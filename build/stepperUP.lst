@@ -1,0 +1,399 @@
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s 			page 1
+
+
+   1              		.file	"stepperUP.c"
+   2              		.option nopic
+   3              		.attribute arch, "rv32i2p0_m2p0_a2p0_c2p0"
+   4              		.attribute unaligned_access, 0
+   5              		.attribute stack_align, 16
+   6              		.text
+   7              	.Ltext0:
+   8              		.cfi_sections	.debug_frame
+   9              		.section	.text.initStep,"ax",@progbits
+  10              		.align	1
+  11              		.globl	initStep
+  13              	initStep:
+  14              	.LFB2:
+  15              		.file 1 "stepperUP.c"
+   1:stepperUP.c   ****     #include "stepperUP.h"
+   2:stepperUP.c   ****     #include "gd32vf103.h"
+   3:stepperUP.c   **** 
+   4:stepperUP.c   ****     // Red      Common +VCC
+   5:stepperUP.c   ****     // Pink     North coil, Yellow  West coil
+   6:stepperUP.c   ****     // Orange   South coil, Blue    East coil
+   7:stepperUP.c   **** 
+   8:stepperUP.c   ****     void initStep(void){
+  16              		.loc 1 8 24
+  17              		.cfi_startproc
+   9:stepperUP.c   ****        rcu_periph_clock_enable(RCU_GPIOA);
+  18              		.loc 1 9 8
+   8:stepperUP.c   ****        rcu_periph_clock_enable(RCU_GPIOA);
+  19              		.loc 1 8 24 is_stmt 0
+  20 0000 4111     		addi	sp,sp,-16
+  21              	.LCFI0:
+  22              		.cfi_def_cfa_offset 16
+  23              		.loc 1 9 8
+  24 0002 13052060 		li	a0,1538
+   8:stepperUP.c   ****        rcu_periph_clock_enable(RCU_GPIOA);
+  25              		.loc 1 8 24
+  26 0006 06C6     		sw	ra,12(sp)
+  27              		.cfi_offset 1, -4
+  28              		.loc 1 9 8
+  29 0008 97000000 		call	rcu_periph_clock_enable
+  29      E7800000 
+  30              	.LVL0:
+  10:stepperUP.c   ****        gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, 
+  31              		.loc 1 10 8 is_stmt 1
+  11:stepperUP.c   ****                  GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 | GPIO_PIN_3);
+  12:stepperUP.c   ****     }
+  32              		.loc 1 12 5 is_stmt 0
+  33 0010 B240     		lw	ra,12(sp)
+  34              		.cfi_restore 1
+  10:stepperUP.c   ****        gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, 
+  35              		.loc 1 10 8
+  36 0012 37150140 		li	a0,1073811456
+  37              		.loc 1 12 5
+  10:stepperUP.c   ****        gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, 
+  38              		.loc 1 10 8
+  39 0016 BD46     		li	a3,15
+  40 0018 0D46     		li	a2,3
+  41 001a C145     		li	a1,16
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s 			page 2
+
+
+  42 001c 13050580 		addi	a0,a0,-2048
+  43              		.loc 1 12 5
+  44 0020 4101     		addi	sp,sp,16
+  45              	.LCFI1:
+  46              		.cfi_def_cfa_offset 0
+  10:stepperUP.c   ****        gpio_init(GPIOA, GPIO_MODE_OUT_PP, GPIO_OSPEED_50MHZ, 
+  47              		.loc 1 10 8
+  48 0022 17030000 		tail	gpio_init
+  48      67000300 
+  49              	.LVL1:
+  50              		.cfi_endproc
+  51              	.LFE2:
+  53              		.section	.text.execStep,"ax",@progbits
+  54              		.align	1
+  55              		.globl	execStep
+  57              	execStep:
+  58              	.LFB3:
+  13:stepperUP.c   **** 
+  14:stepperUP.c   ****     void execStep(int cw){
+  59              		.loc 1 14 26 is_stmt 1
+  60              		.cfi_startproc
+  61              	.LVL2:
+  15:stepperUP.c   ****       static uint8_t step=0xF8; // Eight step sequence
+  62              		.loc 1 15 7
+  16:stepperUP.c   ****       // Step/bit   1   2   3   4   5   6   7   8
+  17:stepperUP.c   ****       // Orange     0   0   0   1   1   1   1   1   Start 0xF8
+  18:stepperUP.c   ****       // Yellow     1   1   0   0   0   1   1   1
+  19:stepperUP.c   ****       // Pink       1   1   1   1   0   0   0   1
+  20:stepperUP.c   ****       // Blue       0   1   1   1   1   1   0   0
+  21:stepperUP.c   ****       // Thus: Signals could be derived from bit 0, 6, 4 & 2.
+  22:stepperUP.c   **** 
+  23:stepperUP.c   ****       step = cw ? (step>>1|step<<7) : (step<<1|step>>7); //RR/RL
+  63              		.loc 1 23 7
+  14:stepperUP.c   ****       static uint8_t step=0xF8; // Eight step sequence
+  64              		.loc 1 14 26 is_stmt 0
+  65 0000 4111     		addi	sp,sp,-16
+  66              	.LCFI2:
+  67              		.cfi_def_cfa_offset 16
+  68 0002 22C4     		sw	s0,8(sp)
+  69 0004 06C6     		sw	ra,12(sp)
+  70              		.cfi_offset 8, -8
+  71              		.cfi_offset 1, -4
+  72 0006 37040000 		lui	s0,%hi(.LANCHOR0)
+  73 000a 26C2     		sw	s1,4(sp)
+  74              		.cfi_offset 9, -12
+  75 000c 83470400 		lbu	a5,%lo(.LANCHOR0)(s0)
+  76 0010 13040400 		addi	s0,s0,%lo(.LANCHOR0)
+  77              		.loc 1 23 12
+  78 0014 25C9     		beq	a0,zero,.L4
+  79              		.loc 1 23 27 discriminator 1
+  80 0016 13D61700 		srli	a2,a5,1
+  81              		.loc 1 23 32 discriminator 1
+  82 001a 9E07     		slli	a5,a5,7
+  83              	.L7:
+  84              		.loc 1 23 47 discriminator 2
+  85 001c 5D8E     		or	a2,a2,a5
+  24:stepperUP.c   ****       gpio_bit_write(GPIOA, GPIO_PIN_0, (step>>0)&1);
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s 			page 3
+
+
+  86              		.loc 1 24 7 discriminator 2
+  87 001e B7140140 		li	s1,1073811456
+  23:stepperUP.c   ****       gpio_bit_write(GPIOA, GPIO_PIN_0, (step>>0)&1);
+  88              		.loc 1 23 12 discriminator 2
+  89 0022 1376F60F 		andi	a2,a2,0xff
+  90 0026 2300C400 		sb	a2,0(s0)
+  91              		.loc 1 24 7 is_stmt 1 discriminator 2
+  92 002a 13850480 		addi	a0,s1,-2048
+  93              	.LVL3:
+  94 002e 058A     		andi	a2,a2,1
+  95 0030 8545     		li	a1,1
+  96 0032 97000000 		call	gpio_bit_write
+  96      E7800000 
+  97              	.LVL4:
+  25:stepperUP.c   ****       gpio_bit_write(GPIOA, GPIO_PIN_1, (step>>6)&1);
+  98              		.loc 1 25 7 discriminator 2
+  99              		.loc 1 25 50 is_stmt 0 discriminator 2
+ 100 003a 03460400 		lbu	a2,0(s0)
+ 101              		.loc 1 25 7 discriminator 2
+ 102 003e 13850480 		addi	a0,s1,-2048
+ 103 0042 8945     		li	a1,2
+ 104              		.loc 1 25 50 discriminator 2
+ 105 0044 1982     		srli	a2,a2,6
+ 106              		.loc 1 25 7 discriminator 2
+ 107 0046 058A     		andi	a2,a2,1
+ 108 0048 97000000 		call	gpio_bit_write
+ 108      E7800000 
+ 109              	.LVL5:
+  26:stepperUP.c   ****       gpio_bit_write(GPIOA, GPIO_PIN_2, (step>>4)&1);
+ 110              		.loc 1 26 7 is_stmt 1 discriminator 2
+ 111              		.loc 1 26 50 is_stmt 0 discriminator 2
+ 112 0050 03460400 		lbu	a2,0(s0)
+ 113              		.loc 1 26 7 discriminator 2
+ 114 0054 13850480 		addi	a0,s1,-2048
+ 115 0058 9145     		li	a1,4
+ 116              		.loc 1 26 50 discriminator 2
+ 117 005a 1182     		srli	a2,a2,4
+ 118              		.loc 1 26 7 discriminator 2
+ 119 005c 058A     		andi	a2,a2,1
+ 120 005e 97000000 		call	gpio_bit_write
+ 120      E7800000 
+ 121              	.LVL6:
+  27:stepperUP.c   ****       gpio_bit_write(GPIOA, GPIO_PIN_3, (step>>2)&1);
+ 122              		.loc 1 27 7 is_stmt 1 discriminator 2
+ 123              		.loc 1 27 50 is_stmt 0 discriminator 2
+ 124 0066 03460400 		lbu	a2,0(s0)
+  28:stepperUP.c   ****     }...
+ 125              		.loc 1 28 5 discriminator 2
+ 126 006a 2244     		lw	s0,8(sp)
+ 127              		.cfi_remember_state
+ 128              		.cfi_restore 8
+ 129 006c B240     		lw	ra,12(sp)
+ 130              		.cfi_restore 1
+  27:stepperUP.c   ****       gpio_bit_write(GPIOA, GPIO_PIN_3, (step>>2)&1);
+ 131              		.loc 1 27 7 discriminator 2
+ 132 006e 13850480 		addi	a0,s1,-2048
+ 133              		.loc 1 28 5 discriminator 2
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s 			page 4
+
+
+ 134 0072 9244     		lw	s1,4(sp)
+ 135              		.cfi_restore 9
+  27:stepperUP.c   ****       gpio_bit_write(GPIOA, GPIO_PIN_3, (step>>2)&1);
+ 136              		.loc 1 27 50 discriminator 2
+ 137 0074 0982     		srli	a2,a2,2
+ 138              		.loc 1 28 5 discriminator 2
+  27:stepperUP.c   ****       gpio_bit_write(GPIOA, GPIO_PIN_3, (step>>2)&1);
+ 139              		.loc 1 27 7 discriminator 2
+ 140 0076 058A     		andi	a2,a2,1
+ 141 0078 A145     		li	a1,8
+ 142              		.loc 1 28 5 discriminator 2
+ 143 007a 4101     		addi	sp,sp,16
+ 144              	.LCFI3:
+ 145              		.cfi_def_cfa_offset 0
+  27:stepperUP.c   ****       gpio_bit_write(GPIOA, GPIO_PIN_3, (step>>2)&1);
+ 146              		.loc 1 27 7 discriminator 2
+ 147 007c 17030000 		tail	gpio_bit_write
+ 147      67000300 
+ 148              	.LVL7:
+ 149              	.L4:
+ 150              	.LCFI4:
+ 151              		.cfi_restore_state
+  23:stepperUP.c   ****       step = cw ? (step>>1|step<<7) : (step<<1|step>>7); //RR/RL
+ 152              		.loc 1 23 44 discriminator 2
+ 153 0084 13961700 		slli	a2,a5,1
+  23:stepperUP.c   ****       step = cw ? (step>>1|step<<7) : (step<<1|step>>7); //RR/RL
+ 154              		.loc 1 23 47 discriminator 2
+ 155 0088 9D83     		srli	a5,a5,7
+ 156 008a 49BF     		j	.L7
+ 157              		.cfi_endproc
+ 158              	.LFE3:
+ 160              		.section	.sdata.step.3494,"aw"
+ 161              		.set	.LANCHOR0,. + 0
+ 164              	step.3494:
+ 165 0000 F8       		.byte	-8
+ 166              		.text
+ 167              	.Letext0:
+ 168              		.file 2 "/Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/riscv64-unknown-elf/include/mac
+ 169              		.file 3 "/Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/riscv64-unknown-elf/include/sys
+ 170              		.file 4 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_gpio.h"
+ 171              		.file 5 "../../firmware/GD32VF103_standard_peripheral/Include/gd32vf103_rcu.h"
+ 172              		.file 6 "../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s 			page 5
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 stepperUP.c
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:13     .text.initStep:0000000000000000 initStep
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:17     .text.initStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:18     .text.initStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:19     .text.initStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:20     .text.initStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:22     .text.initStep:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:24     .text.initStep:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:26     .text.initStep:0000000000000006 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:27     .text.initStep:0000000000000008 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:29     .text.initStep:0000000000000008 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:32     .text.initStep:0000000000000010 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:33     .text.initStep:0000000000000010 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:34     .text.initStep:0000000000000012 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:36     .text.initStep:0000000000000012 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:38     .text.initStep:0000000000000016 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:39     .text.initStep:0000000000000016 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:44     .text.initStep:0000000000000020 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:46     .text.initStep:0000000000000022 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:48     .text.initStep:0000000000000022 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:50     .text.initStep:000000000000002a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:57     .text.execStep:0000000000000000 execStep
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:60     .text.execStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:62     .text.execStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:63     .text.execStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:64     .text.execStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:65     .text.execStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:67     .text.execStep:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:70     .text.execStep:0000000000000006 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:71     .text.execStep:0000000000000006 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:74     .text.execStep:000000000000000c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:78     .text.execStep:0000000000000014 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:80     .text.execStep:0000000000000016 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:82     .text.execStep:000000000000001a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:85     .text.execStep:000000000000001c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:87     .text.execStep:000000000000001e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:89     .text.execStep:0000000000000022 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:92     .text.execStep:000000000000002a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:99     .text.execStep:000000000000003a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:100    .text.execStep:000000000000003a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:102    .text.execStep:000000000000003e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:105    .text.execStep:0000000000000044 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:107    .text.execStep:0000000000000046 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:111    .text.execStep:0000000000000050 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:112    .text.execStep:0000000000000050 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:114    .text.execStep:0000000000000054 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:117    .text.execStep:000000000000005a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:119    .text.execStep:000000000000005c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:123    .text.execStep:0000000000000066 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:124    .text.execStep:0000000000000066 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:126    .text.execStep:000000000000006a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:127    .text.execStep:000000000000006c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:128    .text.execStep:000000000000006c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:130    .text.execStep:000000000000006e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:132    .text.execStep:000000000000006e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:134    .text.execStep:0000000000000072 .L0 
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s 			page 6
+
+
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:135    .text.execStep:0000000000000074 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:137    .text.execStep:0000000000000074 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:139    .text.execStep:0000000000000076 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:140    .text.execStep:0000000000000076 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:143    .text.execStep:000000000000007a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:145    .text.execStep:000000000000007c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:147    .text.execStep:000000000000007c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:151    .text.execStep:0000000000000084 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:153    .text.execStep:0000000000000084 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:155    .text.execStep:0000000000000088 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:157    .text.execStep:000000000000008c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:161    .sdata.step.3494:0000000000000000 .LANCHOR0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:164    .sdata.step.3494:0000000000000000 step.3494
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:53     .text.initStep:000000000000002a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:160    .text.execStep:000000000000008c .L0 
+                     .debug_frame:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:149    .text.execStep:0000000000000084 .L4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:83     .text.execStep:000000000000001c .L7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:553    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:887    .debug_str:0000000000000099 .LASF56
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:867    .debug_str:000000000000003f .LASF57
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:973    .debug_str:00000000000002f4 .LASF58
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:847    .debug_ranges:0000000000000000 .Ldebug_ranges0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:855    .debug_line:0000000000000000 .Ldebug_line0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:925    .debug_str:00000000000001f2 .LASF0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:971    .debug_str:00000000000002e8 .LASF1
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:859    .debug_str:0000000000000009 .LASF6
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:915    .debug_str:00000000000001bd .LASF2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:953    .debug_str:0000000000000293 .LASF3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:907    .debug_str:0000000000000185 .LASF4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:871    .debug_str:0000000000000050 .LASF5
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:919    .debug_str:00000000000001d6 .LASF7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:903    .debug_str:0000000000000169 .LASF8
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:939    .debug_str:0000000000000244 .LASF9
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:927    .debug_str:00000000000001ff .LASF10
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:929    .debug_str:0000000000000216 .LASF11
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:963    .debug_str:00000000000002c1 .LASF12
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:911    .debug_str:00000000000001a2 .LASF59
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:959    .debug_str:00000000000002af .LASF13
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:961    .debug_str:00000000000002b8 .LASF14
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:883    .debug_str:0000000000000089 .LASF15
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:937    .debug_str:000000000000023b .LASF16
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:881    .debug_str:000000000000007f .LASF17
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:943    .debug_str:000000000000025d .LASF18
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:945    .debug_str:0000000000000268 .LASF19
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:875    .debug_str:0000000000000062 .LASF20
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:949    .debug_str:000000000000027d .LASF21
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:877    .debug_str:000000000000006d .LASF22
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:951    .debug_str:0000000000000288 .LASF23
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:975    .debug_str:0000000000000338 .LASF24
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:891    .debug_str:000000000000012a .LASF25
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:893    .debug_str:0000000000000133 .LASF26
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:935    .debug_str:0000000000000230 .LASF27
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:917    .debug_str:00000000000001cb .LASF28
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:861    .debug_str:0000000000000013 .LASF29
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:863    .debug_str:000000000000001d .LASF30
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:931    .debug_str:000000000000021e .LASF31
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s 			page 7
+
+
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:933    .debug_str:0000000000000227 .LASF32
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:965    .debug_str:00000000000002ca .LASF33
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:967    .debug_str:00000000000002d3 .LASF34
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:957    .debug_str:00000000000002a6 .LASF35
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:923    .debug_str:00000000000001ea .LASF36
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:977    .debug_str:0000000000000342 .LASF37
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:885    .debug_str:0000000000000091 .LASF38
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:879    .debug_str:0000000000000078 .LASF39
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:901    .debug_str:000000000000015f .LASF40
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:905    .debug_str:000000000000017b .LASF41
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:909    .debug_str:0000000000000198 .LASF42
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:897    .debug_str:000000000000014b .LASF43
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:899    .debug_str:0000000000000155 .LASF44
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:873    .debug_str:0000000000000059 .LASF45
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:921    .debug_str:00000000000001e1 .LASF46
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:941    .debug_str:0000000000000252 .LASF47
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:889    .debug_str:0000000000000121 .LASF48
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:913    .debug_str:00000000000001b2 .LASF49
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:969    .debug_str:00000000000002dc .LASF50
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:857    .debug_str:0000000000000000 .LASF51
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:58     .text.execStep:0000000000000000 .LFB3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:158    .text.execStep:000000000000008c .LFE3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:773    .debug_loc:0000000000000000 .LLST1
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:796    .debug_loc:0000000000000038 .LLST2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:869    .debug_str:000000000000004b .LASF60
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:97     .text.execStep:000000000000003a .LVL4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:109    .text.execStep:0000000000000050 .LVL5
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:121    .text.execStep:0000000000000066 .LVL6
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:148    .text.execStep:0000000000000084 .LVL7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:955    .debug_str:000000000000029d .LASF52
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:14     .text.initStep:0000000000000000 .LFB2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:51     .text.initStep:000000000000002a .LFE2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:814    .debug_loc:0000000000000064 .LLST0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:30     .text.initStep:0000000000000010 .LVL0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:49     .text.initStep:000000000000002a .LVL1
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:895    .debug_str:000000000000013c .LASF53
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:865    .debug_str:0000000000000027 .LASF54
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:947    .debug_str:0000000000000273 .LASF55
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:66     .text.execStep:0000000000000002 .LCFI2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:144    .text.execStep:000000000000007c .LCFI3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:150    .text.execStep:0000000000000084 .LCFI4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:61     .text.execStep:0000000000000000 .LVL2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:93     .text.execStep:000000000000002e .LVL3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:21     .text.initStep:0000000000000002 .LCFI0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:45     .text.initStep:0000000000000022 .LCFI1
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccGI2C5q.s:174    .debug_info:0000000000000000 .Ldebug_info0
+
+UNDEFINED SYMBOLS
+rcu_periph_clock_enable
+gpio_init
+gpio_bit_write
