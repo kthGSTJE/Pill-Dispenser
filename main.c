@@ -13,13 +13,23 @@ Libraries (other than vendor SDK and gcc libraries) must have .h-files in /lib/[
 #define REVOLUTION 4096
 #define QUARTERREV 1028
 #define HALFREV 2048
-#define SPEED 2
+#define SPEED 1
+#define BLINKSPEED 500
+#define DELAY 200
+
+void blink (int *pMs, int *pLight);
+void keyPad (int pressedKey, int *pStepBuffer, int *pMoveBuffer);
+void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer);
+void printStop (void);
+void printGo (void);
 
 int main(){
 	int idle =0;
 	int ms = 0;
-	int s = 1;
-	int buffer = 0;
+	int light = 1;
+	int moveBuffer = 0;
+	int delayBuffer = 0;
+	int stepBuffer = 0;
 	int key = 0;
 	int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
 	initStep();
@@ -34,40 +44,80 @@ int main(){
 		if (t5expq()) {                           // Manage periodic tasks
             l88row(colset());                     // ...8*8LED and Keyboard
             ms++;                                 // ...One second heart beat
-            if (!(ms%SPEED) && buffer>0){
-				buffer--;
-			 	execStep(CW);
+
+			l88mem(1, stepBuffer);
+			l88mem(2, delayBuffer/100);
+			l88mem(3, moveBuffer/100);
+
+            if (!(ms%SPEED)){
+				motorStep(&stepBuffer, &delayBuffer, &moveBuffer);			
             }
-			if (ms == 1000)
-			{
-				ms = 0;
-				l88mem(0, s);
-				s = s^1;
-			}
 
 			key=keyscan();
 			if (key>=0)
 			{
-				key = lookUpTbl[key];
-				switch (key)
-				{
-				case 1:
-				case 2:
-				case 4:
-					buffer += key*QUARTERREV;
-					break;
-				case 7: 
-					execStep(CW);
-					break;
-				case 9:
-					execStep(CCW);
-					break;
-				default:
-					break;
-				}
-				
+				keyPad(lookUpTbl[key], &stepBuffer, &moveBuffer);
 			}
+
+			blink(&ms, &light);
 			
 		}
 	}
+}
+
+void blink (int *pMs, int *pLight){
+	if (*pMs == BLINKSPEED)
+	{
+		*pMs = 0;
+		l88mem(0, *pLight);
+		*pLight = !(*pLight);
+	}
+}
+void keyPad (int pressedKey, int *pStepBuffer, int *pMoveBuffer){
+	switch (pressedKey)
+	{
+	case 10:
+	case 11:
+	case 12:
+	case 13: 
+	case 14:
+		break;
+	case 15:
+		(*pMoveBuffer) += 32;
+		break;
+	default:
+		(*pStepBuffer) += pressedKey;
+		break;
+	}
+
+}
+
+void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer){
+	if ((*pDelayBuffer)>0)
+	{
+		printStop();
+		(*pDelayBuffer)--;
+	}
+	else if ((*pMoveBuffer)>0){
+		printGo();
+		(*pMoveBuffer)--;
+		execStep(CW);
+		if (!(*pMoveBuffer))
+		{
+			*pDelayBuffer = DELAY;
+		}
+	}
+	else if (*pStepBuffer){
+		(*pStepBuffer)--;
+		*pMoveBuffer = QUARTERREV;
+	}
+}
+
+void printStop (void){
+	l88mem(6, 0xFF);
+	l88mem(7, 0xFF);
+}
+void printGo (void){
+	l88mem(6, 0x00);
+	l88mem(7, 0x00);
 }

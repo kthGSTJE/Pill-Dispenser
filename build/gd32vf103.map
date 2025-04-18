@@ -1485,8 +1485,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/main.o
  .data          0x0000000000000000        0x0 build/main.o
  .bss           0x0000000000000000        0x0 build/main.o
- .text.spinMotor
-                0x0000000000000000        0x2 build/main.o
  .text          0x0000000000000000        0x0 build/stepperUP.o
  .data          0x0000000000000000        0x0 build/stepperUP.o
  .bss           0x0000000000000000        0x0 build/stepperUP.o
@@ -1658,7 +1656,7 @@ END GROUP
 .ialign         0x0000000008000254        0x0
                 [!provide]                        PROVIDE (_ilm = .)
 
-.text           0x0000000008000280      0xc7e
+.text           0x0000000008000280      0xd3e
  *(.rodata .rodata.*)
  .rodata._exit.str1.4
                 0x0000000008000280       0x1f build/_exit.o
@@ -1673,145 +1671,156 @@ END GROUP
  .rodata.handle_trap.str1.4
                 0x00000000080002ac        0x8 build/handlers.o
                                           0x6 (size before relaxing)
- .rodata.main   0x00000000080002b4       0x24 build/main.o
- .rodata        0x00000000080002d8       0x40 build/main.o
+ .rodata        0x00000000080002b4       0x40 build/main.o
  *(.text.unlikely .text.unlikely.*)
  *(.text.startup .text.startup.*)
  .text.startup.main
-                0x0000000008000318       0xec build/main.o
-                0x0000000008000318                main
+                0x00000000080002f4       0xde build/main.o
+                0x00000000080002f4                main
  *(.text .text.*)
  .text.gpio_init
-                0x0000000008000404       0xa4 build/gd32vf103_gpio.o
-                0x0000000008000404                gpio_init
+                0x00000000080003d2       0xa4 build/gd32vf103_gpio.o
+                0x00000000080003d2                gpio_init
  .text.gpio_bit_write
-                0x00000000080004a8        0xa build/gd32vf103_gpio.o
-                0x00000000080004a8                gpio_bit_write
+                0x0000000008000476        0xa build/gd32vf103_gpio.o
+                0x0000000008000476                gpio_bit_write
  .text.rcu_periph_clock_enable
-                0x00000000080004b2       0x18 build/gd32vf103_rcu.o
-                0x00000000080004b2                rcu_periph_clock_enable
+                0x0000000008000480       0x18 build/gd32vf103_rcu.o
+                0x0000000008000480                rcu_periph_clock_enable
  .text.SystemInit
-                0x00000000080004ca      0x11c build/system_gd32vf103.o
-                0x00000000080004ca                SystemInit
- .text._exit    0x00000000080005e6       0x4c build/_exit.o
-                0x00000000080005e6                _exit
+                0x0000000008000498      0x11c build/system_gd32vf103.o
+                0x0000000008000498                SystemInit
+ .text._exit    0x00000000080005b4       0x4c build/_exit.o
+                0x00000000080005b4                _exit
  .text.write_hex
-                0x0000000008000632       0x7c build/write_hex.o
-                0x0000000008000632                write_hex
+                0x0000000008000600       0x7c build/write_hex.o
+                0x0000000008000600                write_hex
  .text.eclic_init
-                0x00000000080006ae       0x22 build/n200_func.o
-                0x00000000080006ae                eclic_init
+                0x000000000800067c       0x22 build/n200_func.o
+                0x000000000800067c                eclic_init
  .text.eclic_mode_enable
-                0x00000000080006d0       0x12 build/n200_func.o
-                0x00000000080006d0                eclic_mode_enable
+                0x000000000800069e       0x12 build/n200_func.o
+                0x000000000800069e                eclic_mode_enable
  .text.handle_nmi
-                0x00000000080006e2       0x22 build/handlers.o
-                0x00000000080006e2                handle_nmi
+                0x00000000080006b0       0x22 build/handlers.o
+                0x00000000080006b0                handle_nmi
  .text.handle_trap
-                0x0000000008000704       0x38 build/handlers.o
-                0x0000000008000704                handle_trap
- .text._init    0x000000000800073c       0x2c build/init.o
-                0x000000000800073c                _init
- .text._fini    0x0000000008000768        0x2 build/init.o
-                0x0000000008000768                _fini
+                0x00000000080006d2       0x38 build/handlers.o
+                0x00000000080006d2                handle_trap
+ .text._init    0x000000000800070a       0x2c build/init.o
+                0x000000000800070a                _init
+ .text._fini    0x0000000008000736        0x2 build/init.o
+                0x0000000008000736                _fini
+ .text.blink    0x0000000008000738       0x34 build/main.o
+                0x0000000008000738                blink
+ .text.keyPad   0x000000000800076c       0x24 build/main.o
+                0x000000000800076c                keyPad
+ .text.printStop
+                0x0000000008000790       0x24 build/main.o
+                0x0000000008000790                printStop
+ .text.printGo  0x00000000080007b4       0x20 build/main.o
+                0x00000000080007b4                printGo
+ .text.motorStep
+                0x00000000080007d4       0x62 build/main.o
+                0x00000000080007d4                motorStep
  .text.initStep
-                0x000000000800076a       0x2a build/stepperUP.o
-                0x000000000800076a                initStep
+                0x0000000008000836       0x2a build/stepperUP.o
+                0x0000000008000836                initStep
  .text.execStep
-                0x0000000008000794       0x8c build/stepperUP.o
-                0x0000000008000794                execStep
- *fill*         0x0000000008000820       0x20 
- .text.trap     0x0000000008000840       0x82 build/entry.o
-                0x0000000008000840                trap_entry
- *fill*         0x00000000080008c2        0x2 
- .text.irq      0x00000000080008c4       0x72 build/entry.o
-                0x00000000080008c4                irq_entry
- .text          0x0000000008000936      0x2e4 build/drivers.o
-                0x00000000080009a8                t5omsi
-                0x00000000080009da                t5expq
-                0x00000000080009ea                colinit
-                0x0000000008000a2a                colset
-                0x0000000008000a62                l88init
-                0x0000000008000a94                l88row
-                0x0000000008000aca                l88mem
-                0x0000000008000ade                keyinit
-                0x0000000008000b10                keyscan
- .text.atexit   0x0000000008000c1a       0x10 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-atexit.o)
-                0x0000000008000c1a                atexit
- .text.exit     0x0000000008000c2a       0x36 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-exit.o)
-                0x0000000008000c2a                exit
+                0x0000000008000860       0x8c build/stepperUP.o
+                0x0000000008000860                execStep
+ *fill*         0x00000000080008ec       0x14 
+ .text.trap     0x0000000008000900       0x82 build/entry.o
+                0x0000000008000900                trap_entry
+ *fill*         0x0000000008000982        0x2 
+ .text.irq      0x0000000008000984       0x72 build/entry.o
+                0x0000000008000984                irq_entry
+ .text          0x00000000080009f6      0x2e4 build/drivers.o
+                0x0000000008000a68                t5omsi
+                0x0000000008000a9a                t5expq
+                0x0000000008000aaa                colinit
+                0x0000000008000aea                colset
+                0x0000000008000b22                l88init
+                0x0000000008000b54                l88row
+                0x0000000008000b8a                l88mem
+                0x0000000008000b9e                keyinit
+                0x0000000008000bd0                keyscan
+ .text.atexit   0x0000000008000cda       0x10 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-atexit.o)
+                0x0000000008000cda                atexit
+ .text.exit     0x0000000008000cea       0x36 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-exit.o)
+                0x0000000008000cea                exit
  .text.__libc_fini_array
-                0x0000000008000c60       0x38 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-fini.o)
-                0x0000000008000c60                __libc_fini_array
+                0x0000000008000d20       0x38 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-fini.o)
+                0x0000000008000d20                __libc_fini_array
  .text.__libc_init_array
-                0x0000000008000c98       0x6a /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-init.o)
-                0x0000000008000c98                __libc_init_array
- .text          0x0000000008000d02       0x16 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memcpy-asm.o)
-                0x0000000008000d02                memcpy
- .text.write    0x0000000008000d18       0x18 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
-                0x0000000008000d18                write
+                0x0000000008000d58       0x6a /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-init.o)
+                0x0000000008000d58                __libc_init_array
+ .text          0x0000000008000dc2       0x16 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memcpy-asm.o)
+                0x0000000008000dc2                memcpy
+ .text.write    0x0000000008000dd8       0x18 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
+                0x0000000008000dd8                write
  .text._write_r
-                0x0000000008000d30       0x3a /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o)
-                0x0000000008000d30                _write_r
+                0x0000000008000df0       0x3a /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o)
+                0x0000000008000df0                _write_r
  .text.__register_exitproc
-                0x0000000008000d6a       0x8c /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
-                0x0000000008000d6a                __register_exitproc
+                0x0000000008000e2a       0x8c /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
+                0x0000000008000e2a                __register_exitproc
  .text.__call_exitprocs
-                0x0000000008000df6       0xc8 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
-                0x0000000008000df6                __call_exitprocs
- .text._write   0x0000000008000ebe       0x34 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
-                0x0000000008000ebe                _write
- .text.__errno  0x0000000008000ef2        0xc /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
-                0x0000000008000ef2                __errno
+                0x0000000008000eb6       0xc8 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
+                0x0000000008000eb6                __call_exitprocs
+ .text._write   0x0000000008000f7e       0x34 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
+                0x0000000008000f7e                _write
+ .text.__errno  0x0000000008000fb2        0xc /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
+                0x0000000008000fb2                __errno
  *(.gnu.linkonce.t.*)
 
 .sdata2._global_impure_ptr
-                0x0000000008000f00        0x4
+                0x0000000008000fc0        0x4
  .sdata2._global_impure_ptr
-                0x0000000008000f00        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
-                0x0000000008000f00                _global_impure_ptr
+                0x0000000008000fc0        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
+                0x0000000008000fc0                _global_impure_ptr
 
-.rela.dyn       0x0000000008000f04        0x0
+.rela.dyn       0x0000000008000fc4        0x0
  .rela.text.handle_trap
-                0x0000000008000f04        0x0 build/gd32vf103_gpio.o
- .rela.init     0x0000000008000f04        0x0 build/gd32vf103_gpio.o
+                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
+ .rela.init     0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
  .rela.text.trap
-                0x0000000008000f04        0x0 build/gd32vf103_gpio.o
+                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
  .rela.text.__libc_fini_array
-                0x0000000008000f04        0x0 build/gd32vf103_gpio.o
+                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
  .rela.data.impure_data
-                0x0000000008000f04        0x0 build/gd32vf103_gpio.o
+                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
  .rela.text.__libc_init_array
-                0x0000000008000f04        0x0 build/gd32vf103_gpio.o
+                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
  .rela.text._write_r
-                0x0000000008000f04        0x0 build/gd32vf103_gpio.o
+                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
  .rela.text.__register_exitproc
-                0x0000000008000f04        0x0 build/gd32vf103_gpio.o
+                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
 
 .fini
  *(SORT_NONE(.fini))
-                0x0000000008000f04                . = ALIGN (0x4)
+                0x0000000008000fc4                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__etext = .)
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (etext = .)
                 [!provide]                        PROVIDE (_eilm = .)
 
-.preinit_array  0x0000000008000f04        0x0
-                0x0000000008000f04                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x0000000008000fc4        0x0
+                0x0000000008000fc4                PROVIDE (__preinit_array_start = .)
  *(.preinit_array)
-                0x0000000008000f04                PROVIDE (__preinit_array_end = .)
+                0x0000000008000fc4                PROVIDE (__preinit_array_end = .)
 
-.init_array     0x0000000008000f04        0x0
-                0x0000000008000f04                PROVIDE (__init_array_start = .)
+.init_array     0x0000000008000fc4        0x0
+                0x0000000008000fc4                PROVIDE (__init_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*))
  *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
-                0x0000000008000f04                PROVIDE (__init_array_end = .)
+                0x0000000008000fc4                PROVIDE (__init_array_end = .)
 
-.fini_array     0x0000000008000f04        0x0
-                0x0000000008000f04                PROVIDE (__fini_array_start = .)
+.fini_array     0x0000000008000fc4        0x0
+                0x0000000008000fc4                PROVIDE (__fini_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*))
  *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
-                0x0000000008000f04                PROVIDE (__fini_array_end = .)
+                0x0000000008000fc4                PROVIDE (__fini_array_end = .)
 
 .ctors
  *crtbegin.o(.ctors)
@@ -1826,18 +1835,18 @@ END GROUP
  *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
  *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
-                0x0000000008000f04                . = ALIGN (0x4)
+                0x0000000008000fc4                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (_eilm = .)
 
-.lalign         0x0000000008000f04        0x0
-                0x0000000008000f04                . = ALIGN (0x4)
-                0x0000000008000f04                PROVIDE (_data_lma = .)
+.lalign         0x0000000008000fc4        0x0
+                0x0000000008000fc4                . = ALIGN (0x4)
+                0x0000000008000fc4                PROVIDE (_data_lma = .)
 
-.dalign         0x0000000020000000        0x0 load address 0x0000000008000f04
+.dalign         0x0000000020000000        0x0 load address 0x0000000008000fc4
                 0x0000000020000000                . = ALIGN (0x4)
                 0x0000000020000000                PROVIDE (_data = .)
 
-.data           0x0000000020000000       0x88 load address 0x0000000008000f04
+.data           0x0000000020000000       0x88 load address 0x0000000008000fc4
  *(.rdata)
  *(.gnu.linkonce.r.*)
  *(.data .data.*)
@@ -1895,7 +1904,7 @@ END GROUP
                 [!provide]                        PROVIDE (_dbg_sp = .)
 OUTPUT(build/gd32vf103.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000     0x5273
+.debug_info     0x0000000000000000     0x54e3
  .debug_info    0x0000000000000000      0x6f6 build/gd32vf103_gpio.o
  .debug_info    0x00000000000006f6      0xf51 build/gd32vf103_rcu.o
  .debug_info    0x0000000000001647      0x203 build/system_gd32vf103.o
@@ -1904,13 +1913,13 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .debug_info    0x0000000000001bd8     0x18a2 build/n200_func.o
  .debug_info    0x000000000000347a      0xb4f build/handlers.o
  .debug_info    0x0000000000003fc9      0xcb0 build/init.o
- .debug_info    0x0000000000004c79      0x29f build/main.o
- .debug_info    0x0000000000004f18      0x2ed build/stepperUP.o
- .debug_info    0x0000000000005205       0x26 build/start.o
- .debug_info    0x000000000000522b       0x22 build/entry.o
- .debug_info    0x000000000000524d       0x26 build/drivers.o
+ .debug_info    0x0000000000004c79      0x50f build/main.o
+ .debug_info    0x0000000000005188      0x2ed build/stepperUP.o
+ .debug_info    0x0000000000005475       0x26 build/start.o
+ .debug_info    0x000000000000549b       0x22 build/entry.o
+ .debug_info    0x00000000000054bd       0x26 build/drivers.o
 
-.debug_abbrev   0x0000000000000000     0x12d5
+.debug_abbrev   0x0000000000000000     0x1396
  .debug_abbrev  0x0000000000000000      0x228 build/gd32vf103_gpio.o
  .debug_abbrev  0x0000000000000228      0x259 build/gd32vf103_rcu.o
  .debug_abbrev  0x0000000000000481       0xe0 build/system_gd32vf103.o
@@ -1919,13 +1928,13 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .debug_abbrev  0x0000000000000747      0x4db build/n200_func.o
  .debug_abbrev  0x0000000000000c22      0x234 build/handlers.o
  .debug_abbrev  0x0000000000000e56      0x22b build/init.o
- .debug_abbrev  0x0000000000001081      0x137 build/main.o
- .debug_abbrev  0x00000000000011b8       0xe3 build/stepperUP.o
- .debug_abbrev  0x000000000000129b       0x14 build/start.o
- .debug_abbrev  0x00000000000012af       0x12 build/entry.o
- .debug_abbrev  0x00000000000012c1       0x14 build/drivers.o
+ .debug_abbrev  0x0000000000001081      0x1f8 build/main.o
+ .debug_abbrev  0x0000000000001279       0xe3 build/stepperUP.o
+ .debug_abbrev  0x000000000000135c       0x14 build/start.o
+ .debug_abbrev  0x0000000000001370       0x12 build/entry.o
+ .debug_abbrev  0x0000000000001382       0x14 build/drivers.o
 
-.debug_loc      0x0000000000000000     0x2099
+.debug_loc      0x0000000000000000     0x227f
  .debug_loc     0x0000000000000000      0x4ba build/gd32vf103_gpio.o
  .debug_loc     0x00000000000004ba      0xcf4 build/gd32vf103_rcu.o
  .debug_loc     0x00000000000011ae      0x173 build/system_gd32vf103.o
@@ -1934,10 +1943,10 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .debug_loc     0x0000000000001460      0xa1d build/n200_func.o
  .debug_loc     0x0000000000001e7d       0x7f build/handlers.o
  .debug_loc     0x0000000000001efc       0x2c build/init.o
- .debug_loc     0x0000000000001f28       0xe1 build/main.o
- .debug_loc     0x0000000000002009       0x90 build/stepperUP.o
+ .debug_loc     0x0000000000001f28      0x2c7 build/main.o
+ .debug_loc     0x00000000000021ef       0x90 build/stepperUP.o
 
-.debug_aranges  0x0000000000000000      0x4b0
+.debug_aranges  0x0000000000000000      0x4d0
  .debug_aranges
                 0x0000000000000000       0xa0 build/gd32vf103_gpio.o
  .debug_aranges
@@ -1955,17 +1964,17 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .debug_aranges
                 0x00000000000003d0       0x28 build/init.o
  .debug_aranges
-                0x00000000000003f8       0x28 build/main.o
+                0x00000000000003f8       0x48 build/main.o
  .debug_aranges
-                0x0000000000000420       0x28 build/stepperUP.o
+                0x0000000000000440       0x28 build/stepperUP.o
  .debug_aranges
-                0x0000000000000448       0x20 build/start.o
+                0x0000000000000468       0x20 build/start.o
  .debug_aranges
-                0x0000000000000468       0x28 build/entry.o
+                0x0000000000000488       0x28 build/entry.o
  .debug_aranges
-                0x0000000000000490       0x20 build/drivers.o
+                0x00000000000004b0       0x20 build/drivers.o
 
-.debug_ranges   0x0000000000000000      0x4f8
+.debug_ranges   0x0000000000000000      0x548
  .debug_ranges  0x0000000000000000       0x90 build/gd32vf103_gpio.o
  .debug_ranges  0x0000000000000090      0x150 build/gd32vf103_rcu.o
  .debug_ranges  0x00000000000001e0       0x18 build/system_gd32vf103.o
@@ -1974,11 +1983,11 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .debug_ranges  0x0000000000000238      0x240 build/n200_func.o
  .debug_ranges  0x0000000000000478       0x18 build/handlers.o
  .debug_ranges  0x0000000000000490       0x18 build/init.o
- .debug_ranges  0x00000000000004a8       0x18 build/main.o
- .debug_ranges  0x00000000000004c0       0x18 build/stepperUP.o
- .debug_ranges  0x00000000000004d8       0x20 build/entry.o
+ .debug_ranges  0x00000000000004a8       0x68 build/main.o
+ .debug_ranges  0x0000000000000510       0x18 build/stepperUP.o
+ .debug_ranges  0x0000000000000528       0x20 build/entry.o
 
-.debug_line     0x0000000000000000     0x50d6
+.debug_line     0x0000000000000000     0x52f3
  .debug_line    0x0000000000000000      0xb18 build/gd32vf103_gpio.o
  .debug_line    0x0000000000000b18     0x150b build/gd32vf103_rcu.o
  .debug_line    0x0000000000002023      0x6b1 build/system_gd32vf103.o
@@ -1987,13 +1996,13 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .debug_line    0x0000000000002a52     0x12bd build/n200_func.o
  .debug_line    0x0000000000003d0f      0x264 build/handlers.o
  .debug_line    0x0000000000003f73      0x2a3 build/init.o
- .debug_line    0x0000000000004216      0x39a build/main.o
- .debug_line    0x00000000000045b0      0x396 build/stepperUP.o
- .debug_line    0x0000000000004946      0x187 build/start.o
- .debug_line    0x0000000000004acd       0xe3 build/entry.o
- .debug_line    0x0000000000004bb0      0x526 build/drivers.o
+ .debug_line    0x0000000000004216      0x5b7 build/main.o
+ .debug_line    0x00000000000047cd      0x396 build/stepperUP.o
+ .debug_line    0x0000000000004b63      0x187 build/start.o
+ .debug_line    0x0000000000004cea       0xe3 build/entry.o
+ .debug_line    0x0000000000004dcd      0x526 build/drivers.o
 
-.debug_str      0x0000000000000000     0x1da4
+.debug_str      0x0000000000000000     0x1e12
  .debug_str     0x0000000000000000      0x547 build/gd32vf103_gpio.o
                                         0x5ab (size before relaxing)
  .debug_str     0x0000000000000547      0xa96 build/gd32vf103_rcu.o
@@ -2010,15 +2019,15 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
                                         0x5e2 (size before relaxing)
  .debug_str     0x00000000000018bc      0x3e5 build/init.o
                                         0x9b2 (size before relaxing)
- .debug_str     0x0000000000001ca1       0x8a build/main.o
-                                        0x222 (size before relaxing)
- .debug_str     0x0000000000001d2b       0x11 build/stepperUP.o
+ .debug_str     0x0000000000001ca1       0xf8 build/main.o
+                                        0x290 (size before relaxing)
+ .debug_str     0x0000000000001d99       0x11 build/stepperUP.o
                                         0x34a (size before relaxing)
- .debug_str     0x0000000000001d3c       0x35 build/start.o
+ .debug_str     0x0000000000001daa       0x35 build/start.o
                                          0x79 (size before relaxing)
- .debug_str     0x0000000000001d71       0x29 build/entry.o
+ .debug_str     0x0000000000001ddf       0x29 build/entry.o
                                          0x79 (size before relaxing)
- .debug_str     0x0000000000001d9a        0xa build/drivers.o
+ .debug_str     0x0000000000001e08        0xa build/drivers.o
                                          0x5a (size before relaxing)
 
 .comment        0x0000000000000000       0x28
@@ -2101,7 +2110,7 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .riscv.attributes
                 0x000000000000042b       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
 
-.debug_frame    0x0000000000000000      0x8d8
+.debug_frame    0x0000000000000000      0x94c
  .debug_frame   0x0000000000000000      0x144 build/gd32vf103_gpio.o
  .debug_frame   0x0000000000000144      0x2e8 build/gd32vf103_rcu.o
  .debug_frame   0x000000000000042c       0x30 build/system_gd32vf103.o
@@ -2110,8 +2119,8 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .debug_frame   0x00000000000004d8      0x2dc build/n200_func.o
  .debug_frame   0x00000000000007b4       0x44 build/handlers.o
  .debug_frame   0x00000000000007f8       0x3c build/init.o
- .debug_frame   0x0000000000000834       0x4c build/main.o
- .debug_frame   0x0000000000000880       0x58 build/stepperUP.o
+ .debug_frame   0x0000000000000834       0xc0 build/main.o
+ .debug_frame   0x00000000000008f4       0x58 build/stepperUP.o
 
 Cross Reference Table
 
@@ -2313,6 +2322,7 @@ bkp_rtc_signal_output_enable                      build/gd32vf103_bkp.o
 bkp_tamper_active_level_set                       build/gd32vf103_bkp.o
 bkp_tamper_detection_disable                      build/gd32vf103_bkp.o
 bkp_tamper_detection_enable                       build/gd32vf103_bkp.o
+blink                                             build/main.o
 can1_filter_start_bank                            build/gd32vf103_can.o
 can_debug_freeze_disable                          build/gd32vf103_can.o
 can_debug_freeze_enable                           build/gd32vf103_can.o
@@ -2572,6 +2582,7 @@ irq_entry                                         build/entry.o
 isatty                                            /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-sysisatty.o)
                                                   build/lseek.o
                                                   build/fstat.o
+keyPad                                            build/main.o
 keyinit                                           build/drivers.o
                                                   build/main.o
 keyscan                                           build/drivers.o
@@ -2589,6 +2600,7 @@ memcpy                                            /Users/gustavsf/Desktop/toolch
                                                   build/main.o
                                                   build/_exit.o
                                                   build/gd32vf103_rcu.o
+motorStep                                         build/main.o
 mtime_hi                                          build/n200_func.o
 mtime_lo                                          build/n200_func.o
 ob_data_get                                       build/gd32vf103_fmc.o
@@ -2615,6 +2627,8 @@ pmu_to_sleepmode                                  build/gd32vf103_pmu.o
 pmu_to_standbymode                                build/gd32vf103_pmu.o
 pmu_wakeup_pin_disable                            build/gd32vf103_pmu.o
 pmu_wakeup_pin_enable                             build/gd32vf103_pmu.o
+printGo                                           build/main.o
+printStop                                         build/main.o
 rcu_adc_clock_config                              build/gd32vf103_rcu.o
 rcu_ahb_clock_config                              build/gd32vf103_rcu.o
 rcu_all_reset_flag_clear                          build/gd32vf103_rcu.o
@@ -2727,7 +2741,6 @@ spi_nssp_mode_enable                              build/gd32vf103_spi.o
 spi_struct_para_init                              build/gd32vf103_spi.o
 spi_ti_mode_disable                               build/gd32vf103_spi.o
 spi_ti_mode_enable                                build/gd32vf103_spi.o
-spinMotor                                         build/main.o
 switch_m2u_mode                                   build/n200_func.o
 t5expq                                            build/drivers.o
                                                   build/main.o

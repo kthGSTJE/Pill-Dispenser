@@ -1,4 +1,4 @@
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 1
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 1
 
 
    1              		.file	"main.c"
@@ -9,11 +9,11 @@ GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page
    6              		.text
    7              	.Ltext0:
    8              		.cfi_sections	.debug_frame
-   9              		.section	.text.startup.main,"ax",@progbits
+   9              		.section	.text.blink,"ax",@progbits
   10              		.align	1
-  11              		.globl	main
-  13              	main:
-  14              	.LFB2:
+  11              		.globl	blink
+  13              	blink:
+  14              	.LFB3:
   15              		.file 1 "main.c"
    1:main.c        **** /* 
    2:main.c        **** Replace this file with your code. Put your source files in this directory and any libraries in the 
@@ -30,565 +30,1073 @@ GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page
   13:main.c        **** #define REVOLUTION 4096
   14:main.c        **** #define QUARTERREV 1028
   15:main.c        **** #define HALFREV 2048
-  16:main.c        **** 
-  17:main.c        **** void spinMotor(int distance);
-  18:main.c        **** 
-  19:main.c        **** int main(){
-  16              		.loc 1 19 11
+  16:main.c        **** #define SPEED 1
+  17:main.c        **** #define BLINKSPEED 500
+  18:main.c        **** #define DELAY 200
+  19:main.c        **** 
+  20:main.c        **** void blink (int *pMs, int *pLight);
+  21:main.c        **** void keyPad (int pressedKey, int *pStepBuffer, int *pMoveBuffer);
+  22:main.c        **** void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer);
+  23:main.c        **** void printStop (void);
+  24:main.c        **** void printGo (void);
+  25:main.c        **** 
+  26:main.c        **** int main(){
+  27:main.c        **** 	int idle =0;
+  28:main.c        **** 	int ms = 0;
+  29:main.c        **** 	int light = 1;
+  30:main.c        **** 	int moveBuffer = 0;
+  31:main.c        **** 	int delayBuffer = 0;
+  32:main.c        **** 	int stepBuffer = 0;
+  33:main.c        **** 	int key = 0;
+  34:main.c        **** 	int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+  35:main.c        **** 	initStep();
+  36:main.c        **** 	t5omsi();                                     // Initialize timer5 1kHz
+  37:main.c        ****     colinit();                                    // Initialize column toolbox
+  38:main.c        ****     l88init(); 
+  39:main.c        **** 	keyinit();
+  40:main.c        **** 
+  41:main.c        **** 
+  42:main.c        **** 
+  43:main.c        **** 	while(1){
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 2
+
+
+  44:main.c        **** 		if (t5expq()) {                           // Manage periodic tasks
+  45:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
+  46:main.c        ****             ms++;                                 // ...One second heart beat
+  47:main.c        **** 
+  48:main.c        **** 			l88mem(1, stepBuffer);
+  49:main.c        **** 			l88mem(2, delayBuffer/100);
+  50:main.c        **** 			l88mem(3, moveBuffer/100);
+  51:main.c        **** 
+  52:main.c        ****             if (!(ms%SPEED)){
+  53:main.c        **** 				motorStep(&stepBuffer, &delayBuffer, &moveBuffer);			
+  54:main.c        ****             }
+  55:main.c        **** 
+  56:main.c        **** 			key=keyscan();
+  57:main.c        **** 			if (key>=0)
+  58:main.c        **** 			{
+  59:main.c        **** 				keyPad(lookUpTbl[key], &stepBuffer, &moveBuffer);
+  60:main.c        **** 			}
+  61:main.c        **** 
+  62:main.c        **** 			blink(&ms, &light);
+  63:main.c        **** 			
+  64:main.c        **** 		}
+  65:main.c        **** 	}
+  66:main.c        **** }
+  67:main.c        **** 
+  68:main.c        **** 
+  69:main.c        **** void blink (int *pMs, int *pLight){
+  16              		.loc 1 69 35
   17              		.cfi_startproc
-  20:main.c        **** 	int idle =0;
-  18              		.loc 1 20 2
-  19              	.LVL0:
-  21:main.c        **** 	int ms = 0;
-  20              		.loc 1 21 2
-  22:main.c        **** 	int s = 1;
-  21              		.loc 1 22 2
-  23:main.c        **** 	int buffer = 0;
-  22              		.loc 1 23 2
-  24:main.c        **** 	int key = 0;
-  23              		.loc 1 24 2
-  25:main.c        **** 	int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
-  24              		.loc 1 25 2
-  19:main.c        **** 	int idle =0;
-  25              		.loc 1 19 11 is_stmt 0
-  26 0000 1D71     		addi	sp,sp,-96
-  27              	.LCFI0:
-  28              		.cfi_def_cfa_offset 96
-  29              		.loc 1 25 6
-  30 0002 B7050000 		lui	a1,%hi(.LANCHOR0)
-  31 0006 13060004 		li	a2,64
-  32 000a 93850500 		addi	a1,a1,%lo(.LANCHOR0)
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 2
+  18              	.LVL0:
+  70:main.c        **** 	if (*pMs == BLINKSPEED)
+  19              		.loc 1 70 2
+  20              		.loc 1 70 5 is_stmt 0
+  21 0000 1841     		lw	a4,0(a0)
+  22 0002 9307401F 		li	a5,500
+  23 0006 6316F702 		bne	a4,a5,.L4
+  69:main.c        **** 	if (*pMs == BLINKSPEED)
+  24              		.loc 1 69 35
+  25 000a 4111     		addi	sp,sp,-16
+  26              	.LCFI0:
+  27              		.cfi_def_cfa_offset 16
+  28 000c 22C4     		sw	s0,8(sp)
+  29 000e 06C6     		sw	ra,12(sp)
+  30              		.cfi_offset 8, -8
+  31              		.cfi_offset 1, -4
+  32              	.LBB4:
+  33              	.LBB5:
+  71:main.c        **** 	{
+  72:main.c        **** 		*pMs = 0;
+  34              		.loc 1 72 8
+  35 0010 23200500 		sw	zero,0(a0)
+  36 0014 2E84     		mv	s0,a1
+  37              	.LVL1:
+  38              		.loc 1 72 3 is_stmt 1
+  73:main.c        **** 		l88mem(0, *pLight);
+  39              		.loc 1 73 3
+  40 0016 8C41     		lw	a1,0(a1)
+  41              	.LVL2:
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 3
 
 
-  33 000e 0A85     		mv	a0,sp
-  19:main.c        **** 	int idle =0;
-  34              		.loc 1 19 11
-  35 0010 86CE     		sw	ra,92(sp)
-  36 0012 A2CC     		sw	s0,88(sp)
-  37 0014 A6CA     		sw	s1,84(sp)
-  38 0016 CAC8     		sw	s2,80(sp)
-  39 0018 CEC6     		sw	s3,76(sp)
-  40 001a D2C4     		sw	s4,72(sp)
-  41 001c D6C2     		sw	s5,68(sp)
-  42 001e DAC0     		sw	s6,64(sp)
-  43              		.cfi_offset 1, -4
-  44              		.cfi_offset 8, -8
-  45              		.cfi_offset 9, -12
-  46              		.cfi_offset 18, -16
-  47              		.cfi_offset 19, -20
-  48              		.cfi_offset 20, -24
-  49              		.cfi_offset 21, -28
-  50              		.cfi_offset 22, -32
-  26:main.c        **** 	initStep();
-  27:main.c        **** 	t5omsi();                                     // Initialize timer5 1kHz
-  28:main.c        ****     colinit();                                    // Initialize column toolbox
-  29:main.c        ****     l88init(); 
-  30:main.c        **** 	keyinit();
-  31:main.c        **** 
-  32:main.c        **** 
-  33:main.c        **** 
-  34:main.c        **** 	while(1){
-  35:main.c        **** 		if (t5expq()) {                           // Manage periodic tasks
-  36:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
-  37:main.c        ****             ms++;                                 // ...One second heart beat
-  38:main.c        ****             if (!(ms%2) && buffer>0){
-  39:main.c        **** 				buffer--;
-  40:main.c        **** 			 	execStep(CW);
-  41:main.c        ****             }
-  42:main.c        **** 			if (ms == 1000)
-  43:main.c        **** 			{
-  44:main.c        **** 				ms = 0;
-  45:main.c        **** 				l88mem(0, s);
-  46:main.c        **** 				s = s^1;
-  47:main.c        **** 			}
-  48:main.c        **** 
-  49:main.c        **** 			key=keyscan();
-  50:main.c        **** 			if (key>=0)
-  51:main.c        **** 			{
-  52:main.c        **** 				key = lookUpTbl[key];
-  53:main.c        **** 				switch (key)
-  51              		.loc 1 53 5
-  52 0020 B7090000 		lui	s3,%hi(.L8)
-  25:main.c        **** 	initStep();
-  53              		.loc 1 25 6
-  54 0024 97000000 		call	memcpy
-  54      E7800000 
-  55              	.LVL1:
-  26:main.c        **** 	initStep();
-  56              		.loc 1 26 2 is_stmt 1
-  57 002c 97000000 		call	initStep
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 3
-
-
-  57      E7800000 
-  58              	.LVL2:
-  27:main.c        ****     colinit();                                    // Initialize column toolbox
-  59              		.loc 1 27 2
-  23:main.c        **** 	int key = 0;
-  60              		.loc 1 23 6 is_stmt 0
-  61 0034 8144     		li	s1,0
-  27:main.c        ****     colinit();                                    // Initialize column toolbox
-  62              		.loc 1 27 2
-  63 0036 97000000 		call	t5omsi
-  63      E7800000 
-  64              	.LVL3:
-  28:main.c        ****     l88init(); 
-  65              		.loc 1 28 5 is_stmt 1
-  22:main.c        **** 	int buffer = 0;
-  66              		.loc 1 22 6 is_stmt 0
-  67 003e 0549     		li	s2,1
-  28:main.c        ****     l88init(); 
-  68              		.loc 1 28 5
-  69 0040 97000000 		call	colinit
-  69      E7800000 
-  70              	.LVL4:
-  29:main.c        **** 	keyinit();
-  71              		.loc 1 29 5 is_stmt 1
-  21:main.c        **** 	int s = 1;
-  72              		.loc 1 21 6 is_stmt 0
-  73 0048 0144     		li	s0,0
-  29:main.c        **** 	keyinit();
-  74              		.loc 1 29 5
-  75 004a 97000000 		call	l88init
-  75      E7800000 
-  76              	.LVL5:
-  30:main.c        **** 
-  77              		.loc 1 30 2 is_stmt 1
-  42:main.c        **** 			{
-  78              		.loc 1 42 7 is_stmt 0
-  79 0052 130A803E 		li	s4,1000
-  30:main.c        **** 
-  80              		.loc 1 30 2
-  81 0056 97000000 		call	keyinit
-  81      E7800000 
-  82              	.LVL6:
-  83              		.loc 1 53 5
-  84 005e A14A     		li	s5,8
-  85 0060 93890900 		addi	s3,s3,%lo(.L8)
-  54:main.c        **** 				{
-  55:main.c        **** 				case 1:
-  56:main.c        **** 				case 2:
-  57:main.c        **** 				case 4:
-  58:main.c        **** 					buffer += key*QUARTERREV;
-  86              		.loc 1 58 19
-  87 0064 130B4040 		li	s6,1028
-  88              	.LVL7:
-  89              	.L4:
-  34:main.c        **** 		if (t5expq()) {                           // Manage periodic tasks
-  90              		.loc 1 34 2 is_stmt 1
-  35:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 4
-
-
-  91              		.loc 1 35 3
-  35:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
-  92              		.loc 1 35 7 is_stmt 0
-  93 0068 97000000 		call	t5expq
-  93      E7800000 
-  94              	.LVL8:
-  35:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
-  95              		.loc 1 35 6
-  96 0070 65DD     		beq	a0,zero,.L4
-  36:main.c        ****             ms++;                                 // ...One second heart beat
-  97              		.loc 1 36 13 is_stmt 1
-  98 0072 97000000 		call	colset
-  98      E7800000 
-  99              	.LVL9:
- 100 007a 97000000 		call	l88row
- 100      E7800000 
- 101              	.LVL10:
-  37:main.c        ****             if (!(ms%2) && buffer>0){
- 102              		.loc 1 37 13
-  37:main.c        ****             if (!(ms%2) && buffer>0){
- 103              		.loc 1 37 15 is_stmt 0
- 104 0082 0504     		addi	s0,s0,1
- 105              	.LVL11:
-  38:main.c        **** 				buffer--;
- 106              		.loc 1 38 13 is_stmt 1
-  38:main.c        **** 				buffer--;
- 107              		.loc 1 38 17 is_stmt 0
- 108 0084 93771400 		andi	a5,s0,1
-  38:main.c        **** 				buffer--;
- 109              		.loc 1 38 16
- 110 0088 81EB     		bne	a5,zero,.L5
-  38:main.c        **** 				buffer--;
- 111              		.loc 1 38 25 discriminator 1
- 112 008a 99C4     		beq	s1,zero,.L5
-  39:main.c        **** 			 	execStep(CW);
- 113              		.loc 1 39 5 is_stmt 1
-  40:main.c        ****             }
- 114              		.loc 1 40 6 is_stmt 0
- 115 008c 0545     		li	a0,1
-  39:main.c        **** 			 	execStep(CW);
- 116              		.loc 1 39 11
- 117 008e FD14     		addi	s1,s1,-1
- 118              	.LVL12:
-  40:main.c        ****             }
- 119              		.loc 1 40 6 is_stmt 1
- 120 0090 97000000 		call	execStep
- 120      E7800000 
- 121              	.LVL13:
- 122              	.L5:
-  42:main.c        **** 			{
- 123              		.loc 1 42 4
-  42:main.c        **** 			{
- 124              		.loc 1 42 7 is_stmt 0
- 125 0098 631B4401 		bne	s0,s4,.L6
-  44:main.c        **** 				l88mem(0, s);
- 126              		.loc 1 44 5 is_stmt 1
- 127              	.LVL14:
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 5
-
-
-  45:main.c        **** 				s = s^1;
- 128              		.loc 1 45 5
- 129 009c CA85     		mv	a1,s2
- 130 009e 0145     		li	a0,0
- 131 00a0 97000000 		call	l88mem
- 131      E7800000 
- 132              	.LVL15:
-  46:main.c        **** 			}
- 133              		.loc 1 46 5
-  46:main.c        **** 			}
- 134              		.loc 1 46 7 is_stmt 0
- 135 00a8 13491900 		xori	s2,s2,1
- 136              	.LVL16:
-  44:main.c        **** 				l88mem(0, s);
- 137              		.loc 1 44 8
- 138 00ac 0144     		li	s0,0
- 139              	.LVL17:
- 140              	.L6:
-  49:main.c        **** 			if (key>=0)
- 141              		.loc 1 49 4 is_stmt 1
-  49:main.c        **** 			if (key>=0)
- 142              		.loc 1 49 8 is_stmt 0
- 143 00ae 97000000 		call	keyscan
- 143      E7800000 
- 144              	.LVL18:
-  50:main.c        **** 			{
- 145              		.loc 1 50 4 is_stmt 1
-  50:main.c        **** 			{
- 146              		.loc 1 50 7 is_stmt 0
- 147 00b6 E34905FA 		blt	a0,zero,.L4
-  52:main.c        **** 				switch (key)
- 148              		.loc 1 52 5 is_stmt 1
-  52:main.c        **** 				switch (key)
- 149              		.loc 1 52 9 is_stmt 0
- 150 00ba 9C00     		addi	a5,sp,64
- 151 00bc 0A05     		slli	a0,a0,2
- 152              	.LVL19:
- 153 00be 3E95     		add	a0,a5,a0
- 154 00c0 032705FC 		lw	a4,-64(a0)
- 155              	.LVL20:
-  53:main.c        **** 				{
- 156              		.loc 1 53 5 is_stmt 1
- 157 00c4 9307F7FF 		addi	a5,a4,-1
- 158 00c8 E3E0FAFA 		bgtu	a5,s5,.L4
- 159 00cc 8A07     		slli	a5,a5,2
- 160 00ce CE97     		add	a5,a5,s3
- 161 00d0 9C43     		lw	a5,0(a5)
- 162 00d2 8287     		jr	a5
- 163              		.section	.rodata.main,"a",@progbits
- 164              		.align	2
- 165              		.align	2
- 166              	.L8:
- 167 0000 00000000 		.word	.L10
- 168 0004 00000000 		.word	.L10
- 169 0008 00000000 		.word	.L4
- 170 000c 00000000 		.word	.L10
- 171 0010 00000000 		.word	.L4
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 6
-
-
- 172 0014 00000000 		.word	.L4
- 173 0018 00000000 		.word	.L9
- 174 001c 00000000 		.word	.L4
- 175 0020 00000000 		.word	.L7
- 176              		.section	.text.startup.main
- 177              	.L10:
- 178              		.loc 1 58 6
- 179              		.loc 1 58 19 is_stmt 0
- 180 00d4 33076703 		mul	a4,a4,s6
- 181              	.LVL21:
- 182              		.loc 1 58 13
- 183 00d8 BA94     		add	s1,s1,a4
- 184              	.LVL22:
-  59:main.c        **** 					break;
- 185              		.loc 1 59 6 is_stmt 1
- 186 00da 79B7     		j	.L4
- 187              	.LVL23:
- 188              	.L9:
-  60:main.c        **** 				case 7: 
-  61:main.c        **** 					execStep(CW);
- 189              		.loc 1 61 6
- 190 00dc 0545     		li	a0,1
- 191              	.L17:
-  62:main.c        **** 					break;
-  63:main.c        **** 				case 9:
-  64:main.c        **** 					execStep(CCW);
- 192              		.loc 1 64 6 is_stmt 0
- 193 00de 97000000 		call	execStep
- 193      E7800000 
- 194              	.LVL24:
-  65:main.c        **** 					break;
- 195              		.loc 1 65 6 is_stmt 1
- 196 00e6 49B7     		j	.L4
- 197              	.LVL25:
- 198              	.L7:
-  64:main.c        **** 					break;
- 199              		.loc 1 64 6
- 200 00e8 0145     		li	a0,0
- 201 00ea D5BF     		j	.L17
- 202              		.cfi_endproc
- 203              	.LFE2:
- 205              		.section	.text.spinMotor,"ax",@progbits
- 206              		.align	1
- 207              		.globl	spinMotor
- 209              	spinMotor:
- 210              	.LFB3:
-  66:main.c        **** 				default:
-  67:main.c        **** 					break;
-  68:main.c        **** 				}
-  69:main.c        **** 				
-  70:main.c        **** 			}
-  71:main.c        **** 			
-  72:main.c        **** 			
-  73:main.c        **** 
-  74:main.c        **** 		}
+  42 0018 0145     		li	a0,0
+  43              	.LVL3:
+  44 001a 97000000 		call	l88mem
+  44      E7800000 
+  45              	.LVL4:
+  74:main.c        **** 		*pLight = !(*pLight);
+  46              		.loc 1 74 3
+  47              		.loc 1 74 13 is_stmt 0
+  48 0022 1C40     		lw	a5,0(s0)
+  49              	.LBE5:
+  50              	.LBE4:
   75:main.c        **** 	}
   76:main.c        **** }
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 7
+  51              		.loc 1 76 1
+  52 0024 B240     		lw	ra,12(sp)
+  53              		.cfi_restore 1
+  54              	.LBB7:
+  55              	.LBB6:
+  74:main.c        **** 		*pLight = !(*pLight);
+  56              		.loc 1 74 13
+  57 0026 93B71700 		seqz	a5,a5
+  74:main.c        **** 		*pLight = !(*pLight);
+  58              		.loc 1 74 11
+  59 002a 1CC0     		sw	a5,0(s0)
+  60              	.LBE6:
+  61              	.LBE7:
+  62              		.loc 1 76 1
+  63 002c 2244     		lw	s0,8(sp)
+  64              		.cfi_restore 8
+  65              	.LVL5:
+  66 002e 4101     		addi	sp,sp,16
+  67              	.LCFI1:
+  68              		.cfi_def_cfa_offset 0
+  69 0030 8280     		jr	ra
+  70              	.LVL6:
+  71              	.L4:
+  72 0032 8280     		ret
+  73              		.cfi_endproc
+  74              	.LFE3:
+  76              		.section	.text.keyPad,"ax",@progbits
+  77              		.align	1
+  78              		.globl	keyPad
+  80              	keyPad:
+  81              	.LFB4:
+  77:main.c        **** void keyPad (int pressedKey, int *pStepBuffer, int *pMoveBuffer){
+  82              		.loc 1 77 65 is_stmt 1
+  83              		.cfi_startproc
+  84              	.LVL7:
+  78:main.c        **** 	switch (pressedKey)
+  85              		.loc 1 78 2
+  86 0000 A947     		li	a5,10
+  87 0002 634DF500 		blt	a0,a5,.L8
+  88 0006 B947     		li	a5,14
+  89 0008 63DDA700 		ble	a0,a5,.L7
+  90 000c BD47     		li	a5,15
+  91 000e 6317F500 		bne	a0,a5,.L8
+  79:main.c        **** 	{
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 4
 
 
-  77:main.c        **** 
-  78:main.c        **** void spinMotor(int distance){
- 211              		.loc 1 78 29
- 212              		.cfi_startproc
- 213              	.LVL26:
-  79:main.c        **** 	
-  80:main.c        **** }...
- 214              		.loc 1 80 1
- 215 0000 8280     		ret
- 216              		.cfi_endproc
- 217              	.LFE3:
- 219              		.section	.rodata
- 220              		.align	2
- 221              		.set	.LANCHOR0,. + 0
- 222              	.LC0:
- 223 0000 01000000 		.word	1
- 224 0004 04000000 		.word	4
- 225 0008 07000000 		.word	7
- 226 000c 0E000000 		.word	14
- 227 0010 02000000 		.word	2
- 228 0014 05000000 		.word	5
- 229 0018 08000000 		.word	8
- 230 001c 00000000 		.word	0
- 231 0020 03000000 		.word	3
- 232 0024 06000000 		.word	6
- 233 0028 09000000 		.word	9
- 234 002c 0F000000 		.word	15
- 235 0030 0A000000 		.word	10
- 236 0034 0B000000 		.word	11
- 237 0038 0C000000 		.word	12
- 238 003c 0D000000 		.word	13
- 239              		.text
- 240              	.Letext0:
- 241              		.file 2 "/Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/riscv64-unknown-elf/include/mac
- 242              		.file 3 "/Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/riscv64-unknown-elf/include/sys
- 243              		.file 4 "stepperUP.h"
- 244              		.file 5 "drivers.h"
- 245              		.file 6 "../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
- 246              		.file 7 "<built-in>"
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 8
+  80:main.c        **** 	case 10:
+  81:main.c        **** 	case 11:
+  82:main.c        **** 	case 12:
+  83:main.c        **** 	case 13: 
+  84:main.c        **** 	case 14:
+  85:main.c        **** 		break;
+  86:main.c        **** 	case 15:
+  87:main.c        **** 		(*pMoveBuffer) += 32;
+  92              		.loc 1 87 3
+  93              		.loc 1 87 18 is_stmt 0
+  94 0012 1C42     		lw	a5,0(a2)
+  95 0014 93870702 		addi	a5,a5,32
+  96 0018 1CC2     		sw	a5,0(a2)
+  88:main.c        **** 		break;
+  97              		.loc 1 88 3 is_stmt 1
+  98 001a 8280     		ret
+  99              	.L8:
+  89:main.c        **** 	default:
+  90:main.c        **** 		(*pStepBuffer) += pressedKey;
+ 100              		.loc 1 90 3
+ 101              		.loc 1 90 18 is_stmt 0
+ 102 001c 9C41     		lw	a5,0(a1)
+ 103 001e 3E95     		add	a0,a5,a0
+ 104              	.LVL8:
+ 105 0020 88C1     		sw	a0,0(a1)
+  91:main.c        **** 		break;
+ 106              		.loc 1 91 3 is_stmt 1
+ 107              	.L7:
+  92:main.c        **** 	}
+  93:main.c        **** 
+  94:main.c        **** }
+ 108              		.loc 1 94 1 is_stmt 0
+ 109 0022 8280     		ret
+ 110              		.cfi_endproc
+ 111              	.LFE4:
+ 113              		.section	.text.printStop,"ax",@progbits
+ 114              		.align	1
+ 115              		.globl	printStop
+ 117              	printStop:
+ 118              	.LFB6:
+  95:main.c        **** 
+  96:main.c        **** void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer){
+  97:main.c        **** 	if ((*pDelayBuffer)>0)
+  98:main.c        **** 	{
+  99:main.c        **** 		printStop();
+ 100:main.c        **** 		(*pDelayBuffer)--;
+ 101:main.c        **** 	}
+ 102:main.c        **** 	else if ((*pMoveBuffer)>0){
+ 103:main.c        **** 		printGo();
+ 104:main.c        **** 		(*pMoveBuffer)--;
+ 105:main.c        **** 		execStep(CW);
+ 106:main.c        **** 		if (!(*pMoveBuffer))
+ 107:main.c        **** 		{
+ 108:main.c        **** 			*pDelayBuffer = DELAY;
+ 109:main.c        **** 		}
+ 110:main.c        **** 	}
+ 111:main.c        **** 	else if (*pStepBuffer){
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 5
+
+
+ 112:main.c        **** 		(*pStepBuffer)--;
+ 113:main.c        **** 		*pMoveBuffer = QUARTERREV;
+ 114:main.c        **** 	}
+ 115:main.c        **** }
+ 116:main.c        **** 
+ 117:main.c        **** void printStop (void){
+ 119              		.loc 1 117 22 is_stmt 1
+ 120              		.cfi_startproc
+ 118:main.c        **** 	l88mem(6, 0xFF);
+ 121              		.loc 1 118 2
+ 117:main.c        **** 	l88mem(6, 0xFF);
+ 122              		.loc 1 117 22 is_stmt 0
+ 123 0000 4111     		addi	sp,sp,-16
+ 124              	.LCFI2:
+ 125              		.cfi_def_cfa_offset 16
+ 126              		.loc 1 118 2
+ 127 0002 9305F00F 		li	a1,255
+ 128 0006 1945     		li	a0,6
+ 117:main.c        **** 	l88mem(6, 0xFF);
+ 129              		.loc 1 117 22
+ 130 0008 06C6     		sw	ra,12(sp)
+ 131              		.cfi_offset 1, -4
+ 132              		.loc 1 118 2
+ 133 000a 97000000 		call	l88mem
+ 133      E7800000 
+ 134              	.LVL9:
+ 119:main.c        **** 	l88mem(7, 0xFF);
+ 135              		.loc 1 119 2 is_stmt 1
+ 120:main.c        **** }
+ 136              		.loc 1 120 1 is_stmt 0
+ 137 0012 B240     		lw	ra,12(sp)
+ 138              		.cfi_restore 1
+ 119:main.c        **** 	l88mem(7, 0xFF);
+ 139              		.loc 1 119 2
+ 140 0014 9305F00F 		li	a1,255
+ 141              		.loc 1 120 1
+ 119:main.c        **** 	l88mem(7, 0xFF);
+ 142              		.loc 1 119 2
+ 143 0018 1D45     		li	a0,7
+ 144              		.loc 1 120 1
+ 145 001a 4101     		addi	sp,sp,16
+ 146              	.LCFI3:
+ 147              		.cfi_def_cfa_offset 0
+ 119:main.c        **** 	l88mem(7, 0xFF);
+ 148              		.loc 1 119 2
+ 149 001c 17030000 		tail	l88mem
+ 149      67000300 
+ 150              	.LVL10:
+ 151              		.cfi_endproc
+ 152              	.LFE6:
+ 154              		.section	.text.printGo,"ax",@progbits
+ 155              		.align	1
+ 156              		.globl	printGo
+ 158              	printGo:
+ 159              	.LFB7:
+ 121:main.c        **** void printGo (void){
+ 160              		.loc 1 121 20 is_stmt 1
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 6
+
+
+ 161              		.cfi_startproc
+ 122:main.c        **** 	l88mem(6, 0x00);
+ 162              		.loc 1 122 2
+ 121:main.c        **** void printGo (void){
+ 163              		.loc 1 121 20 is_stmt 0
+ 164 0000 4111     		addi	sp,sp,-16
+ 165              	.LCFI4:
+ 166              		.cfi_def_cfa_offset 16
+ 167              		.loc 1 122 2
+ 168 0002 8145     		li	a1,0
+ 169 0004 1945     		li	a0,6
+ 121:main.c        **** void printGo (void){
+ 170              		.loc 1 121 20
+ 171 0006 06C6     		sw	ra,12(sp)
+ 172              		.cfi_offset 1, -4
+ 173              		.loc 1 122 2
+ 174 0008 97000000 		call	l88mem
+ 174      E7800000 
+ 175              	.LVL11:
+ 123:main.c        **** 	l88mem(7, 0x00);
+ 176              		.loc 1 123 2 is_stmt 1
+ 124:main.c        **** }...
+ 177              		.loc 1 124 1 is_stmt 0
+ 178 0010 B240     		lw	ra,12(sp)
+ 179              		.cfi_restore 1
+ 123:main.c        **** 	l88mem(7, 0x00);
+ 180              		.loc 1 123 2
+ 181 0012 8145     		li	a1,0
+ 182              		.loc 1 124 1
+ 123:main.c        **** 	l88mem(7, 0x00);
+ 183              		.loc 1 123 2
+ 184 0014 1D45     		li	a0,7
+ 185              		.loc 1 124 1
+ 186 0016 4101     		addi	sp,sp,16
+ 187              	.LCFI5:
+ 188              		.cfi_def_cfa_offset 0
+ 123:main.c        **** 	l88mem(7, 0x00);
+ 189              		.loc 1 123 2
+ 190 0018 17030000 		tail	l88mem
+ 190      67000300 
+ 191              	.LVL12:
+ 192              		.cfi_endproc
+ 193              	.LFE7:
+ 195              		.section	.text.motorStep,"ax",@progbits
+ 196              		.align	1
+ 197              		.globl	motorStep
+ 199              	motorStep:
+ 200              	.LFB5:
+  96:main.c        **** void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer){
+ 201              		.loc 1 96 71 is_stmt 1
+ 202              		.cfi_startproc
+ 203              	.LVL13:
+  97:main.c        **** 	if ((*pDelayBuffer)>0)
+ 204              		.loc 1 97 2
+  97:main.c        **** 	if ((*pDelayBuffer)>0)
+ 205              		.loc 1 97 5 is_stmt 0
+ 206 0000 9C41     		lw	a5,0(a1)
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 7
+
+
+  96:main.c        **** void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer){
+ 207              		.loc 1 96 71
+ 208 0002 4111     		addi	sp,sp,-16
+ 209              	.LCFI6:
+ 210              		.cfi_def_cfa_offset 16
+ 211 0004 26C2     		sw	s1,4(sp)
+ 212 0006 06C6     		sw	ra,12(sp)
+ 213 0008 22C4     		sw	s0,8(sp)
+ 214              		.cfi_offset 9, -12
+ 215              		.cfi_offset 1, -4
+ 216              		.cfi_offset 8, -8
+  96:main.c        **** void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer){
+ 217              		.loc 1 96 71
+ 218 000a AE84     		mv	s1,a1
+  97:main.c        **** 	if ((*pDelayBuffer)>0)
+ 219              		.loc 1 97 5
+ 220 000c 635EF000 		ble	a5,zero,.L15
+  99:main.c        **** 		printStop();
+ 221              		.loc 1 99 3 is_stmt 1
+ 222 0010 97000000 		call	printStop
+ 222      E7800000 
+ 223              	.LVL14:
+ 100:main.c        **** 		(*pDelayBuffer)--;
+ 224              		.loc 1 100 3
+ 100:main.c        **** 		(*pDelayBuffer)--;
+ 225              		.loc 1 100 18 is_stmt 0
+ 226 0018 9C40     		lw	a5,0(s1)
+ 227 001a FD17     		addi	a5,a5,-1
+ 228              	.L24:
+ 229              	.LBB10:
+ 230              	.LBB11:
+ 108:main.c        **** 			*pDelayBuffer = DELAY;
+ 231              		.loc 1 108 18
+ 232 001c 9CC0     		sw	a5,0(s1)
+ 233              	.L14:
+ 234              	.LBE11:
+ 235              	.LBE10:
+ 115:main.c        **** }
+ 236              		.loc 1 115 1
+ 237 001e B240     		lw	ra,12(sp)
+ 238              		.cfi_remember_state
+ 239              		.cfi_restore 1
+ 240 0020 2244     		lw	s0,8(sp)
+ 241              		.cfi_restore 8
+ 242 0022 9244     		lw	s1,4(sp)
+ 243              		.cfi_restore 9
+ 244              	.LVL15:
+ 245 0024 4101     		addi	sp,sp,16
+ 246              	.LCFI7:
+ 247              		.cfi_def_cfa_offset 0
+ 248 0026 8280     		jr	ra
+ 249              	.LVL16:
+ 250              	.L15:
+ 251              	.LCFI8:
+ 252              		.cfi_restore_state
+ 102:main.c        **** 	else if ((*pMoveBuffer)>0){
+ 253              		.loc 1 102 10
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 8
+
+
+ 254 0028 1C42     		lw	a5,0(a2)
+ 255 002a 3284     		mv	s0,a2
+ 102:main.c        **** 	else if ((*pMoveBuffer)>0){
+ 256              		.loc 1 102 7 is_stmt 1
+ 102:main.c        **** 	else if ((*pMoveBuffer)>0){
+ 257              		.loc 1 102 10 is_stmt 0
+ 258 002c 6353F002 		ble	a5,zero,.L17
+ 259              	.LVL17:
+ 260              	.LBB13:
+ 261              	.LBB12:
+ 103:main.c        **** 		printGo();
+ 262              		.loc 1 103 3 is_stmt 1
+ 263 0030 97000000 		call	printGo
+ 263      E7800000 
+ 264              	.LVL18:
+ 104:main.c        **** 		(*pMoveBuffer)--;
+ 265              		.loc 1 104 3
+ 104:main.c        **** 		(*pMoveBuffer)--;
+ 266              		.loc 1 104 17 is_stmt 0
+ 267 0038 1C40     		lw	a5,0(s0)
+ 105:main.c        **** 		execStep(CW);
+ 268              		.loc 1 105 3
+ 269 003a 0545     		li	a0,1
+ 104:main.c        **** 		(*pMoveBuffer)--;
+ 270              		.loc 1 104 17
+ 271 003c FD17     		addi	a5,a5,-1
+ 272 003e 1CC0     		sw	a5,0(s0)
+ 105:main.c        **** 		execStep(CW);
+ 273              		.loc 1 105 3 is_stmt 1
+ 274 0040 97000000 		call	execStep
+ 274      E7800000 
+ 275              	.LVL19:
+ 106:main.c        **** 		if (!(*pMoveBuffer))
+ 276              		.loc 1 106 3
+ 106:main.c        **** 		if (!(*pMoveBuffer))
+ 277              		.loc 1 106 6 is_stmt 0
+ 278 0048 1C40     		lw	a5,0(s0)
+ 279 004a F1FB     		bne	a5,zero,.L14
+ 108:main.c        **** 			*pDelayBuffer = DELAY;
+ 280              		.loc 1 108 4 is_stmt 1
+ 108:main.c        **** 			*pDelayBuffer = DELAY;
+ 281              		.loc 1 108 18 is_stmt 0
+ 282 004c 9307800C 		li	a5,200
+ 283 0050 F1B7     		j	.L24
+ 284              	.LVL20:
+ 285              	.L17:
+ 286              	.LBE12:
+ 287              	.LBE13:
+ 111:main.c        **** 	else if (*pStepBuffer){
+ 288              		.loc 1 111 7 is_stmt 1
+ 111:main.c        **** 	else if (*pStepBuffer){
+ 289              		.loc 1 111 11 is_stmt 0
+ 290 0052 1C41     		lw	a5,0(a0)
+ 111:main.c        **** 	else if (*pStepBuffer){
+ 291              		.loc 1 111 10
+ 292 0054 E9D7     		beq	a5,zero,.L14
+ 112:main.c        **** 		(*pStepBuffer)--;
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 9
+
+
+ 293              		.loc 1 112 3 is_stmt 1
+ 112:main.c        **** 		(*pStepBuffer)--;
+ 294              		.loc 1 112 17 is_stmt 0
+ 295 0056 FD17     		addi	a5,a5,-1
+ 296 0058 1CC1     		sw	a5,0(a0)
+ 113:main.c        **** 		*pMoveBuffer = QUARTERREV;
+ 297              		.loc 1 113 3 is_stmt 1
+ 113:main.c        **** 		*pMoveBuffer = QUARTERREV;
+ 298              		.loc 1 113 16 is_stmt 0
+ 299 005a 93074040 		li	a5,1028
+ 300 005e 1CC2     		sw	a5,0(a2)
+ 115:main.c        **** }
+ 301              		.loc 1 115 1
+ 302 0060 7DBF     		j	.L14
+ 303              		.cfi_endproc
+ 304              	.LFE5:
+ 306              		.section	.text.startup.main,"ax",@progbits
+ 307              		.align	1
+ 308              		.globl	main
+ 310              	main:
+ 311              	.LFB2:
+  26:main.c        **** int main(){
+ 312              		.loc 1 26 11 is_stmt 1
+ 313              		.cfi_startproc
+  27:main.c        **** 	int idle =0;
+ 314              		.loc 1 27 2
+ 315              	.LVL21:
+  28:main.c        **** 	int ms = 0;
+ 316              		.loc 1 28 2
+  26:main.c        **** int main(){
+ 317              		.loc 1 26 11 is_stmt 0
+ 318 0000 5971     		addi	sp,sp,-112
+ 319              	.LCFI9:
+ 320              		.cfi_def_cfa_offset 112
+  34:main.c        **** 	int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+ 321              		.loc 1 34 6
+ 322 0002 B7050000 		lui	a1,%hi(.LANCHOR0)
+  29:main.c        **** 	int light = 1;
+ 323              		.loc 1 29 6
+ 324 0006 8547     		li	a5,1
+  34:main.c        **** 	int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+ 325              		.loc 1 34 6
+ 326 0008 13060004 		li	a2,64
+ 327 000c 93850500 		addi	a1,a1,%lo(.LANCHOR0)
+ 328 0010 0810     		addi	a0,sp,32
+  26:main.c        **** int main(){
+ 329              		.loc 1 26 11
+ 330 0012 86D6     		sw	ra,108(sp)
+  29:main.c        **** 	int light = 1;
+ 331              		.loc 1 29 6
+ 332 0014 3EC8     		sw	a5,16(sp)
+  26:main.c        **** int main(){
+ 333              		.loc 1 26 11
+ 334 0016 A2D4     		sw	s0,104(sp)
+ 335              		.cfi_offset 1, -4
+ 336              		.cfi_offset 8, -8
+  28:main.c        **** 	int ms = 0;
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 10
+
+
+ 337              		.loc 1 28 6
+ 338 0018 02C6     		sw	zero,12(sp)
+  29:main.c        **** 	int light = 1;
+ 339              		.loc 1 29 2 is_stmt 1
+  30:main.c        **** 	int moveBuffer = 0;
+ 340              		.loc 1 30 2
+  30:main.c        **** 	int moveBuffer = 0;
+ 341              		.loc 1 30 6 is_stmt 0
+ 342 001a 02CA     		sw	zero,20(sp)
+  31:main.c        **** 	int delayBuffer = 0;
+ 343              		.loc 1 31 2 is_stmt 1
+  31:main.c        **** 	int delayBuffer = 0;
+ 344              		.loc 1 31 6 is_stmt 0
+ 345 001c 02CC     		sw	zero,24(sp)
+  32:main.c        **** 	int stepBuffer = 0;
+ 346              		.loc 1 32 2 is_stmt 1
+  32:main.c        **** 	int stepBuffer = 0;
+ 347              		.loc 1 32 6 is_stmt 0
+ 348 001e 02CE     		sw	zero,28(sp)
+  33:main.c        **** 	int key = 0;
+ 349              		.loc 1 33 2 is_stmt 1
+ 350              	.LVL22:
+  34:main.c        **** 	int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+ 351              		.loc 1 34 2
+  34:main.c        **** 	int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+ 352              		.loc 1 34 6 is_stmt 0
+ 353 0020 97000000 		call	memcpy
+ 353      E7800000 
+ 354              	.LVL23:
+  35:main.c        **** 	initStep();
+ 355              		.loc 1 35 2 is_stmt 1
+ 356 0028 97000000 		call	initStep
+ 356      E7800000 
+ 357              	.LVL24:
+  36:main.c        **** 	t5omsi();                                     // Initialize timer5 1kHz
+ 358              		.loc 1 36 2
+  49:main.c        **** 			l88mem(2, delayBuffer/100);
+ 359              		.loc 1 49 4 is_stmt 0
+ 360 0030 13044006 		li	s0,100
+  36:main.c        **** 	t5omsi();                                     // Initialize timer5 1kHz
+ 361              		.loc 1 36 2
+ 362 0034 97000000 		call	t5omsi
+ 362      E7800000 
+ 363              	.LVL25:
+  37:main.c        ****     colinit();                                    // Initialize column toolbox
+ 364              		.loc 1 37 5 is_stmt 1
+ 365 003c 97000000 		call	colinit
+ 365      E7800000 
+ 366              	.LVL26:
+  38:main.c        ****     l88init(); 
+ 367              		.loc 1 38 5
+ 368 0044 97000000 		call	l88init
+ 368      E7800000 
+ 369              	.LVL27:
+  39:main.c        **** 	keyinit();
+ 370              		.loc 1 39 2
+ 371 004c 97000000 		call	keyinit
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 11
+
+
+ 371      E7800000 
+ 372              	.LVL28:
+ 373              	.L26:
+  43:main.c        **** 	while(1){
+ 374              		.loc 1 43 2
+  44:main.c        **** 		if (t5expq()) {                           // Manage periodic tasks
+ 375              		.loc 1 44 3
+  44:main.c        **** 		if (t5expq()) {                           // Manage periodic tasks
+ 376              		.loc 1 44 7 is_stmt 0
+ 377 0054 97000000 		call	t5expq
+ 377      E7800000 
+ 378              	.LVL29:
+  44:main.c        **** 		if (t5expq()) {                           // Manage periodic tasks
+ 379              		.loc 1 44 6
+ 380 005c 65DD     		beq	a0,zero,.L26
+  45:main.c        ****             l88row(colset());                     // ...8*8LED and Keyboard
+ 381              		.loc 1 45 13 is_stmt 1
+ 382 005e 97000000 		call	colset
+ 382      E7800000 
+ 383              	.LVL30:
+ 384 0066 97000000 		call	l88row
+ 384      E7800000 
+ 385              	.LVL31:
+  46:main.c        ****             ms++;                                 // ...One second heart beat
+ 386              		.loc 1 46 13
+  46:main.c        ****             ms++;                                 // ...One second heart beat
+ 387              		.loc 1 46 15 is_stmt 0
+ 388 006e B247     		lw	a5,12(sp)
+  48:main.c        **** 			l88mem(1, stepBuffer);
+ 389              		.loc 1 48 4
+ 390 0070 F245     		lw	a1,28(sp)
+ 391 0072 0545     		li	a0,1
+  46:main.c        ****             ms++;                                 // ...One second heart beat
+ 392              		.loc 1 46 15
+ 393 0074 8507     		addi	a5,a5,1
+ 394 0076 3EC6     		sw	a5,12(sp)
+  48:main.c        **** 			l88mem(1, stepBuffer);
+ 395              		.loc 1 48 4 is_stmt 1
+ 396 0078 97000000 		call	l88mem
+ 396      E7800000 
+ 397              	.LVL32:
+  49:main.c        **** 			l88mem(2, delayBuffer/100);
+ 398              		.loc 1 49 4
+ 399 0080 E245     		lw	a1,24(sp)
+ 400 0082 0945     		li	a0,2
+ 401 0084 B3C58502 		div	a1,a1,s0
+ 402 0088 97000000 		call	l88mem
+ 402      E7800000 
+ 403              	.LVL33:
+  50:main.c        **** 			l88mem(3, moveBuffer/100);
+ 404              		.loc 1 50 4
+ 405 0090 D245     		lw	a1,20(sp)
+ 406 0092 0D45     		li	a0,3
+ 407 0094 B3C58502 		div	a1,a1,s0
+ 408 0098 97000000 		call	l88mem
+ 408      E7800000 
+ 409              	.LVL34:
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 12
+
+
+  52:main.c        ****             if (!(ms%SPEED)){
+ 410              		.loc 1 52 13
+  53:main.c        **** 				motorStep(&stepBuffer, &delayBuffer, &moveBuffer);			
+ 411              		.loc 1 53 5
+ 412 00a0 5008     		addi	a2,sp,20
+ 413 00a2 2C08     		addi	a1,sp,24
+ 414 00a4 6808     		addi	a0,sp,28
+ 415 00a6 97000000 		call	motorStep
+ 415      E7800000 
+ 416              	.LVL35:
+  56:main.c        **** 			key=keyscan();
+ 417              		.loc 1 56 4
+  56:main.c        **** 			key=keyscan();
+ 418              		.loc 1 56 8 is_stmt 0
+ 419 00ae 97000000 		call	keyscan
+ 419      E7800000 
+ 420              	.LVL36:
+  57:main.c        **** 			if (key>=0)
+ 421              		.loc 1 57 4 is_stmt 1
+  57:main.c        **** 			if (key>=0)
+ 422              		.loc 1 57 7 is_stmt 0
+ 423 00b6 634D0500 		blt	a0,zero,.L27
+  59:main.c        **** 				keyPad(lookUpTbl[key], &stepBuffer, &moveBuffer);
+ 424              		.loc 1 59 5 is_stmt 1
+ 425 00ba 0A05     		slli	a0,a0,2
+ 426              	.LVL37:
+ 427 00bc 9C10     		addi	a5,sp,96
+ 428 00be 3E95     		add	a0,a5,a0
+ 429 00c0 032505FC 		lw	a0,-64(a0)
+ 430 00c4 5008     		addi	a2,sp,20
+ 431 00c6 6C08     		addi	a1,sp,28
+ 432 00c8 97000000 		call	keyPad
+ 432      E7800000 
+ 433              	.LVL38:
+ 434              	.L27:
+  62:main.c        **** 			blink(&ms, &light);
+ 435              		.loc 1 62 4
+ 436 00d0 0C08     		addi	a1,sp,16
+ 437 00d2 6800     		addi	a0,sp,12
+ 438 00d4 97000000 		call	blink
+ 438      E7800000 
+ 439              	.LVL39:
+ 440 00dc A5BF     		j	.L26
+ 441              		.cfi_endproc
+ 442              	.LFE2:
+ 444              		.section	.rodata
+ 445              		.align	2
+ 446              		.set	.LANCHOR0,. + 0
+ 447              	.LC0:
+ 448 0000 01000000 		.word	1
+ 449 0004 04000000 		.word	4
+ 450 0008 07000000 		.word	7
+ 451 000c 0E000000 		.word	14
+ 452 0010 02000000 		.word	2
+ 453 0014 05000000 		.word	5
+ 454 0018 08000000 		.word	8
+ 455 001c 00000000 		.word	0
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 13
+
+
+ 456 0020 03000000 		.word	3
+ 457 0024 06000000 		.word	6
+ 458 0028 09000000 		.word	9
+ 459 002c 0F000000 		.word	15
+ 460 0030 0A000000 		.word	10
+ 461 0034 0B000000 		.word	11
+ 462 0038 0C000000 		.word	12
+ 463 003c 0D000000 		.word	13
+ 464              		.text
+ 465              	.Letext0:
+ 466              		.file 2 "/Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/riscv64-unknown-elf/include/mac
+ 467              		.file 3 "/Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/riscv64-unknown-elf/include/sys
+ 468              		.file 4 "drivers.h"
+ 469              		.file 5 "stepperUP.h"
+ 470              		.file 6 "../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h"
+ 471              		.file 7 "<built-in>"
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 14
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 main.c
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:13     .text.startup.main:0000000000000000 main
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:17     .text.startup.main:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:18     .text.startup.main:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:20     .text.startup.main:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:21     .text.startup.main:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:22     .text.startup.main:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:23     .text.startup.main:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:24     .text.startup.main:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:25     .text.startup.main:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:26     .text.startup.main:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:28     .text.startup.main:0000000000000002 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:30     .text.startup.main:0000000000000002 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:35     .text.startup.main:0000000000000010 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:43     .text.startup.main:0000000000000020 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:44     .text.startup.main:0000000000000020 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:45     .text.startup.main:0000000000000020 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:46     .text.startup.main:0000000000000020 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:47     .text.startup.main:0000000000000020 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:48     .text.startup.main:0000000000000020 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:49     .text.startup.main:0000000000000020 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:50     .text.startup.main:0000000000000020 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:52     .text.startup.main:0000000000000020 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:54     .text.startup.main:0000000000000024 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:57     .text.startup.main:000000000000002c .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:60     .text.startup.main:0000000000000034 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:61     .text.startup.main:0000000000000034 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:63     .text.startup.main:0000000000000036 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:66     .text.startup.main:000000000000003e .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:67     .text.startup.main:000000000000003e .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:69     .text.startup.main:0000000000000040 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:72     .text.startup.main:0000000000000048 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:73     .text.startup.main:0000000000000048 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:75     .text.startup.main:000000000000004a .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:78     .text.startup.main:0000000000000052 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:79     .text.startup.main:0000000000000052 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:81     .text.startup.main:0000000000000056 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:84     .text.startup.main:000000000000005e .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:87     .text.startup.main:0000000000000064 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:91     .text.startup.main:0000000000000068 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:92     .text.startup.main:0000000000000068 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:93     .text.startup.main:0000000000000068 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:96     .text.startup.main:0000000000000070 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:98     .text.startup.main:0000000000000072 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:103    .text.startup.main:0000000000000082 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:104    .text.startup.main:0000000000000082 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:107    .text.startup.main:0000000000000084 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:108    .text.startup.main:0000000000000084 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:110    .text.startup.main:0000000000000088 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:112    .text.startup.main:000000000000008a .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:114    .text.startup.main:000000000000008c .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:115    .text.startup.main:000000000000008c .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:117    .text.startup.main:000000000000008e .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:120    .text.startup.main:0000000000000090 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:124    .text.startup.main:0000000000000098 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:125    .text.startup.main:0000000000000098 .L0 
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 9
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:13     .text.blink:0000000000000000 blink
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:17     .text.blink:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:19     .text.blink:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:20     .text.blink:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:21     .text.blink:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:25     .text.blink:000000000000000a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:27     .text.blink:000000000000000c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:30     .text.blink:0000000000000010 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:31     .text.blink:0000000000000010 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:35     .text.blink:0000000000000010 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:39     .text.blink:0000000000000016 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:40     .text.blink:0000000000000016 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:47     .text.blink:0000000000000022 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:48     .text.blink:0000000000000022 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:52     .text.blink:0000000000000024 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:53     .text.blink:0000000000000026 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:57     .text.blink:0000000000000026 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:59     .text.blink:000000000000002a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:63     .text.blink:000000000000002c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:64     .text.blink:000000000000002e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:68     .text.blink:0000000000000030 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:73     .text.blink:0000000000000034 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:80     .text.keyPad:0000000000000000 keyPad
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:83     .text.keyPad:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:85     .text.keyPad:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:86     .text.keyPad:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:93     .text.keyPad:0000000000000012 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:94     .text.keyPad:0000000000000012 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:98     .text.keyPad:000000000000001a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:101    .text.keyPad:000000000000001c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:102    .text.keyPad:000000000000001c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:108    .text.keyPad:0000000000000022 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:109    .text.keyPad:0000000000000022 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:110    .text.keyPad:0000000000000024 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:117    .text.printStop:0000000000000000 printStop
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:120    .text.printStop:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:121    .text.printStop:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:122    .text.printStop:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:123    .text.printStop:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:125    .text.printStop:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:127    .text.printStop:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:130    .text.printStop:0000000000000008 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:131    .text.printStop:000000000000000a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:133    .text.printStop:000000000000000a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:136    .text.printStop:0000000000000012 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:137    .text.printStop:0000000000000012 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:138    .text.printStop:0000000000000014 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:140    .text.printStop:0000000000000014 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:142    .text.printStop:0000000000000018 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:143    .text.printStop:0000000000000018 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:145    .text.printStop:000000000000001a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:147    .text.printStop:000000000000001c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:149    .text.printStop:000000000000001c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:151    .text.printStop:0000000000000024 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:158    .text.printGo:0000000000000000 printGo
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 15
 
 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:128    .text.startup.main:000000000000009c .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:129    .text.startup.main:000000000000009c .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:134    .text.startup.main:00000000000000a8 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:135    .text.startup.main:00000000000000a8 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:138    .text.startup.main:00000000000000ac .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:142    .text.startup.main:00000000000000ae .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:143    .text.startup.main:00000000000000ae .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:146    .text.startup.main:00000000000000b6 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:147    .text.startup.main:00000000000000b6 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:149    .text.startup.main:00000000000000ba .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:150    .text.startup.main:00000000000000ba .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:157    .text.startup.main:00000000000000c4 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:179    .text.startup.main:00000000000000d4 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:180    .text.startup.main:00000000000000d4 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:183    .text.startup.main:00000000000000d8 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:186    .text.startup.main:00000000000000da .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:190    .text.startup.main:00000000000000dc .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:193    .text.startup.main:00000000000000de .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:196    .text.startup.main:00000000000000e6 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:200    .text.startup.main:00000000000000e8 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:202    .text.startup.main:00000000000000ec .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:209    .text.spinMotor:0000000000000000 spinMotor
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:212    .text.spinMotor:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:214    .text.spinMotor:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:215    .text.spinMotor:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:216    .text.spinMotor:0000000000000002 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:221    .rodata:0000000000000000 .LANCHOR0
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:205    .text.startup.main:00000000000000ec .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:219    .text.spinMotor:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:161    .text.printGo:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:162    .text.printGo:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:163    .text.printGo:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:164    .text.printGo:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:166    .text.printGo:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:168    .text.printGo:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:171    .text.printGo:0000000000000006 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:172    .text.printGo:0000000000000008 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:174    .text.printGo:0000000000000008 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:177    .text.printGo:0000000000000010 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:178    .text.printGo:0000000000000010 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:179    .text.printGo:0000000000000012 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:181    .text.printGo:0000000000000012 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:183    .text.printGo:0000000000000014 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:184    .text.printGo:0000000000000014 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:186    .text.printGo:0000000000000016 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:188    .text.printGo:0000000000000018 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:190    .text.printGo:0000000000000018 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:192    .text.printGo:0000000000000020 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:199    .text.motorStep:0000000000000000 motorStep
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:202    .text.motorStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:204    .text.motorStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:205    .text.motorStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:206    .text.motorStep:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:208    .text.motorStep:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:210    .text.motorStep:0000000000000004 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:214    .text.motorStep:000000000000000a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:215    .text.motorStep:000000000000000a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:216    .text.motorStep:000000000000000a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:218    .text.motorStep:000000000000000a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:220    .text.motorStep:000000000000000c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:222    .text.motorStep:0000000000000010 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:225    .text.motorStep:0000000000000018 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:226    .text.motorStep:0000000000000018 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:232    .text.motorStep:000000000000001c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:237    .text.motorStep:000000000000001e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:238    .text.motorStep:0000000000000020 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:239    .text.motorStep:0000000000000020 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:241    .text.motorStep:0000000000000022 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:243    .text.motorStep:0000000000000024 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:247    .text.motorStep:0000000000000026 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:252    .text.motorStep:0000000000000028 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:254    .text.motorStep:0000000000000028 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:257    .text.motorStep:000000000000002c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:258    .text.motorStep:000000000000002c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:263    .text.motorStep:0000000000000030 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:266    .text.motorStep:0000000000000038 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:267    .text.motorStep:0000000000000038 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:269    .text.motorStep:000000000000003a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:271    .text.motorStep:000000000000003c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:274    .text.motorStep:0000000000000040 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:277    .text.motorStep:0000000000000048 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:278    .text.motorStep:0000000000000048 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:281    .text.motorStep:000000000000004c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:282    .text.motorStep:000000000000004c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:289    .text.motorStep:0000000000000052 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:290    .text.motorStep:0000000000000052 .L0 
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 16
+
+
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:292    .text.motorStep:0000000000000054 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:294    .text.motorStep:0000000000000056 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:295    .text.motorStep:0000000000000056 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:298    .text.motorStep:000000000000005a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:299    .text.motorStep:000000000000005a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:302    .text.motorStep:0000000000000060 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:303    .text.motorStep:0000000000000062 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:310    .text.startup.main:0000000000000000 main
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:313    .text.startup.main:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:314    .text.startup.main:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:316    .text.startup.main:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:317    .text.startup.main:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:318    .text.startup.main:0000000000000000 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:320    .text.startup.main:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:322    .text.startup.main:0000000000000002 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:324    .text.startup.main:0000000000000006 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:326    .text.startup.main:0000000000000008 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:330    .text.startup.main:0000000000000012 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:332    .text.startup.main:0000000000000014 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:334    .text.startup.main:0000000000000016 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:335    .text.startup.main:0000000000000018 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:336    .text.startup.main:0000000000000018 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:338    .text.startup.main:0000000000000018 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:340    .text.startup.main:000000000000001a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:341    .text.startup.main:000000000000001a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:342    .text.startup.main:000000000000001a .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:344    .text.startup.main:000000000000001c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:345    .text.startup.main:000000000000001c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:347    .text.startup.main:000000000000001e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:348    .text.startup.main:000000000000001e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:351    .text.startup.main:0000000000000020 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:352    .text.startup.main:0000000000000020 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:353    .text.startup.main:0000000000000020 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:356    .text.startup.main:0000000000000028 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:359    .text.startup.main:0000000000000030 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:360    .text.startup.main:0000000000000030 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:362    .text.startup.main:0000000000000034 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:365    .text.startup.main:000000000000003c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:368    .text.startup.main:0000000000000044 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:371    .text.startup.main:000000000000004c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:375    .text.startup.main:0000000000000054 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:376    .text.startup.main:0000000000000054 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:377    .text.startup.main:0000000000000054 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:380    .text.startup.main:000000000000005c .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:382    .text.startup.main:000000000000005e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:387    .text.startup.main:000000000000006e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:388    .text.startup.main:000000000000006e .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:390    .text.startup.main:0000000000000070 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:393    .text.startup.main:0000000000000074 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:396    .text.startup.main:0000000000000078 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:399    .text.startup.main:0000000000000080 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:405    .text.startup.main:0000000000000090 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:411    .text.startup.main:00000000000000a0 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:412    .text.startup.main:00000000000000a0 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:418    .text.startup.main:00000000000000ae .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:419    .text.startup.main:00000000000000ae .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:422    .text.startup.main:00000000000000b6 .L0 
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 17
+
+
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:423    .text.startup.main:00000000000000b6 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:425    .text.startup.main:00000000000000ba .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:436    .text.startup.main:00000000000000d0 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:441    .text.startup.main:00000000000000de .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:446    .rodata:0000000000000000 .LANCHOR0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:76     .text.blink:0000000000000034 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:113    .text.keyPad:0000000000000024 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:154    .text.printStop:0000000000000024 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:195    .text.printGo:0000000000000020 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:306    .text.motorStep:0000000000000062 .L0 
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:444    .text.startup.main:00000000000000de .L0 
                      .debug_frame:0000000000000000 .L0 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:166    .rodata.main:0000000000000000 .L8
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:89     .text.startup.main:0000000000000068 .L4
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:122    .text.startup.main:0000000000000098 .L5
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:140    .text.startup.main:00000000000000ae .L6
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:191    .text.startup.main:00000000000000de .L17
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:177    .text.startup.main:00000000000000d4 .L10
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:188    .text.startup.main:00000000000000dc .L9
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:198    .text.startup.main:00000000000000e8 .L7
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:589    .debug_abbrev:0000000000000000 .Ldebug_abbrev0
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1060   .debug_str:0000000000000160 .LASF28
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1042   .debug_str:00000000000000d7 .LASF29
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1054   .debug_str:000000000000010d .LASF30
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:994    .debug_ranges:0000000000000000 .Ldebug_ranges0
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1002   .debug_line:0000000000000000 .Ldebug_line0
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1032   .debug_str:000000000000009d .LASF0
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1068   .debug_str:0000000000000205 .LASF1
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1018   .debug_str:0000000000000049 .LASF2
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1052   .debug_str:0000000000000103 .LASF3
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1022   .debug_str:0000000000000069 .LASF4
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1008   .debug_str:0000000000000011 .LASF5
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1026   .debug_str:0000000000000086 .LASF9
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1020   .debug_str:0000000000000057 .LASF6
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1040   .debug_str:00000000000000c9 .LASF7
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1016   .debug_str:0000000000000032 .LASF8
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1062   .debug_str:00000000000001e8 .LASF10
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1046   .debug_str:00000000000000e5 .LASF31
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1066   .debug_str:00000000000001f9 .LASF11
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 10
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:71     .text.blink:0000000000000032 .L4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:99     .text.keyPad:000000000000001c .L8
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:107    .text.keyPad:0000000000000022 .L7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:250    .text.motorStep:0000000000000028 .L15
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:285    .text.motorStep:0000000000000052 .L17
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:233    .text.motorStep:000000000000001e .L14
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:228    .text.motorStep:000000000000001c .L24
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:373    .text.startup.main:0000000000000054 .L26
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:434    .text.startup.main:00000000000000d0 .L27
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1138   .debug_abbrev:0000000000000000 .Ldebug_abbrev0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1981   .debug_str:0000000000000030 .LASF40
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2027   .debug_str:00000000000001ba .LASF41
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2037   .debug_str:00000000000001e6 .LASF42
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1939   .debug_ranges:0000000000000000 .Ldebug_ranges0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1967   .debug_line:0000000000000000 .Ldebug_line0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2015   .debug_str:0000000000000174 .LASF0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2051   .debug_str:0000000000000261 .LASF1
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1993   .debug_str:00000000000000f6 .LASF2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2003   .debug_str:000000000000013e .LASF3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1997   .debug_str:0000000000000116 .LASF4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1979   .debug_str:0000000000000027 .LASF5
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1999   .debug_str:0000000000000129 .LASF9
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1995   .debug_str:0000000000000104 .LASF6
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2025   .debug_str:00000000000001ac .LASF7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1991   .debug_str:00000000000000df .LASF8
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2045   .debug_str:0000000000000244 .LASF10
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2031   .debug_str:00000000000001c8 .LASF43
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2049   .debug_str:0000000000000255 .LASF11
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2011   .debug_str:0000000000000167 .LASF12
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:159    .text.printGo:0000000000000000 .LFB7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:193    .text.printGo:0000000000000020 .LFE7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1627   .debug_loc:0000000000000000 .LLST7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:175    .text.printGo:0000000000000010 .LVL11
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:191    .text.printGo:0000000000000020 .LVL12
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1985   .debug_str:00000000000000bd .LASF13
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:118    .text.printStop:0000000000000000 .LFB6
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:152    .text.printStop:0000000000000024 .LFE6
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1645   .debug_loc:000000000000002c .LLST6
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:134    .text.printStop:0000000000000012 .LVL9
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:150    .text.printStop:0000000000000024 .LVL10
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1977   .debug_str:000000000000001d .LASF19
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2019   .debug_str:0000000000000188 .LASF14
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2009   .debug_str:000000000000015a .LASF15
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1989   .debug_str:00000000000000d3 .LASF16
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2053   .debug_str:000000000000026d .LASF17
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 18
 
 
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1010   .debug_str:000000000000001a .LASF12
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:210    .text.spinMotor:0000000000000000 .LFB3
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:217    .text.spinMotor:0000000000000002 .LFE3
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1014   .debug_str:0000000000000029 .LASF32
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1030   .debug_str:0000000000000098 .LASF13
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:14     .text.startup.main:0000000000000000 .LFB2
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:203    .text.startup.main:00000000000000ec .LFE2
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:892    .debug_loc:0000000000000000 .LLST0
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1012   .debug_str:0000000000000024 .LASF14
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:905    .debug_loc:0000000000000021 .LLST1
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:926    .debug_loc:0000000000000057 .LLST2
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1056   .debug_str:0000000000000151 .LASF15
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:938    .debug_loc:0000000000000076 .LLST3
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:950    .debug_loc:0000000000000095 .LLST4
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1024   .debug_str:000000000000007c .LASF16
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:55     .text.startup.main:000000000000002c .LVL1
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:58     .text.startup.main:0000000000000034 .LVL2
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:64     .text.startup.main:000000000000003e .LVL3
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:70     .text.startup.main:0000000000000048 .LVL4
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:76     .text.startup.main:0000000000000052 .LVL5
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:82     .text.startup.main:000000000000005e .LVL6
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:94     .text.startup.main:0000000000000070 .LVL8
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:99     .text.startup.main:000000000000007a .LVL9
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:101    .text.startup.main:0000000000000082 .LVL10
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:121    .text.startup.main:0000000000000098 .LVL13
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:132    .text.startup.main:00000000000000a8 .LVL15
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:144    .text.startup.main:00000000000000b6 .LVL18
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:194    .text.startup.main:00000000000000e6 .LVL24
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1044   .debug_str:00000000000000de .LASF33
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1036   .debug_str:00000000000000b1 .LASF34
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1072   .debug_str:0000000000000219 .LASF17
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1034   .debug_str:00000000000000aa .LASF18
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1006   .debug_str:0000000000000009 .LASF19
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1070   .debug_str:0000000000000211 .LASF20
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1058   .debug_str:0000000000000158 .LASF21
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1048   .debug_str:00000000000000f5 .LASF22
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1028   .debug_str:0000000000000091 .LASF23
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1050   .debug_str:00000000000000fc .LASF24
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1004   .debug_str:0000000000000000 .LASF25
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1038   .debug_str:00000000000000c2 .LASF26
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:1064   .debug_str:00000000000001f1 .LASF27
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:27     .text.startup.main:0000000000000002 .LCFI0
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:19     .text.startup.main:0000000000000000 .LVL0
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:88     .text.startup.main:0000000000000068 .LVL7
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:127    .text.startup.main:000000000000009c .LVL14
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:139    .text.startup.main:00000000000000ae .LVL17
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:152    .text.startup.main:00000000000000be .LVL19
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:155    .text.startup.main:00000000000000c4 .LVL20
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:181    .text.startup.main:00000000000000d8 .LVL21
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:187    .text.startup.main:00000000000000dc .LVL23
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:197    .text.startup.main:00000000000000e8 .LVL25
-/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s:248    .debug_info:0000000000000000 .Ldebug_info0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:81     .text.keyPad:0000000000000000 .LFB4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:111    .text.keyPad:0000000000000024 .LFE4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2007   .debug_str:000000000000014f .LASF18
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1663   .debug_loc:0000000000000058 .LLST5
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1969   .debug_str:0000000000000000 .LASF20
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2043   .debug_str:000000000000023d .LASF21
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2013   .debug_str:000000000000016f .LASF22
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:311    .text.startup.main:0000000000000000 .LFB2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:442    .text.startup.main:00000000000000de .LFE2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1677   .debug_loc:0000000000000079 .LLST15
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1983   .debug_str:00000000000000b8 .LASF23
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1971   .debug_str:0000000000000006 .LASF24
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2057   .debug_str:000000000000027c .LASF25
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1987   .debug_str:00000000000000c7 .LASF26
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2041   .debug_str:0000000000000232 .LASF27
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1690   .debug_loc:000000000000009a .LLST16
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2001   .debug_str:0000000000000134 .LASF28
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:354    .text.startup.main:0000000000000028 .LVL23
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:357    .text.startup.main:0000000000000030 .LVL24
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:363    .text.startup.main:000000000000003c .LVL25
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:366    .text.startup.main:0000000000000044 .LVL26
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:369    .text.startup.main:000000000000004c .LVL27
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:372    .text.startup.main:0000000000000054 .LVL28
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:378    .text.startup.main:000000000000005c .LVL29
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:383    .text.startup.main:0000000000000066 .LVL30
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:385    .text.startup.main:000000000000006e .LVL31
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:397    .text.startup.main:0000000000000080 .LVL32
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:403    .text.startup.main:0000000000000090 .LVL33
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:409    .text.startup.main:00000000000000a0 .LVL34
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:416    .text.startup.main:00000000000000ae .LVL35
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:420    .text.startup.main:00000000000000b6 .LVL36
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:433    .text.startup.main:00000000000000d0 .LVL38
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:439    .text.startup.main:00000000000000dc .LVL39
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:14     .text.blink:0000000000000000 .LFB3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:74     .text.blink:0000000000000034 .LFE3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1702   .debug_loc:00000000000000b9 .LLST0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1720   .debug_loc:00000000000000e5 .LLST1
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1738   .debug_loc:0000000000000111 .LLST2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:32     .text.blink:0000000000000010 .LBB4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1760   .debug_loc:0000000000000148 .LLST3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1778   .debug_loc:0000000000000174 .LLST4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:45     .text.blink:0000000000000022 .LVL4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:200    .text.motorStep:0000000000000000 .LFB5
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:304    .text.motorStep:0000000000000062 .LFE5
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1792   .debug_loc:0000000000000195 .LLST8
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1815   .debug_loc:00000000000001cd .LLST9
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1844   .debug_loc:0000000000000212 .LLST10
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1866   .debug_loc:0000000000000249 .LLST11
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:229    .text.motorStep:000000000000001c .LBB10
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1888   .debug_loc:0000000000000280 .LLST12
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1902   .debug_loc:00000000000002a1 .LLST13
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1909   .debug_loc:00000000000002b4 .LLST14
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:264    .text.motorStep:0000000000000038 .LVL18
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:275    .text.motorStep:0000000000000048 .LVL19
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:223    .text.motorStep:0000000000000018 .LVL14
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2023   .debug_str:00000000000001a5 .LASF29
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2029   .debug_str:00000000000001c1 .LASF44
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 19
+
+
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2021   .debug_str:0000000000000194 .LASF45
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2059   .debug_str:0000000000000287 .LASF30
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2017   .debug_str:0000000000000181 .LASF31
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1975   .debug_str:0000000000000015 .LASF32
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2055   .debug_str:0000000000000274 .LASF33
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2039   .debug_str:000000000000022a .LASF34
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2033   .debug_str:00000000000001d8 .LASF35
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2005   .debug_str:0000000000000148 .LASF36
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2035   .debug_str:00000000000001df .LASF37
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:2047   .debug_str:000000000000024d .LASF38
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:1973   .debug_str:000000000000000c .LASF39
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:165    .text.printGo:0000000000000002 .LCFI4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:187    .text.printGo:0000000000000018 .LCFI5
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:124    .text.printStop:0000000000000002 .LCFI2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:146    .text.printStop:000000000000001c .LCFI3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:84     .text.keyPad:0000000000000000 .LVL7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:104    .text.keyPad:0000000000000020 .LVL8
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:319    .text.startup.main:0000000000000002 .LCFI9
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:350    .text.startup.main:0000000000000020 .LVL22
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:426    .text.startup.main:00000000000000bc .LVL37
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:26     .text.blink:000000000000000c .LCFI0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:67     .text.blink:0000000000000030 .LCFI1
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:18     .text.blink:0000000000000000 .LVL0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:43     .text.blink:000000000000001a .LVL3
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:70     .text.blink:0000000000000032 .LVL6
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:41     .text.blink:0000000000000018 .LVL2
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:65     .text.blink:000000000000002e .LVL5
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:37     .text.blink:0000000000000016 .LVL1
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:209    .text.motorStep:0000000000000004 .LCFI6
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:246    .text.motorStep:0000000000000026 .LCFI7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:251    .text.motorStep:0000000000000028 .LCFI8
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:203    .text.motorStep:0000000000000000 .LVL13
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:249    .text.motorStep:0000000000000028 .LVL16
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:284    .text.motorStep:0000000000000052 .LVL20
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:244    .text.motorStep:0000000000000024 .LVL15
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:259    .text.motorStep:0000000000000030 .LVL17
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:473    .debug_info:0000000000000000 .Ldebug_info0
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:50     .text.blink:0000000000000024 .LBE4
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:54     .text.blink:0000000000000026 .LBB7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:61     .text.blink:000000000000002c .LBE7
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:235    .text.motorStep:000000000000001e .LBE10
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:260    .text.motorStep:0000000000000030 .LBB13
+/var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s:287    .text.motorStep:0000000000000052 .LBE13
 
 UNDEFINED SYMBOLS
+l88mem
+execStep
 memcpy
 initStep
 t5omsi
-GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccmXNb0K.s 			page 11
-
-
 colinit
 l88init
 keyinit
 t5expq
 colset
 l88row
-execStep
-l88mem
 keyscan
+GAS LISTING /var/folders/_0/fbrtbm_x4pbf1b72ynjm3v580000gn/T//ccnSh7Zs.s 			page 20
+
+
