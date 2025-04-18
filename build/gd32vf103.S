@@ -1239,9 +1239,9 @@ void _fini()
  8000736:	8082                	ret
 
 08000738 <blink>:
+		}
 	}
 }
-
 
 void blink (int *pMs, int *pLight){
 	if (*pMs == BLINKSPEED)
@@ -1410,7 +1410,7 @@ void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer){
  800082a:	17fd                	addi	a5,a5,-1
  800082c:	c11c                	sw	a5,0(a0)
 		*pMoveBuffer = QUARTERREV;
- 800082e:	40400793          	li	a5,1028
+ 800082e:	40000793          	li	a5,1024
  8000832:	c21c                	sw	a5,0(a2)
 }
  8000834:	bf7d                	j	80007f2 <motorStep+0x1e>
@@ -3830,9 +3830,9 @@ void _fini()
  8000736:	8082                	ret
 
 08000738 <blink>:
+		}
 	}
 }
-
 
 void blink (int *pMs, int *pLight){
 	if (*pMs == BLINKSPEED)
@@ -4001,7 +4001,7 @@ void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer){
  800082a:	17fd                	addi	a5,a5,-1
  800082c:	c11c                	sw	a5,0(a0)
 		*pMoveBuffer = QUARTERREV;
- 800082e:	40400793          	li	a5,1028
+ 800082e:	40000793          	li	a5,1024
  8000832:	c21c                	sw	a5,0(a2)
 }
  8000834:	bf7d                	j	80007f2 <motorStep+0x1e>

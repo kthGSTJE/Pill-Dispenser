@@ -11,7 +11,7 @@ Libraries (other than vendor SDK and gcc libraries) must have .h-files in /lib/[
 #include "drivers.h"
 
 #define REVOLUTION 4096
-#define QUARTERREV 1028
+#define QUARTERREV 1024
 #define HALFREV 2048
 #define SPEED 1
 #define BLINKSPEED 500
