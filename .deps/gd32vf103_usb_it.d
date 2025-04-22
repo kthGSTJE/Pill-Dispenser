@@ -1,4 +1,4 @@
-build/main.o: main.c \
+build/gd32vf103_usb_it.o: lib/usbcdc/src/gd32vf103_usb_it.c \
  ../../firmware/GD32VF103_standard_peripheral/gd32vf103.h \
  ../../firmware/GD32VF103_standard_peripheral/system_gd32vf103.h \
  ../../firmware/GD32VF103_standard_peripheral/gd32vf103_libopt.h \
@@ -27,14 +27,13 @@ build/main.o: main.c \
  ../../firmware/RISCV/drivers/n200_timer.h \
  ../../firmware/RISCV/drivers/n200_eclic.h \
  ../../firmware/RISCV/drivers/riscv_const.h \
- lib/usbcdc/include/usb_serial_if.h lib/usbcdc/include/cdc_acm_core.h \
- lib/usbcdc/include/usbd_enum.h lib/usbcdc/include/usbd_core.h \
- lib/usbcdc/include/drv_usb_core.h lib/usbcdc/include/drv_usb_regs.h \
- lib/usbcdc/include/usb_conf.h lib/usbcdc/include/usb_ch9_std.h \
- lib/usbcdc/include/drv_usb_dev.h lib/usbcdc/include/usbd_conf.h \
- lib/usbcdc/include/usbd_transc.h lib/usbcdc/include/usb_delay.h \
- lib/cs1237/include/cs1237.h lib/cs1237/include/cs1237_port.h stepperUP.h \
- drivers.h
+ lib/usbcdc/include/drv_usbd_int.h lib/usbcdc/include/drv_usb_core.h \
+ lib/usbcdc/include/drv_usb_regs.h lib/usbcdc/include/usb_conf.h \
+ lib/usbcdc/include/usb_ch9_std.h lib/usbcdc/include/drv_usb_dev.h \
+ lib/usbcdc/include/drv_usb_hw.h lib/usbcdc/include/gd32vf103_usb_it.h \
+ lib/usbcdc/include/usbd_core.h lib/usbcdc/include/usb_serial_if.h \
+ lib/usbcdc/include/cdc_acm_core.h lib/usbcdc/include/usbd_enum.h \
+ lib/usbcdc/include/usbd_conf.h lib/usbcdc/include/usbd_transc.h
 
 ../../firmware/GD32VF103_standard_peripheral/gd32vf103.h:
 
@@ -92,13 +91,7 @@ build/main.o: main.c \
 
 ../../firmware/RISCV/drivers/riscv_const.h:
 
-lib/usbcdc/include/usb_serial_if.h:
-
-lib/usbcdc/include/cdc_acm_core.h:
-
-lib/usbcdc/include/usbd_enum.h:
-
-lib/usbcdc/include/usbd_core.h:
+lib/usbcdc/include/drv_usbd_int.h:
 
 lib/usbcdc/include/drv_usb_core.h:
 
@@ -110,16 +103,18 @@ lib/usbcdc/include/usb_ch9_std.h:
 
 lib/usbcdc/include/drv_usb_dev.h:
 
+lib/usbcdc/include/drv_usb_hw.h:
+
+lib/usbcdc/include/gd32vf103_usb_it.h:
+
+lib/usbcdc/include/usbd_core.h:
+
+lib/usbcdc/include/usb_serial_if.h:
+
+lib/usbcdc/include/cdc_acm_core.h:
+
+lib/usbcdc/include/usbd_enum.h:
+
 lib/usbcdc/include/usbd_conf.h:
 
 lib/usbcdc/include/usbd_transc.h:
-
-lib/usbcdc/include/usb_delay.h:
-
-lib/cs1237/include/cs1237.h:
-
-lib/cs1237/include/cs1237_port.h:
-
-stepperUP.h:
-
-drivers.h:

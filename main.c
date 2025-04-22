@@ -7,8 +7,15 @@ Libraries (other than vendor SDK and gcc libraries) must have .h-files in /lib/[
 */
 
 #include "gd32vf103.h"
+#include "usb_serial_if.h"
+#include "usb_delay.h"
+#include "cs1237.h"
+#include "cs1237_port.h"
 #include "stepperUP.h"
 #include "drivers.h"
+#include <stdlib.h>
+#include <string.h>
+
 
 #define REVOLUTION 4096
 #define QUARTERREV 1024
@@ -32,22 +39,46 @@ int main(){
 	int stepBuffer = 0;
 	int key = 0;
 	int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+
+	uint64_t time = 0;
+    uint64_t last_time = 0;
+    uint32_t delta_time = 0;
+
+    
+	
 	initStep();
 	t5omsi();                                     // Initialize timer5 1kHz
     colinit();                                    // Initialize column toolbox
     l88init(); 
 	keyinit();
 
-
+    int32_t adc = 0;
+    cs1237_setup_pins();
+    cs1237_sample_rate_and_gain(CS1237_40SPS, CS1237_GAIN128);
+    cs1237_configure(0x3C);
 
 	while(1){
+
 		if (t5expq()) {                           // Manage periodic tasks
             l88row(colset());                     // ...8*8LED and Keyboard
             ms++;                                 // ...One second heart beat
+			
+			while(!cs1237_data_ready());
+        	adc = cs1237_read();
+			
 
 			l88mem(1, stepBuffer);
 			l88mem(2, delayBuffer/100);
 			l88mem(3, moveBuffer/100);
+			if (adc >= -41000){
+			
+				l88mem(4, 0xFF);
+			}
+			else{
+				l88mem(4, 0x00);
+			}
+			
+			
 
             if (!(ms%SPEED)){
 				motorStep(&stepBuffer, &delayBuffer, &moveBuffer);			
@@ -60,7 +91,7 @@ int main(){
 			}
 
 			blink(&ms, &light);
-			
+
 		}
 	}
 }
@@ -91,7 +122,6 @@ void keyPad (int pressedKey, int *pStepBuffer, int *pMoveBuffer){
 	}
 
 }
-
 void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer){
 	if ((*pDelayBuffer)>0)
 	{
@@ -112,7 +142,6 @@ void motorStep (int *pStepBuffer, int *pDelayBuffer, int *pMoveBuffer){
 		*pMoveBuffer = QUARTERREV;
 	}
 }
-
 void printStop (void){
 	l88mem(6, 0xFF);
 	l88mem(7, 0xFF);

@@ -12,6 +12,8 @@ Archive member included to satisfy reference by file (symbol)
                               build/start.o (__libc_init_array)
 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memcpy-asm.o)
                               build/gd32vf103_rcu.o (memcpy)
+/Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memset.o)
+                              build/drv_usb_core.o (memset)
 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-sysisatty.o)
                               build/fstat.o (isatty)
 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
@@ -32,15 +34,14 @@ Archive member included to satisfy reference by file (symbol)
                               /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-nano-mallocr.o) (_sbrk_r)
 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-mlock.o)
                               /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-nano-freer.o) (__malloc_lock)
-/Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
-                              /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o) (_write)
-/Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
-                              /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o) (__errno)
 
 Allocating common symbols
 Common symbol       size              file
 
 errno               0x4               /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-reent.o)
+usb_data_buffer     0x40              build/cdc_acm_core.o
+usb_cmd_buffer      0x8               build/cdc_acm_core.o
+timer_prescaler     0x4               build/gd32vf103_hw.o
 
 Discarded input sections
 
@@ -516,24 +517,10 @@ Discarded input sections
                 0x0000000000000000        0xa build/gd32vf103_exti.o
  .text.exti_interrupt_flag_get
                 0x0000000000000000       0x1c build/gd32vf103_exti.o
- .text.exti_interrupt_flag_clear
-                0x0000000000000000        0xa build/gd32vf103_exti.o
  .text.exti_software_interrupt_enable
                 0x0000000000000000       0x10 build/gd32vf103_exti.o
  .text.exti_software_interrupt_disable
                 0x0000000000000000       0x14 build/gd32vf103_exti.o
- .debug_info    0x0000000000000000      0x3e9 build/gd32vf103_exti.o
- .debug_abbrev  0x0000000000000000      0x15c build/gd32vf103_exti.o
- .debug_loc     0x0000000000000000      0x1c8 build/gd32vf103_exti.o
- .debug_aranges
-                0x0000000000000000       0x70 build/gd32vf103_exti.o
- .debug_ranges  0x0000000000000000       0x60 build/gd32vf103_exti.o
- .debug_line    0x0000000000000000      0x582 build/gd32vf103_exti.o
- .debug_str     0x0000000000000000      0x412 build/gd32vf103_exti.o
- .comment       0x0000000000000000       0x29 build/gd32vf103_exti.o
- .debug_frame   0x0000000000000000       0xd0 build/gd32vf103_exti.o
- .riscv.attributes
-                0x0000000000000000       0x2b build/gd32vf103_exti.o
  .text          0x0000000000000000        0x0 build/gd32vf103_fmc.o
  .data          0x0000000000000000        0x0 build/gd32vf103_fmc.o
  .bss           0x0000000000000000        0x0 build/gd32vf103_fmc.o
@@ -640,8 +627,6 @@ Discarded input sections
                 0x0000000000000000        0x4 build/gd32vf103_gpio.o
  .text.gpio_port_write
                 0x0000000000000000        0x4 build/gd32vf103_gpio.o
- .text.gpio_input_bit_get
-                0x0000000000000000        0xa build/gd32vf103_gpio.o
  .text.gpio_input_port_get
                 0x0000000000000000        0x8 build/gd32vf103_gpio.o
  .text.gpio_output_bit_get
@@ -817,8 +802,6 @@ Discarded input sections
                 0x0000000000000000       0x16 build/gd32vf103_rcu.o
  .text.rcu_adc_clock_config
                 0x0000000000000000       0x40 build/gd32vf103_rcu.o
- .text.rcu_usb_clock_config
-                0x0000000000000000       0x14 build/gd32vf103_rcu.o
  .text.rcu_rtc_clock_config
                 0x0000000000000000       0x10 build/gd32vf103_rcu.o
  .text.rcu_i2s1_clock_config
@@ -1278,10 +1261,6 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/system_gd32vf103.o
  .data          0x0000000000000000        0x0 build/system_gd32vf103.o
  .bss           0x0000000000000000        0x0 build/system_gd32vf103.o
- .text.SystemCoreClockUpdate
-                0x0000000000000000       0xca build/system_gd32vf103.o
- .sdata.SystemCoreClock
-                0x0000000000000000        0x4 build/system_gd32vf103.o
  .text          0x0000000000000000        0x0 build/_exit.o
  .data          0x0000000000000000        0x0 build/_exit.o
  .bss           0x0000000000000000        0x0 build/_exit.o
@@ -1414,8 +1393,6 @@ Discarded input sections
                 0x0000000000000000        0x8 build/n200_func.o
  .text.mtime_hi
                 0x0000000000000000        0x8 build/n200_func.o
- .text.get_timer_value
-                0x0000000000000000       0x10 build/n200_func.o
  .text.get_timer_freq
                 0x0000000000000000        0xc build/n200_func.o
  .text.get_instret_value
@@ -1482,6 +1459,180 @@ Discarded input sections
  .text          0x0000000000000000        0x0 build/init.o
  .data          0x0000000000000000        0x0 build/init.o
  .bss           0x0000000000000000        0x0 build/init.o
+ .text          0x0000000000000000        0x0 build/cs1237.o
+ .data          0x0000000000000000        0x0 build/cs1237.o
+ .bss           0x0000000000000000        0x0 build/cs1237.o
+ .text.clk      0x0000000000000000        0x8 build/cs1237.o
+ .text.wait     0x0000000000000000        0x8 build/cs1237.o
+ .text.drdy_input
+                0x0000000000000000        0x8 build/cs1237.o
+ .text.drdy_output
+                0x0000000000000000        0x8 build/cs1237.o
+ .text.set_drdy
+                0x0000000000000000        0x8 build/cs1237.o
+ .text.get_drdy
+                0x0000000000000000        0x8 build/cs1237.o
+ .text.cs1237_get_configuration
+                0x0000000000000000      0x118 build/cs1237.o
+ .text          0x0000000000000000        0x0 build/cs1237_gd32vf103_port.o
+ .data          0x0000000000000000        0x0 build/cs1237_gd32vf103_port.o
+ .bss           0x0000000000000000        0x0 build/cs1237_gd32vf103_port.o
+ .text          0x0000000000000000        0x0 build/cdc_acm_core.o
+ .data          0x0000000000000000        0x0 build/cdc_acm_core.o
+ .bss           0x0000000000000000        0x0 build/cdc_acm_core.o
+ .text.cdc_acm_init
+                0x0000000000000000       0x46 build/cdc_acm_core.o
+ .text.cdc_acm_deinit
+                0x0000000000000000       0x38 build/cdc_acm_core.o
+ .text.cdc_acm_data_out_handler
+                0x0000000000000000       0x4c build/cdc_acm_core.o
+ .text.cdc_acm_data_in_handler
+                0x0000000000000000       0x40 build/cdc_acm_core.o
+ .text.cdc_acm_req_handler
+                0x0000000000000000       0xa4 build/cdc_acm_core.o
+ .text.cdc_acm_data_receive
+                0x0000000000000000       0x1e build/cdc_acm_core.o
+ .text.cdc_acm_data_send
+                0x0000000000000000       0x2c build/cdc_acm_core.o
+ .text.cdc_acm_EP0_RxReady
+                0x0000000000000000       0x5e build/cdc_acm_core.o
+ .text.cdc_acm_set_custom_cb
+                0x0000000000000000        0xa build/cdc_acm_core.o
+ .text.cdc_acm_get_line_state
+                0x0000000000000000        0xa build/cdc_acm_core.o
+ .data.usbd_cdc_cb
+                0x0000000000000000       0x24 build/cdc_acm_core.o
+ .sbss.receive_length
+                0x0000000000000000        0x4 build/cdc_acm_core.o
+ .sbss.rx_custom_cb
+                0x0000000000000000        0x4 build/cdc_acm_core.o
+ .sbss.usb_serial_connected
+                0x0000000000000000        0x4 build/cdc_acm_core.o
+ .sdata.cdc_cmd
+                0x0000000000000000        0x4 build/cdc_acm_core.o
+ .sdata.linecoding
+                0x0000000000000000        0x8 build/cdc_acm_core.o
+ .sdata.packet_receive
+                0x0000000000000000        0x1 build/cdc_acm_core.o
+ COMMON         0x0000000000000000       0x48 build/cdc_acm_core.o
+ .text          0x0000000000000000        0x0 build/drv_usb_core.o
+ .data          0x0000000000000000        0x0 build/drv_usb_core.o
+ .bss           0x0000000000000000        0x0 build/drv_usb_core.o
+ .text.usb_basic_init
+                0x0000000000000000       0xe8 build/drv_usb_core.o
+ .text.usb_core_init
+                0x0000000000000000       0xca build/drv_usb_core.o
+ .text.usb_rxfifo_flush
+                0x0000000000000000       0x22 build/drv_usb_core.o
+ .text          0x0000000000000000        0x0 build/drv_usb_dev.o
+ .data          0x0000000000000000        0x0 build/drv_usb_dev.o
+ .bss           0x0000000000000000        0x0 build/drv_usb_dev.o
+ .text.usb_devint_enable
+                0x0000000000000000       0x3e build/drv_usb_dev.o
+ .text.usb_devcore_init
+                0x0000000000000000      0x10e build/drv_usb_dev.o
+ .text.usb_dev_disconnect
+                0x0000000000000000        0xc build/drv_usb_dev.o
+ .text.usb_dev_connect
+                0x0000000000000000        0xa build/drv_usb_dev.o
+ .text.usb_transc_deactivate
+                0x0000000000000000       0x46 build/drv_usb_dev.o
+ .text.usb_rwkup_set
+                0x0000000000000000       0x12 build/drv_usb_dev.o
+ .text.usb_rwkup_reset
+                0x0000000000000000       0x10 build/drv_usb_dev.o
+ .text.usb_rwkup_active
+                0x0000000000000000       0x4a build/drv_usb_dev.o
+ .text.usb_dev_suspend
+                0x0000000000000000       0x32 build/drv_usb_dev.o
+ .text.usb_dev_stop
+                0x0000000000000000       0x5e build/drv_usb_dev.o
+ .text          0x0000000000000000        0x0 build/drv_usbd_int.o
+ .data          0x0000000000000000        0x0 build/drv_usbd_int.o
+ .bss           0x0000000000000000        0x0 build/drv_usbd_int.o
+ .text.usbd_int_suspend
+                0x0000000000000000        0xe build/drv_usbd_int.o
+ .text          0x0000000000000000        0x0 build/gd32vf103_hw.o
+ .data          0x0000000000000000        0x0 build/gd32vf103_hw.o
+ .bss           0x0000000000000000        0x0 build/gd32vf103_hw.o
+ .text.usb_rcu_config
+                0x0000000000000000       0x7e build/gd32vf103_hw.o
+ .text.usb_intr_config
+                0x0000000000000000       0x5c build/gd32vf103_hw.o
+ .text.usb_timer_init
+                0x0000000000000000        0x2 build/gd32vf103_hw.o
+ .text.usb_mdelay
+                0x0000000000000000        0x8 build/gd32vf103_hw.o
+ .sbss.delay_time
+                0x0000000000000000        0x4 build/gd32vf103_hw.o
+ COMMON         0x0000000000000000        0x4 build/gd32vf103_hw.o
+ .text          0x0000000000000000        0x0 build/gd32vf103_usb_it.o
+ .data          0x0000000000000000        0x0 build/gd32vf103_usb_it.o
+ .bss           0x0000000000000000        0x0 build/gd32vf103_usb_it.o
+ .text          0x0000000000000000        0x0 build/usb_delay.o
+ .data          0x0000000000000000        0x0 build/usb_delay.o
+ .bss           0x0000000000000000        0x0 build/usb_delay.o
+ .text.usb_delay_1ms
+                0x0000000000000000       0x72 build/usb_delay.o
+ .text          0x0000000000000000        0x0 build/usb_serial_if.o
+ .data          0x0000000000000000        0x0 build/usb_serial_if.o
+ .bss           0x0000000000000000        0x0 build/usb_serial_if.o
+ .text.usb_serial_connected
+                0x0000000000000000       0x16 build/usb_serial_if.o
+ .text.read_usb_serial
+                0x0000000000000000       0xee build/usb_serial_if.o
+ .text.configure_usb_serial
+                0x0000000000000000       0x58 build/usb_serial_if.o
+ .text.usb_serial_available
+                0x0000000000000000       0x14 build/usb_serial_if.o
+ .bss.receive_buffer.5944
+                0x0000000000000000       0x40 build/usb_serial_if.o
+ .data.usb_buffer
+                0x0000000000000000      0x208 build/usb_serial_if.o
+ .text          0x0000000000000000        0x0 build/usbd_core.o
+ .data          0x0000000000000000        0x0 build/usbd_core.o
+ .bss           0x0000000000000000        0x0 build/usbd_core.o
+ .text.usbd_ep_setup
+                0x0000000000000000       0x9a build/usbd_core.o
+ .text.usbd_ep_clear
+                0x0000000000000000       0x3a build/usbd_core.o
+ .text.usbd_fifo_flush
+                0x0000000000000000       0x2e build/usbd_core.o
+ .text.usbd_rxcount_get
+                0x0000000000000000        0xe build/usbd_core.o
+ .text.usbd_connect
+                0x0000000000000000       0x1a build/usbd_core.o
+ .text.usbd_disconnect
+                0x0000000000000000       0x1a build/usbd_core.o
+ .text.usbd_init
+                0x0000000000000000       0x5a build/usbd_core.o
+ .rodata.ep_type
+                0x0000000000000000       0x10 build/usbd_core.o
+ .text          0x0000000000000000        0x0 build/usbd_enum.o
+ .data          0x0000000000000000        0x0 build/usbd_enum.o
+ .bss           0x0000000000000000        0x0 build/usbd_enum.o
+ .text.int_to_unicode
+                0x0000000000000000       0x34 build/usbd_enum.o
+ .text          0x0000000000000000        0x0 build/usbd_transc.o
+ .data          0x0000000000000000        0x0 build/usbd_transc.o
+ .bss           0x0000000000000000        0x0 build/usbd_transc.o
+ .text          0x0000000000000000        0x0 build/weak.o
+ .data          0x0000000000000000        0x0 build/weak.o
+ .bss           0x0000000000000000        0x0 build/weak.o
+ .text._put_char
+                0x0000000000000000       0x3c build/weak.o
+ .debug_info    0x0000000000000000      0xba7 build/weak.o
+ .debug_abbrev  0x0000000000000000      0x226 build/weak.o
+ .debug_loc     0x0000000000000000       0x55 build/weak.o
+ .debug_aranges
+                0x0000000000000000       0x20 build/weak.o
+ .debug_ranges  0x0000000000000000       0x10 build/weak.o
+ .debug_line    0x0000000000000000      0x300 build/weak.o
+ .debug_str     0x0000000000000000      0x6a8 build/weak.o
+ .comment       0x0000000000000000       0x29 build/weak.o
+ .debug_frame   0x0000000000000000       0x38 build/weak.o
+ .riscv.attributes
+                0x0000000000000000       0x2b build/weak.o
  .text          0x0000000000000000        0x0 build/main.o
  .data          0x0000000000000000        0x0 build/main.o
  .bss           0x0000000000000000        0x0 build/main.o
@@ -1512,6 +1663,8 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-init.o)
  .data          0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memcpy-asm.o)
  .bss           0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memcpy-asm.o)
+ .data          0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memset.o)
+ .bss           0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memset.o)
  .text          0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-sysisatty.o)
  .data          0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-sysisatty.o)
  .bss           0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-sysisatty.o)
@@ -1576,12 +1729,6 @@ Discarded input sections
  .comment       0x0000000000000000       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-mlock.o)
  .riscv.attributes
                 0x0000000000000000       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-mlock.o)
- .text          0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
- .data          0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
- .bss           0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
- .text          0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
- .data          0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
- .bss           0x0000000000000000        0x0 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
 
 Memory Configuration
 
@@ -1626,6 +1773,20 @@ LOAD build/write_hex.o
 LOAD build/n200_func.o
 LOAD build/handlers.o
 LOAD build/init.o
+LOAD build/cs1237.o
+LOAD build/cs1237_gd32vf103_port.o
+LOAD build/cdc_acm_core.o
+LOAD build/drv_usb_core.o
+LOAD build/drv_usb_dev.o
+LOAD build/drv_usbd_int.o
+LOAD build/gd32vf103_hw.o
+LOAD build/gd32vf103_usb_it.o
+LOAD build/usb_delay.o
+LOAD build/usb_serial_if.o
+LOAD build/usbd_core.o
+LOAD build/usbd_enum.o
+LOAD build/usbd_transc.o
+LOAD build/weak.o
 LOAD build/main.o
 LOAD build/stepperUP.o
 LOAD build/start.o
@@ -1656,7 +1817,7 @@ END GROUP
 .ialign         0x0000000008000254        0x0
                 [!provide]                        PROVIDE (_ilm = .)
 
-.text           0x0000000008000280      0xd3e
+.text           0x0000000008000280     0x284e
  *(.rodata .rodata.*)
  .rodata._exit.str1.4
                 0x0000000008000280       0x1f build/_exit.o
@@ -1671,156 +1832,389 @@ END GROUP
  .rodata.handle_trap.str1.4
                 0x00000000080002ac        0x8 build/handlers.o
                                           0x6 (size before relaxing)
- .rodata        0x00000000080002b4       0x40 build/main.o
+ .rodata.__compound_literal.0
+                0x00000000080002b4       0x18 build/cdc_acm_core.o
+ .rodata.__compound_literal.1
+                0x00000000080002cc       0x3a build/cdc_acm_core.o
+ *fill*         0x0000000008000306        0x2 
+ .rodata.__compound_literal.2
+                0x0000000008000308       0x30 build/cdc_acm_core.o
+ .rodata.device_descriptor
+                0x0000000008000338       0x12 build/cdc_acm_core.o
+                0x0000000008000338                device_descriptor
+ *fill*         0x000000000800034a        0x2 
+ .rodata.usbd_strings
+                0x000000000800034c       0x10 build/cdc_acm_core.o
+                0x000000000800034c                usbd_strings
+ .rodata._std_dev_req
+                0x000000000800035c       0x34 build/usbd_enum.o
+ .rodata        0x0000000008000390       0x40 build/main.o
  *(.text.unlikely .text.unlikely.*)
  *(.text.startup .text.startup.*)
  .text.startup.main
-                0x00000000080002f4       0xde build/main.o
-                0x00000000080002f4                main
+                0x00000000080003d0      0x13c build/main.o
+                0x00000000080003d0                main
  *(.text .text.*)
+ .text.exti_interrupt_flag_clear
+                0x000000000800050c        0xa build/gd32vf103_exti.o
+                0x000000000800050c                exti_interrupt_flag_clear
  .text.gpio_init
-                0x00000000080003d2       0xa4 build/gd32vf103_gpio.o
-                0x00000000080003d2                gpio_init
+                0x0000000008000516       0xa4 build/gd32vf103_gpio.o
+                0x0000000008000516                gpio_init
  .text.gpio_bit_write
-                0x0000000008000476        0xa build/gd32vf103_gpio.o
-                0x0000000008000476                gpio_bit_write
+                0x00000000080005ba        0xa build/gd32vf103_gpio.o
+                0x00000000080005ba                gpio_bit_write
+ .text.gpio_input_bit_get
+                0x00000000080005c4        0xa build/gd32vf103_gpio.o
+                0x00000000080005c4                gpio_input_bit_get
  .text.rcu_periph_clock_enable
-                0x0000000008000480       0x18 build/gd32vf103_rcu.o
-                0x0000000008000480                rcu_periph_clock_enable
+                0x00000000080005ce       0x18 build/gd32vf103_rcu.o
+                0x00000000080005ce                rcu_periph_clock_enable
+ .text.rcu_usb_clock_config
+                0x00000000080005e6       0x14 build/gd32vf103_rcu.o
+                0x00000000080005e6                rcu_usb_clock_config
  .text.SystemInit
-                0x0000000008000498      0x11c build/system_gd32vf103.o
-                0x0000000008000498                SystemInit
- .text._exit    0x00000000080005b4       0x4c build/_exit.o
-                0x00000000080005b4                _exit
+                0x00000000080005fa      0x11c build/system_gd32vf103.o
+                0x00000000080005fa                SystemInit
+ .text.SystemCoreClockUpdate
+                0x0000000008000716       0xca build/system_gd32vf103.o
+                0x0000000008000716                SystemCoreClockUpdate
+ .text._exit    0x00000000080007e0       0x4c build/_exit.o
+                0x00000000080007e0                _exit
  .text.write_hex
-                0x0000000008000600       0x7c build/write_hex.o
-                0x0000000008000600                write_hex
+                0x000000000800082c       0x7c build/write_hex.o
+                0x000000000800082c                write_hex
+ .text.get_timer_value
+                0x00000000080008a8       0x10 build/n200_func.o
+                0x00000000080008a8                get_timer_value
  .text.eclic_init
-                0x000000000800067c       0x22 build/n200_func.o
-                0x000000000800067c                eclic_init
+                0x00000000080008b8       0x22 build/n200_func.o
+                0x00000000080008b8                eclic_init
  .text.eclic_mode_enable
-                0x000000000800069e       0x12 build/n200_func.o
-                0x000000000800069e                eclic_mode_enable
+                0x00000000080008da       0x12 build/n200_func.o
+                0x00000000080008da                eclic_mode_enable
  .text.handle_nmi
-                0x00000000080006b0       0x22 build/handlers.o
-                0x00000000080006b0                handle_nmi
+                0x00000000080008ec       0x22 build/handlers.o
+                0x00000000080008ec                handle_nmi
  .text.handle_trap
-                0x00000000080006d2       0x38 build/handlers.o
-                0x00000000080006d2                handle_trap
- .text._init    0x000000000800070a       0x2c build/init.o
-                0x000000000800070a                _init
- .text._fini    0x0000000008000736        0x2 build/init.o
-                0x0000000008000736                _fini
- .text.blink    0x0000000008000738       0x34 build/main.o
-                0x0000000008000738                blink
- .text.keyPad   0x000000000800076c       0x24 build/main.o
-                0x000000000800076c                keyPad
- .text.printStop
-                0x0000000008000790       0x24 build/main.o
-                0x0000000008000790                printStop
- .text.printGo  0x00000000080007b4       0x20 build/main.o
-                0x00000000080007b4                printGo
+                0x000000000800090e       0x38 build/handlers.o
+                0x000000000800090e                handle_trap
+ .text._init    0x0000000008000946       0x2c build/init.o
+                0x0000000008000946                _init
+ .text._fini    0x0000000008000972        0x2 build/init.o
+                0x0000000008000972                _fini
+ .text.cs1237_read
+                0x0000000008000974       0x72 build/cs1237.o
+                0x0000000008000974                cs1237_read
+ .text.cs1237_data_ready
+                0x00000000080009e6       0x16 build/cs1237.o
+                0x00000000080009e6                cs1237_data_ready
+ .text.cs1237_configure
+                0x00000000080009fc      0x152 build/cs1237.o
+                0x00000000080009fc                cs1237_configure
+ .text.cs1237_sample_rate_and_gain
+                0x0000000008000b4e       0x22 build/cs1237.o
+                0x0000000008000b4e                cs1237_sample_rate_and_gain
+ .text.cs1237_port_set_clock_pin
+                0x0000000008000b70       0x16 build/cs1237_gd32vf103_port.o
+                0x0000000008000b70                cs1237_port_set_clock_pin
+ .text.cs1237_set_drdy_pin
+                0x0000000008000b86       0x16 build/cs1237_gd32vf103_port.o
+                0x0000000008000b86                cs1237_set_drdy_pin
+ .text.cs1237_port_wait_min_455ns
+                0x0000000008000b9c       0x6a build/cs1237_gd32vf103_port.o
+                0x0000000008000b9c                cs1237_port_wait_min_455ns
+ .text.cs1237_set_drdy_as_input
+                0x0000000008000c06       0x18 build/cs1237_gd32vf103_port.o
+                0x0000000008000c06                cs1237_set_drdy_as_input
+ .text.cs1237_set_drdy_as_output
+                0x0000000008000c1e       0x18 build/cs1237_gd32vf103_port.o
+                0x0000000008000c1e                cs1237_set_drdy_as_output
+ .text.cs1237_get_drdy_value
+                0x0000000008000c36       0x22 build/cs1237_gd32vf103_port.o
+                0x0000000008000c36                cs1237_get_drdy_value
+ .text.cs1237_setup_pins
+                0x0000000008000c58       0x50 build/cs1237_gd32vf103_port.o
+                0x0000000008000c58                cs1237_setup_pins
+ .text.usb_txfifo_write
+                0x0000000008000ca8       0x3a build/drv_usb_core.o
+                0x0000000008000ca8                usb_txfifo_write
+ .text.usb_rxfifo_read
+                0x0000000008000ce2       0x32 build/drv_usb_core.o
+                0x0000000008000ce2                usb_rxfifo_read
+ .text.usb_txfifo_flush
+                0x0000000008000d14       0x28 build/drv_usb_core.o
+                0x0000000008000d14                usb_txfifo_flush
+ .text.usb_devaddr_set
+                0x0000000008000d3c       0x14 build/drv_usb_dev.o
+                0x0000000008000d3c                usb_devaddr_set
+ .text.usb_transc_active
+                0x0000000008000d50       0x9e build/drv_usb_dev.o
+                0x0000000008000d50                usb_transc_active
+ .text.usb_transc_inxfer
+                0x0000000008000dee       0xea build/drv_usb_dev.o
+                0x0000000008000dee                usb_transc_inxfer
+ .text.usb_transc_outxfer
+                0x0000000008000ed8       0x8c build/drv_usb_dev.o
+                0x0000000008000ed8                usb_transc_outxfer
+ .text.usb_transc_stall
+                0x0000000008000f64       0x3a build/drv_usb_dev.o
+                0x0000000008000f64                usb_transc_stall
+ .text.usb_transc_clrstall
+                0x0000000008000f9e       0x46 build/drv_usb_dev.o
+                0x0000000008000f9e                usb_transc_clrstall
+ .text.usb_oepintnum_read
+                0x0000000008000fe4       0x10 build/drv_usb_dev.o
+                0x0000000008000fe4                usb_oepintnum_read
+ .text.usb_oepintr_read
+                0x0000000008000ff4       0x12 build/drv_usb_dev.o
+                0x0000000008000ff4                usb_oepintr_read
+ .text.usb_iepintnum_read
+                0x0000000008001006        0xe build/drv_usb_dev.o
+                0x0000000008001006                usb_iepintnum_read
+ .text.usb_iepintr_read
+                0x0000000008001014       0x20 build/drv_usb_dev.o
+                0x0000000008001014                usb_iepintr_read
+ .text.usb_ctlep_startout
+                0x0000000008001034       0x26 build/drv_usb_dev.o
+                0x0000000008001034                usb_ctlep_startout
+ .text.usb_clock_active
+                0x000000000800105a       0x1a build/drv_usb_dev.o
+                0x000000000800105a                usb_clock_active
+ .text.usbd_isr
+                0x0000000008001074      0x140 build/drv_usbd_int.o
+                0x0000000008001074                usbd_isr
+ .text.usbd_int_epout
+                0x00000000080011b4       0xfe build/drv_usbd_int.o
+ .text.usbd_int_epin
+                0x00000000080012b2       0xbc build/drv_usbd_int.o
+ .text.usbd_int_rxfifo
+                0x000000000800136e       0xc6 build/drv_usbd_int.o
+ .text.usbd_int_reset
+                0x0000000008001434       0xd2 build/drv_usbd_int.o
+ .text.usbd_int_enumfinish
+                0x0000000008001506       0x68 build/drv_usbd_int.o
+ .text.usbd_emptytxfifo_write
+                0x000000000800156e       0xe6 build/drv_usbd_int.o
+ .text.usb_udelay
+                0x0000000008001654        0x8 build/gd32vf103_hw.o
+                0x0000000008001654                usb_udelay
+ .text.USBFS_IRQHandler
+                0x000000000800165c       0x10 build/gd32vf103_usb_it.o
+                0x000000000800165c                USBFS_IRQHandler
+ .text.USBFS_WKUP_IRQHandler
+                0x000000000800166c       0x56 build/gd32vf103_usb_it.o
+                0x000000000800166c                USBFS_WKUP_IRQHandler
+ .text.usb_delay_1us
+                0x00000000080016c2       0x74 build/usb_delay.o
+                0x00000000080016c2                usb_delay_1us
+ .text._write   0x0000000008001736       0xb0 build/usb_serial_if.o
+                0x0000000008001736                _write
+ .text.set_usb_clock_96m_hxtal
+                0x00000000080017e6       0xee build/usb_serial_if.o
+                0x00000000080017e6                set_usb_clock_96m_hxtal
+ .text.usbd_ep_recev
+                0x00000000080018d4       0x40 build/usbd_core.o
+                0x00000000080018d4                usbd_ep_recev
+ .text.usbd_ep_send
+                0x0000000008001914       0x40 build/usbd_core.o
+                0x0000000008001914                usbd_ep_send
+ .text.usbd_ep_stall
+                0x0000000008001954       0x40 build/usbd_core.o
+                0x0000000008001954                usbd_ep_stall
+ .text.usbd_ep_stall_clear
+                0x0000000008001994       0x3e build/usbd_core.o
+                0x0000000008001994                usbd_ep_stall_clear
+ .text.usbd_addr_set
+                0x00000000080019d2        0x8 build/usbd_core.o
+                0x00000000080019d2                usbd_addr_set
+ .text._usb_std_reserved
+                0x00000000080019da        0x4 build/usbd_enum.o
+ .text._usb_dev_desc_get
+                0x00000000080019de        0xe build/usbd_enum.o
+ .text._usb_config_desc_get
+                0x00000000080019ec        0xe build/usbd_enum.o
+ .text._usb_str_desc_get
+                0x00000000080019fa       0x14 build/usbd_enum.o
+ .text._usb_std_getdescriptor
+                0x0000000008001a0e       0xfa build/usbd_enum.o
+ .text._usb_std_setconfiguration
+                0x0000000008001b08       0xa8 build/usbd_enum.o
+ .text._usb_std_getstatus
+                0x0000000008001bb0       0xba build/usbd_enum.o
+ .text._usb_std_getconfiguration
+                0x0000000008001c6a       0x3c build/usbd_enum.o
+ .text._usb_std_getinterface
+                0x0000000008001ca6       0x2c build/usbd_enum.o
+ .text._usb_std_setinterface
+                0x0000000008001cd2       0x2a build/usbd_enum.o
+ .text._usb_std_setaddress
+                0x0000000008001cfc       0x64 build/usbd_enum.o
+ .text._usb_std_setfeature
+                0x0000000008001d60       0x80 build/usbd_enum.o
+ .text._usb_std_clearfeature
+                0x0000000008001de0       0x98 build/usbd_enum.o
+ .text._usb_std_setdescriptor
+                0x0000000008001e78        0x4 build/usbd_enum.o
+ .text._usb_std_synchframe
+                0x0000000008001e7c        0x4 build/usbd_enum.o
+ .text.usbd_standard_request
+                0x0000000008001e80       0x18 build/usbd_enum.o
+                0x0000000008001e80                usbd_standard_request
+ .text.usbd_class_request
+                0x0000000008001e98       0x2c build/usbd_enum.o
+                0x0000000008001e98                usbd_class_request
+ .text.usbd_vendor_request
+                0x0000000008001ec4        0x4 build/usbd_enum.o
+                0x0000000008001ec4                usbd_vendor_request
+ .text.usbd_enum_error
+                0x0000000008001ec8       0x30 build/usbd_enum.o
+                0x0000000008001ec8                usbd_enum_error
+ .text.usbd_ctl_send
+                0x0000000008001ef8       0x38 build/usbd_transc.o
+                0x0000000008001ef8                usbd_ctl_send
+ .text.usbd_ctl_recev
+                0x0000000008001f30       0x38 build/usbd_transc.o
+                0x0000000008001f30                usbd_ctl_recev
+ .text.usbd_ctl_status_send
+                0x0000000008001f68       0x30 build/usbd_transc.o
+                0x0000000008001f68                usbd_ctl_status_send
+ .text.usbd_ctl_status_recev
+                0x0000000008001f98       0x30 build/usbd_transc.o
+                0x0000000008001f98                usbd_ctl_status_recev
+ .text.usbd_setup_transc
+                0x0000000008001fc8       0x94 build/usbd_transc.o
+                0x0000000008001fc8                usbd_setup_transc
+ .text.usbd_out_transc
+                0x000000000800205c       0xe6 build/usbd_transc.o
+                0x000000000800205c                usbd_out_transc
+ .text.usbd_in_transc
+                0x0000000008002142      0x10c build/usbd_transc.o
+                0x0000000008002142                usbd_in_transc
+ .text.blink    0x000000000800224e       0x34 build/main.o
+                0x000000000800224e                blink
+ .text.keyPad   0x0000000008002282       0x24 build/main.o
+                0x0000000008002282                keyPad
  .text.motorStep
-                0x00000000080007d4       0x62 build/main.o
-                0x00000000080007d4                motorStep
+                0x00000000080022a6       0x64 build/main.o
+                0x00000000080022a6                motorStep
+ .text.printStop
+                0x000000000800230a       0x24 build/main.o
+                0x000000000800230a                printStop
+ .text.printGo  0x000000000800232e       0x20 build/main.o
+                0x000000000800232e                printGo
  .text.initStep
-                0x0000000008000836       0x2a build/stepperUP.o
-                0x0000000008000836                initStep
+                0x000000000800234e       0x2a build/stepperUP.o
+                0x000000000800234e                initStep
  .text.execStep
-                0x0000000008000860       0x8c build/stepperUP.o
-                0x0000000008000860                execStep
- *fill*         0x00000000080008ec       0x14 
- .text.trap     0x0000000008000900       0x82 build/entry.o
-                0x0000000008000900                trap_entry
- *fill*         0x0000000008000982        0x2 
- .text.irq      0x0000000008000984       0x72 build/entry.o
-                0x0000000008000984                irq_entry
- .text          0x00000000080009f6      0x2e4 build/drivers.o
-                0x0000000008000a68                t5omsi
-                0x0000000008000a9a                t5expq
-                0x0000000008000aaa                colinit
-                0x0000000008000aea                colset
-                0x0000000008000b22                l88init
-                0x0000000008000b54                l88row
-                0x0000000008000b8a                l88mem
-                0x0000000008000b9e                keyinit
-                0x0000000008000bd0                keyscan
- .text.atexit   0x0000000008000cda       0x10 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-atexit.o)
-                0x0000000008000cda                atexit
- .text.exit     0x0000000008000cea       0x36 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-exit.o)
-                0x0000000008000cea                exit
+                0x0000000008002378       0x8c build/stepperUP.o
+                0x0000000008002378                execStep
+ *fill*         0x0000000008002404       0x3c 
+ .text.trap     0x0000000008002440       0x82 build/entry.o
+                0x0000000008002440                trap_entry
+ *fill*         0x00000000080024c2        0x2 
+ .text.irq      0x00000000080024c4       0x72 build/entry.o
+                0x00000000080024c4                irq_entry
+ .text          0x0000000008002536      0x2e4 build/drivers.o
+                0x00000000080025a8                t5omsi
+                0x00000000080025da                t5expq
+                0x00000000080025ea                colinit
+                0x000000000800262a                colset
+                0x0000000008002662                l88init
+                0x0000000008002694                l88row
+                0x00000000080026ca                l88mem
+                0x00000000080026de                keyinit
+                0x0000000008002710                keyscan
+ .text.atexit   0x000000000800281a       0x10 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-atexit.o)
+                0x000000000800281a                atexit
+ .text.exit     0x000000000800282a       0x36 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-exit.o)
+                0x000000000800282a                exit
  .text.__libc_fini_array
-                0x0000000008000d20       0x38 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-fini.o)
-                0x0000000008000d20                __libc_fini_array
+                0x0000000008002860       0x38 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-fini.o)
+                0x0000000008002860                __libc_fini_array
  .text.__libc_init_array
-                0x0000000008000d58       0x6a /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-init.o)
-                0x0000000008000d58                __libc_init_array
- .text          0x0000000008000dc2       0x16 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memcpy-asm.o)
-                0x0000000008000dc2                memcpy
- .text.write    0x0000000008000dd8       0x18 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
-                0x0000000008000dd8                write
+                0x0000000008002898       0x6a /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-init.o)
+                0x0000000008002898                __libc_init_array
+ .text          0x0000000008002902       0x16 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memcpy-asm.o)
+                0x0000000008002902                memcpy
+ .text          0x0000000008002918       0x10 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memset.o)
+                0x0000000008002918                memset
+ .text.write    0x0000000008002928       0x18 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
+                0x0000000008002928                write
  .text._write_r
-                0x0000000008000df0       0x3a /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o)
-                0x0000000008000df0                _write_r
+                0x0000000008002940       0x3a /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o)
+                0x0000000008002940                _write_r
  .text.__register_exitproc
-                0x0000000008000e2a       0x8c /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
-                0x0000000008000e2a                __register_exitproc
+                0x000000000800297a       0x8c /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
+                0x000000000800297a                __register_exitproc
  .text.__call_exitprocs
-                0x0000000008000eb6       0xc8 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
-                0x0000000008000eb6                __call_exitprocs
- .text._write   0x0000000008000f7e       0x34 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
-                0x0000000008000f7e                _write
- .text.__errno  0x0000000008000fb2        0xc /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
-                0x0000000008000fb2                __errno
+                0x0000000008002a06       0xc8 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
+                0x0000000008002a06                __call_exitprocs
  *(.gnu.linkonce.t.*)
 
-.sdata2._global_impure_ptr
-                0x0000000008000fc0        0x4
- .sdata2._global_impure_ptr
-                0x0000000008000fc0        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
-                0x0000000008000fc0                _global_impure_ptr
+.sdata2.usbd_language_id_desc
+                0x0000000008002ad0        0x4
+ .sdata2.usbd_language_id_desc
+                0x0000000008002ad0        0x4 build/cdc_acm_core.o
+                0x0000000008002ad0                usbd_language_id_desc
 
-.rela.dyn       0x0000000008000fc4        0x0
+.sdata2.EP0_MAXLEN
+                0x0000000008002ad4        0x4
+ .sdata2.EP0_MAXLEN
+                0x0000000008002ad4        0x4 build/drv_usb_dev.o
+
+.sdata2.USB_SPEED
+                0x0000000008002ad8        0x4
+ .sdata2.USB_SPEED
+                0x0000000008002ad8        0x4 build/drv_usbd_int.o
+
+.sdata2._global_impure_ptr
+                0x0000000008002adc        0x4
+ .sdata2._global_impure_ptr
+                0x0000000008002adc        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
+                0x0000000008002adc                _global_impure_ptr
+
+.rela.dyn       0x0000000008002ae0        0x0
  .rela.text.handle_trap
-                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
- .rela.init     0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
+                0x0000000008002ae0        0x0 build/gd32vf103_exti.o
+ .rela.init     0x0000000008002ae0        0x0 build/gd32vf103_exti.o
  .rela.text.trap
-                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
+                0x0000000008002ae0        0x0 build/gd32vf103_exti.o
  .rela.text.__libc_fini_array
-                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
+                0x0000000008002ae0        0x0 build/gd32vf103_exti.o
  .rela.data.impure_data
-                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
+                0x0000000008002ae0        0x0 build/gd32vf103_exti.o
  .rela.text.__libc_init_array
-                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
+                0x0000000008002ae0        0x0 build/gd32vf103_exti.o
  .rela.text._write_r
-                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
+                0x0000000008002ae0        0x0 build/gd32vf103_exti.o
  .rela.text.__register_exitproc
-                0x0000000008000fc4        0x0 build/gd32vf103_gpio.o
+                0x0000000008002ae0        0x0 build/gd32vf103_exti.o
 
 .fini
  *(SORT_NONE(.fini))
-                0x0000000008000fc4                . = ALIGN (0x4)
+                0x0000000008002ae0                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (__etext = .)
                 [!provide]                        PROVIDE (_etext = .)
                 [!provide]                        PROVIDE (etext = .)
                 [!provide]                        PROVIDE (_eilm = .)
 
-.preinit_array  0x0000000008000fc4        0x0
-                0x0000000008000fc4                PROVIDE (__preinit_array_start = .)
+.preinit_array  0x0000000008002ae0        0x0
+                0x0000000008002ae0                PROVIDE (__preinit_array_start = .)
  *(.preinit_array)
-                0x0000000008000fc4                PROVIDE (__preinit_array_end = .)
+                0x0000000008002ae0                PROVIDE (__preinit_array_end = .)
 
-.init_array     0x0000000008000fc4        0x0
-                0x0000000008000fc4                PROVIDE (__init_array_start = .)
+.init_array     0x0000000008002ae0        0x0
+                0x0000000008002ae0                PROVIDE (__init_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.init_array.*) SORT_BY_INIT_PRIORITY(.ctors.*))
  *(.init_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .ctors)
-                0x0000000008000fc4                PROVIDE (__init_array_end = .)
+                0x0000000008002ae0                PROVIDE (__init_array_end = .)
 
-.fini_array     0x0000000008000fc4        0x0
-                0x0000000008000fc4                PROVIDE (__fini_array_start = .)
+.fini_array     0x0000000008002ae0        0x0
+                0x0000000008002ae0                PROVIDE (__fini_array_start = .)
  *(SORT_BY_INIT_PRIORITY(.fini_array.*) SORT_BY_INIT_PRIORITY(.dtors.*))
  *(.fini_array EXCLUDE_FILE(*crtend?.o *crtend.o *crtbegin?.o *crtbegin.o) .dtors)
-                0x0000000008000fc4                PROVIDE (__fini_array_end = .)
+                0x0000000008002ae0                PROVIDE (__fini_array_end = .)
 
 .ctors
  *crtbegin.o(.ctors)
@@ -1835,67 +2229,100 @@ END GROUP
  *(EXCLUDE_FILE(*crtend?.o *crtend.o) .dtors)
  *(SORT_BY_NAME(.dtors.*))
  *(.dtors)
-                0x0000000008000fc4                . = ALIGN (0x4)
+                0x0000000008002ae0                . = ALIGN (0x4)
                 [!provide]                        PROVIDE (_eilm = .)
 
-.lalign         0x0000000008000fc4        0x0
-                0x0000000008000fc4                . = ALIGN (0x4)
-                0x0000000008000fc4                PROVIDE (_data_lma = .)
+.lalign         0x0000000008002ae0        0x0
+                0x0000000008002ae0                . = ALIGN (0x4)
+                0x0000000008002ae0                PROVIDE (_data_lma = .)
 
-.dalign         0x0000000020000000        0x0 load address 0x0000000008000fc4
+.dalign         0x0000000020000000        0x0 load address 0x0000000008002ae0
                 0x0000000020000000                . = ALIGN (0x4)
                 0x0000000020000000                PROVIDE (_data = .)
 
-.data           0x0000000020000000       0x88 load address 0x0000000008000fc4
+.data           0x0000000020000000      0x508 load address 0x0000000008002ae0
  *(.rdata)
  *(.gnu.linkonce.r.*)
  *(.data .data.*)
- .data          0x0000000020000000       0x1f build/drivers.o
- *fill*         0x000000002000001f        0x1 
+ .data.configuration_descriptor
+                0x0000000020000000       0x43 build/cdc_acm_core.o
+                0x0000000020000000                configuration_descriptor
+ *fill*         0x0000000020000043        0x1 
+ .data.USB_OTG_dev
+                0x0000000020000044      0x434 build/usb_serial_if.o
+                0x0000000020000044                USB_OTG_dev
+ .data          0x0000000020000478       0x1f build/drivers.o
+ *fill*         0x0000000020000497        0x1 
  .data.impure_data
-                0x0000000020000020       0x60 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
+                0x0000000020000498       0x60 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
  *(.gnu.linkonce.d.*)
-                0x0000000020000080                . = ALIGN (0x8)
-                0x0000000020000880                PROVIDE (__global_pointer$ = (. + 0x800))
+                0x00000000200004f8                . = ALIGN (0x8)
+                0x0000000020000cf8                PROVIDE (__global_pointer$ = (. + 0x800))
  *(.sdata .sdata.*)
+ .sdata.SystemCoreClock
+                0x00000000200004f8        0x4 build/system_gd32vf103.o
+                0x00000000200004f8                SystemCoreClock
+ .sdata.current_config
+                0x00000000200004fc        0x1 build/cs1237.o
+                0x00000000200004fc                current_config
+ .sdata.packet_sent
+                0x00000000200004fd        0x1 build/cdc_acm_core.o
+                0x00000000200004fd                packet_sent
  .sdata.step.3494
-                0x0000000020000080        0x1 build/stepperUP.o
- *fill*         0x0000000020000081        0x3 
+                0x00000000200004fe        0x1 build/stepperUP.o
+ *fill*         0x00000000200004ff        0x1 
  .sdata._impure_ptr
-                0x0000000020000084        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
-                0x0000000020000084                _impure_ptr
+                0x0000000020000500        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
+                0x0000000020000500                _impure_ptr
  *(.gnu.linkonce.s.*)
-                0x0000000020000088                . = ALIGN (0x8)
+                0x0000000020000508                . = ALIGN (0x8)
+ *fill*         0x0000000020000504        0x4 
  *(.srodata.cst16)
  *(.srodata.cst8)
  *(.srodata.cst4)
  *(.srodata.cst2)
  *(.srodata .srodata.*)
-                0x0000000020000088                . = ALIGN (0x4)
-                0x0000000020000088                PROVIDE (_edata = .)
+                0x0000000020000508                . = ALIGN (0x4)
+                0x0000000020000508                PROVIDE (_edata = .)
                 [!provide]                        PROVIDE (edata = .)
                 [!provide]                        PROVIDE (_fbss = .)
-                0x0000000020000088                PROVIDE (__bss_start = .)
+                0x0000000020000508                PROVIDE (__bss_start = .)
 
-.bss            0x0000000020000088       0x94
+.bss            0x0000000020000508      0x2a4
  *(.sbss*)
+ .sbss.setupc_flag
+                0x0000000020000508        0x1 build/drv_usbd_int.o
+                0x0000000020000508                setupc_flag
+ *fill*         0x0000000020000509        0x3 
+ .sbss.usbfs_prescaler
+                0x000000002000050c        0x4 build/gd32vf103_hw.o
+                0x000000002000050c                usbfs_prescaler
+ .sbss.config.4766
+                0x0000000020000510        0x1 build/usbd_enum.o
+ *fill*         0x0000000020000511        0x3 
+ .sbss.status.4696
+                0x0000000020000514        0x2 build/usbd_enum.o
+ *fill*         0x0000000020000516        0x2 
  .sbss._global_atexit
-                0x0000000020000088        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
-                0x0000000020000088                _global_atexit
+                0x0000000020000518        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
+                0x0000000020000518                _global_atexit
  *(.gnu.linkonce.sb.*)
  *(.bss .bss.*)
+ .bss.tx_buffer
+                0x000000002000051c      0x200 build/usb_serial_if.o
+                0x000000002000051c                tx_buffer
  .bss._global_atexit0
-                0x000000002000008c       0x8c /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
+                0x000000002000071c       0x8c /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
  *(.gnu.linkonce.b.*)
  *(COMMON)
- COMMON         0x0000000020000118        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-reent.o)
-                0x0000000020000118                errno
-                0x000000002000011c                . = ALIGN (0x4)
-                0x0000000020000120                . = ALIGN (0x8)
-                0x0000000020000120                PROVIDE (_end = .)
+ COMMON         0x00000000200007a8        0x4 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-reent.o)
+                0x00000000200007a8                errno
+                0x00000000200007ac                . = ALIGN (0x4)
+                0x00000000200007b0                . = ALIGN (0x8)
+                0x00000000200007b0                PROVIDE (_end = .)
                 [!provide]                        PROVIDE (end = .)
 
-.stack          0x0000000020007000     0x1000 load address 0x000000002000011c
+.stack          0x0000000020007000     0x1000 load address 0x00000000200007ac
                 0x0000000020007000                PROVIDE (_heap_end = .)
                 0x0000000000001000                . = __stack_size
  *fill*         0x0000000020007000     0x1000 
@@ -1904,135 +2331,262 @@ END GROUP
                 [!provide]                        PROVIDE (_dbg_sp = .)
 OUTPUT(build/gd32vf103.elf elf32-littleriscv)
 
-.debug_info     0x0000000000000000     0x54e3
- .debug_info    0x0000000000000000      0x6f6 build/gd32vf103_gpio.o
- .debug_info    0x00000000000006f6      0xf51 build/gd32vf103_rcu.o
- .debug_info    0x0000000000001647      0x203 build/system_gd32vf103.o
- .debug_info    0x000000000000184a      0x1d3 build/_exit.o
- .debug_info    0x0000000000001a1d      0x1bb build/write_hex.o
- .debug_info    0x0000000000001bd8     0x18a2 build/n200_func.o
- .debug_info    0x000000000000347a      0xb4f build/handlers.o
- .debug_info    0x0000000000003fc9      0xcb0 build/init.o
- .debug_info    0x0000000000004c79      0x50f build/main.o
- .debug_info    0x0000000000005188      0x2ed build/stepperUP.o
- .debug_info    0x0000000000005475       0x26 build/start.o
- .debug_info    0x000000000000549b       0x22 build/entry.o
- .debug_info    0x00000000000054bd       0x26 build/drivers.o
+.debug_info     0x0000000000000000    0x17489
+ .debug_info    0x0000000000000000      0x3e9 build/gd32vf103_exti.o
+ .debug_info    0x00000000000003e9      0x6f6 build/gd32vf103_gpio.o
+ .debug_info    0x0000000000000adf      0xf51 build/gd32vf103_rcu.o
+ .debug_info    0x0000000000001a30      0x203 build/system_gd32vf103.o
+ .debug_info    0x0000000000001c33      0x1d3 build/_exit.o
+ .debug_info    0x0000000000001e06      0x1bb build/write_hex.o
+ .debug_info    0x0000000000001fc1     0x18a2 build/n200_func.o
+ .debug_info    0x0000000000003863      0xb4f build/handlers.o
+ .debug_info    0x00000000000043b2      0xcb0 build/init.o
+ .debug_info    0x0000000000005062      0xd0b build/cs1237.o
+ .debug_info    0x0000000000005d6d      0x458 build/cs1237_gd32vf103_port.o
+ .debug_info    0x00000000000061c5     0x21a4 build/cdc_acm_core.o
+ .debug_info    0x0000000000008369      0xb4e build/drv_usb_core.o
+ .debug_info    0x0000000000008eb7     0x13ce build/drv_usb_dev.o
+ .debug_info    0x000000000000a285     0x12e8 build/drv_usbd_int.o
+ .debug_info    0x000000000000b56d     0x10bb build/gd32vf103_hw.o
+ .debug_info    0x000000000000c628     0x1cb4 build/gd32vf103_usb_it.o
+ .debug_info    0x000000000000e2dc      0x1a9 build/usb_delay.o
+ .debug_info    0x000000000000e485     0x1e9b build/usb_serial_if.o
+ .debug_info    0x0000000000010320     0x1304 build/usbd_core.o
+ .debug_info    0x0000000000011624     0x2128 build/usbd_enum.o
+ .debug_info    0x000000000001374c     0x1a23 build/usbd_transc.o
+ .debug_info    0x000000000001516f     0x1fbf build/main.o
+ .debug_info    0x000000000001712e      0x2ed build/stepperUP.o
+ .debug_info    0x000000000001741b       0x26 build/start.o
+ .debug_info    0x0000000000017441       0x22 build/entry.o
+ .debug_info    0x0000000000017463       0x26 build/drivers.o
 
-.debug_abbrev   0x0000000000000000     0x1396
- .debug_abbrev  0x0000000000000000      0x228 build/gd32vf103_gpio.o
- .debug_abbrev  0x0000000000000228      0x259 build/gd32vf103_rcu.o
- .debug_abbrev  0x0000000000000481       0xe0 build/system_gd32vf103.o
- .debug_abbrev  0x0000000000000561       0xec build/_exit.o
- .debug_abbrev  0x000000000000064d       0xfa build/write_hex.o
- .debug_abbrev  0x0000000000000747      0x4db build/n200_func.o
- .debug_abbrev  0x0000000000000c22      0x234 build/handlers.o
- .debug_abbrev  0x0000000000000e56      0x22b build/init.o
- .debug_abbrev  0x0000000000001081      0x1f8 build/main.o
- .debug_abbrev  0x0000000000001279       0xe3 build/stepperUP.o
- .debug_abbrev  0x000000000000135c       0x14 build/start.o
- .debug_abbrev  0x0000000000001370       0x12 build/entry.o
- .debug_abbrev  0x0000000000001382       0x14 build/drivers.o
+.debug_abbrev   0x0000000000000000     0x3b57
+ .debug_abbrev  0x0000000000000000      0x15c build/gd32vf103_exti.o
+ .debug_abbrev  0x000000000000015c      0x228 build/gd32vf103_gpio.o
+ .debug_abbrev  0x0000000000000384      0x259 build/gd32vf103_rcu.o
+ .debug_abbrev  0x00000000000005dd       0xe0 build/system_gd32vf103.o
+ .debug_abbrev  0x00000000000006bd       0xec build/_exit.o
+ .debug_abbrev  0x00000000000007a9       0xfa build/write_hex.o
+ .debug_abbrev  0x00000000000008a3      0x4db build/n200_func.o
+ .debug_abbrev  0x0000000000000d7e      0x234 build/handlers.o
+ .debug_abbrev  0x0000000000000fb2      0x22b build/init.o
+ .debug_abbrev  0x00000000000011dd      0x20e build/cs1237.o
+ .debug_abbrev  0x00000000000013eb      0x17d build/cs1237_gd32vf103_port.o
+ .debug_abbrev  0x0000000000001568      0x3f7 build/cdc_acm_core.o
+ .debug_abbrev  0x000000000000195f      0x2a9 build/drv_usb_core.o
+ .debug_abbrev  0x0000000000001c08      0x335 build/drv_usb_dev.o
+ .debug_abbrev  0x0000000000001f3d      0x305 build/drv_usbd_int.o
+ .debug_abbrev  0x0000000000002242      0x318 build/gd32vf103_hw.o
+ .debug_abbrev  0x000000000000255a      0x2a8 build/gd32vf103_usb_it.o
+ .debug_abbrev  0x0000000000002802       0xcb build/usb_delay.o
+ .debug_abbrev  0x00000000000028cd      0x3b3 build/usb_serial_if.o
+ .debug_abbrev  0x0000000000002c80      0x2a8 build/usbd_core.o
+ .debug_abbrev  0x0000000000002f28      0x511 build/usbd_enum.o
+ .debug_abbrev  0x0000000000003439      0x2ab build/usbd_transc.o
+ .debug_abbrev  0x00000000000036e4      0x356 build/main.o
+ .debug_abbrev  0x0000000000003a3a       0xe3 build/stepperUP.o
+ .debug_abbrev  0x0000000000003b1d       0x14 build/start.o
+ .debug_abbrev  0x0000000000003b31       0x12 build/entry.o
+ .debug_abbrev  0x0000000000003b43       0x14 build/drivers.o
 
-.debug_loc      0x0000000000000000     0x227f
- .debug_loc     0x0000000000000000      0x4ba build/gd32vf103_gpio.o
- .debug_loc     0x00000000000004ba      0xcf4 build/gd32vf103_rcu.o
- .debug_loc     0x00000000000011ae      0x173 build/system_gd32vf103.o
- .debug_loc     0x0000000000001321       0x3e build/_exit.o
- .debug_loc     0x000000000000135f      0x101 build/write_hex.o
- .debug_loc     0x0000000000001460      0xa1d build/n200_func.o
- .debug_loc     0x0000000000001e7d       0x7f build/handlers.o
- .debug_loc     0x0000000000001efc       0x2c build/init.o
- .debug_loc     0x0000000000001f28      0x2c7 build/main.o
- .debug_loc     0x00000000000021ef       0x90 build/stepperUP.o
+.debug_loc      0x0000000000000000     0x5f30
+ .debug_loc     0x0000000000000000      0x1c8 build/gd32vf103_exti.o
+ .debug_loc     0x00000000000001c8      0x4ba build/gd32vf103_gpio.o
+ .debug_loc     0x0000000000000682      0xcf4 build/gd32vf103_rcu.o
+ .debug_loc     0x0000000000001376      0x173 build/system_gd32vf103.o
+ .debug_loc     0x00000000000014e9       0x3e build/_exit.o
+ .debug_loc     0x0000000000001527      0x101 build/write_hex.o
+ .debug_loc     0x0000000000001628      0xa1d build/n200_func.o
+ .debug_loc     0x0000000000002045       0x7f build/handlers.o
+ .debug_loc     0x00000000000020c4       0x2c build/init.o
+ .debug_loc     0x00000000000020f0      0x523 build/cs1237.o
+ .debug_loc     0x0000000000002613      0x106 build/cs1237_gd32vf103_port.o
+ .debug_loc     0x0000000000002719      0x3df build/cdc_acm_core.o
+ .debug_loc     0x0000000000002af8      0x53e build/drv_usb_core.o
+ .debug_loc     0x0000000000003036      0x83b build/drv_usb_dev.o
+ .debug_loc     0x0000000000003871      0x69a build/drv_usbd_int.o
+ .debug_loc     0x0000000000003f0b      0x106 build/gd32vf103_hw.o
+ .debug_loc     0x0000000000004011       0x2c build/gd32vf103_usb_it.o
+ .debug_loc     0x000000000000403d      0x130 build/usb_delay.o
+ .debug_loc     0x000000000000416d      0x2a3 build/usb_serial_if.o
+ .debug_loc     0x0000000000004410      0x730 build/usbd_core.o
+ .debug_loc     0x0000000000004b40      0xb83 build/usbd_enum.o
+ .debug_loc     0x00000000000056c3      0x4ec build/usbd_transc.o
+ .debug_loc     0x0000000000005baf      0x2f1 build/main.o
+ .debug_loc     0x0000000000005ea0       0x90 build/stepperUP.o
 
-.debug_aranges  0x0000000000000000      0x4d0
+.debug_aranges  0x0000000000000000      0xa18
  .debug_aranges
-                0x0000000000000000       0xa0 build/gd32vf103_gpio.o
+                0x0000000000000000       0x70 build/gd32vf103_exti.o
  .debug_aranges
-                0x00000000000000a0      0x160 build/gd32vf103_rcu.o
+                0x0000000000000070       0xa0 build/gd32vf103_gpio.o
  .debug_aranges
-                0x0000000000000200       0x28 build/system_gd32vf103.o
+                0x0000000000000110      0x160 build/gd32vf103_rcu.o
  .debug_aranges
-                0x0000000000000228       0x20 build/_exit.o
+                0x0000000000000270       0x28 build/system_gd32vf103.o
  .debug_aranges
-                0x0000000000000248       0x20 build/write_hex.o
+                0x0000000000000298       0x20 build/_exit.o
  .debug_aranges
-                0x0000000000000268      0x140 build/n200_func.o
+                0x00000000000002b8       0x20 build/write_hex.o
  .debug_aranges
-                0x00000000000003a8       0x28 build/handlers.o
+                0x00000000000002d8      0x140 build/n200_func.o
  .debug_aranges
-                0x00000000000003d0       0x28 build/init.o
+                0x0000000000000418       0x28 build/handlers.o
  .debug_aranges
-                0x00000000000003f8       0x48 build/main.o
+                0x0000000000000440       0x28 build/init.o
  .debug_aranges
-                0x0000000000000440       0x28 build/stepperUP.o
+                0x0000000000000468       0x70 build/cs1237.o
  .debug_aranges
-                0x0000000000000468       0x20 build/start.o
+                0x00000000000004d8       0x50 build/cs1237_gd32vf103_port.o
  .debug_aranges
-                0x0000000000000488       0x28 build/entry.o
+                0x0000000000000528       0x68 build/cdc_acm_core.o
  .debug_aranges
-                0x00000000000004b0       0x20 build/drivers.o
+                0x0000000000000590       0x48 build/drv_usb_core.o
+ .debug_aranges
+                0x00000000000005d8       0xc8 build/drv_usb_dev.o
+ .debug_aranges
+                0x00000000000006a0       0x58 build/drv_usbd_int.o
+ .debug_aranges
+                0x00000000000006f8       0x40 build/gd32vf103_hw.o
+ .debug_aranges
+                0x0000000000000738       0x28 build/gd32vf103_usb_it.o
+ .debug_aranges
+                0x0000000000000760       0x28 build/usb_delay.o
+ .debug_aranges
+                0x0000000000000788       0x48 build/usb_serial_if.o
+ .debug_aranges
+                0x00000000000007d0       0x78 build/usbd_core.o
+ .debug_aranges
+                0x0000000000000848       0xa8 build/usbd_enum.o
+ .debug_aranges
+                0x00000000000008f0       0x50 build/usbd_transc.o
+ .debug_aranges
+                0x0000000000000940       0x48 build/main.o
+ .debug_aranges
+                0x0000000000000988       0x28 build/stepperUP.o
+ .debug_aranges
+                0x00000000000009b0       0x20 build/start.o
+ .debug_aranges
+                0x00000000000009d0       0x28 build/entry.o
+ .debug_aranges
+                0x00000000000009f8       0x20 build/drivers.o
 
-.debug_ranges   0x0000000000000000      0x548
- .debug_ranges  0x0000000000000000       0x90 build/gd32vf103_gpio.o
- .debug_ranges  0x0000000000000090      0x150 build/gd32vf103_rcu.o
- .debug_ranges  0x00000000000001e0       0x18 build/system_gd32vf103.o
- .debug_ranges  0x00000000000001f8       0x10 build/_exit.o
- .debug_ranges  0x0000000000000208       0x30 build/write_hex.o
- .debug_ranges  0x0000000000000238      0x240 build/n200_func.o
- .debug_ranges  0x0000000000000478       0x18 build/handlers.o
- .debug_ranges  0x0000000000000490       0x18 build/init.o
- .debug_ranges  0x00000000000004a8       0x68 build/main.o
- .debug_ranges  0x0000000000000510       0x18 build/stepperUP.o
- .debug_ranges  0x0000000000000528       0x20 build/entry.o
+.debug_ranges   0x0000000000000000      0xc28
+ .debug_ranges  0x0000000000000000       0x60 build/gd32vf103_exti.o
+ .debug_ranges  0x0000000000000060       0x90 build/gd32vf103_gpio.o
+ .debug_ranges  0x00000000000000f0      0x150 build/gd32vf103_rcu.o
+ .debug_ranges  0x0000000000000240       0x18 build/system_gd32vf103.o
+ .debug_ranges  0x0000000000000258       0x10 build/_exit.o
+ .debug_ranges  0x0000000000000268       0x30 build/write_hex.o
+ .debug_ranges  0x0000000000000298      0x240 build/n200_func.o
+ .debug_ranges  0x00000000000004d8       0x18 build/handlers.o
+ .debug_ranges  0x00000000000004f0       0x18 build/init.o
+ .debug_ranges  0x0000000000000508      0x128 build/cs1237.o
+ .debug_ranges  0x0000000000000630       0x40 build/cs1237_gd32vf103_port.o
+ .debug_ranges  0x0000000000000670       0x88 build/cdc_acm_core.o
+ .debug_ranges  0x00000000000006f8       0x38 build/drv_usb_core.o
+ .debug_ranges  0x0000000000000730       0xd0 build/drv_usb_dev.o
+ .debug_ranges  0x0000000000000800       0xc0 build/drv_usbd_int.o
+ .debug_ranges  0x00000000000008c0       0x30 build/gd32vf103_hw.o
+ .debug_ranges  0x00000000000008f0       0x18 build/gd32vf103_usb_it.o
+ .debug_ranges  0x0000000000000908       0x18 build/usb_delay.o
+ .debug_ranges  0x0000000000000920       0x88 build/usb_serial_if.o
+ .debug_ranges  0x00000000000009a8       0x68 build/usbd_core.o
+ .debug_ranges  0x0000000000000a10      0x150 build/usbd_enum.o
+ .debug_ranges  0x0000000000000b60       0x40 build/usbd_transc.o
+ .debug_ranges  0x0000000000000ba0       0x50 build/main.o
+ .debug_ranges  0x0000000000000bf0       0x18 build/stepperUP.o
+ .debug_ranges  0x0000000000000c08       0x20 build/entry.o
 
-.debug_line     0x0000000000000000     0x52f3
- .debug_line    0x0000000000000000      0xb18 build/gd32vf103_gpio.o
- .debug_line    0x0000000000000b18     0x150b build/gd32vf103_rcu.o
- .debug_line    0x0000000000002023      0x6b1 build/system_gd32vf103.o
- .debug_line    0x00000000000026d4      0x145 build/_exit.o
- .debug_line    0x0000000000002819      0x239 build/write_hex.o
- .debug_line    0x0000000000002a52     0x12bd build/n200_func.o
- .debug_line    0x0000000000003d0f      0x264 build/handlers.o
- .debug_line    0x0000000000003f73      0x2a3 build/init.o
- .debug_line    0x0000000000004216      0x5b7 build/main.o
- .debug_line    0x00000000000047cd      0x396 build/stepperUP.o
- .debug_line    0x0000000000004b63      0x187 build/start.o
- .debug_line    0x0000000000004cea       0xe3 build/entry.o
- .debug_line    0x0000000000004dcd      0x526 build/drivers.o
+.debug_line     0x0000000000000000     0xd457
+ .debug_line    0x0000000000000000      0x582 build/gd32vf103_exti.o
+ .debug_line    0x0000000000000582      0xb18 build/gd32vf103_gpio.o
+ .debug_line    0x000000000000109a     0x150b build/gd32vf103_rcu.o
+ .debug_line    0x00000000000025a5      0x6b1 build/system_gd32vf103.o
+ .debug_line    0x0000000000002c56      0x145 build/_exit.o
+ .debug_line    0x0000000000002d9b      0x239 build/write_hex.o
+ .debug_line    0x0000000000002fd4     0x12bd build/n200_func.o
+ .debug_line    0x0000000000004291      0x264 build/handlers.o
+ .debug_line    0x00000000000044f5      0x2a3 build/init.o
+ .debug_line    0x0000000000004798      0x875 build/cs1237.o
+ .debug_line    0x000000000000500d      0x3ea build/cs1237_gd32vf103_port.o
+ .debug_line    0x00000000000053f7      0x7b5 build/cdc_acm_core.o
+ .debug_line    0x0000000000005bac      0x909 build/drv_usb_core.o
+ .debug_line    0x00000000000064b5     0x1531 build/drv_usb_dev.o
+ .debug_line    0x00000000000079e6     0x103b build/drv_usbd_int.o
+ .debug_line    0x0000000000008a21      0x505 build/gd32vf103_hw.o
+ .debug_line    0x0000000000008f26      0x3df build/gd32vf103_usb_it.o
+ .debug_line    0x0000000000009305      0x351 build/usb_delay.o
+ .debug_line    0x0000000000009656      0xa22 build/usb_serial_if.o
+ .debug_line    0x000000000000a078      0x7ee build/usbd_core.o
+ .debug_line    0x000000000000a866     0x1064 build/usbd_enum.o
+ .debug_line    0x000000000000b8ca      0x873 build/usbd_transc.o
+ .debug_line    0x000000000000c13d      0x7f4 build/main.o
+ .debug_line    0x000000000000c931      0x396 build/stepperUP.o
+ .debug_line    0x000000000000ccc7      0x187 build/start.o
+ .debug_line    0x000000000000ce4e       0xe3 build/entry.o
+ .debug_line    0x000000000000cf31      0x526 build/drivers.o
 
-.debug_str      0x0000000000000000     0x1e12
- .debug_str     0x0000000000000000      0x547 build/gd32vf103_gpio.o
+.debug_str      0x0000000000000000     0x3cd6
+ .debug_str     0x0000000000000000      0x3d0 build/gd32vf103_exti.o
+                                        0x412 (size before relaxing)
+ .debug_str     0x00000000000003d0      0x3ed build/gd32vf103_gpio.o
                                         0x5ab (size before relaxing)
- .debug_str     0x0000000000000547      0xa96 build/gd32vf103_rcu.o
+ .debug_str     0x00000000000007bd      0xa90 build/gd32vf103_rcu.o
                                         0xe2a (size before relaxing)
- .debug_str     0x0000000000000fdd       0xa4 build/system_gd32vf103.o
+ .debug_str     0x000000000000124d       0xa4 build/system_gd32vf103.o
                                         0x27d (size before relaxing)
- .debug_str     0x0000000000001081       0x66 build/_exit.o
+ .debug_str     0x00000000000012f1       0x61 build/_exit.o
                                         0x1ec (size before relaxing)
- .debug_str     0x00000000000010e7       0x35 build/write_hex.o
+ .debug_str     0x0000000000001352       0x35 build/write_hex.o
                                         0x1e5 (size before relaxing)
- .debug_str     0x000000000000111c      0x74a build/n200_func.o
+ .debug_str     0x0000000000001387      0x730 build/n200_func.o
                                         0x989 (size before relaxing)
- .debug_str     0x0000000000001866       0x56 build/handlers.o
+ .debug_str     0x0000000000001ab7       0x56 build/handlers.o
                                         0x5e2 (size before relaxing)
- .debug_str     0x00000000000018bc      0x3e5 build/init.o
+ .debug_str     0x0000000000001b0d      0x3e5 build/init.o
                                         0x9b2 (size before relaxing)
- .debug_str     0x0000000000001ca1       0xf8 build/main.o
-                                        0x290 (size before relaxing)
- .debug_str     0x0000000000001d99       0x11 build/stepperUP.o
+ .debug_str     0x0000000000001ef2      0x179 build/cs1237.o
+                                        0x30e (size before relaxing)
+ .debug_str     0x000000000000206b       0x39 build/cs1237_gd32vf103_port.o
+                                        0x447 (size before relaxing)
+ .debug_str     0x00000000000020a4      0xc62 build/cdc_acm_core.o
+                                       0x1311 (size before relaxing)
+ .debug_str     0x0000000000002d06      0x299 build/drv_usb_core.o
+                                        0x73b (size before relaxing)
+ .debug_str     0x0000000000002f9f      0x28a build/drv_usb_dev.o
+                                        0xa31 (size before relaxing)
+ .debug_str     0x0000000000003229      0x1ef build/drv_usbd_int.o
+                                        0xa86 (size before relaxing)
+ .debug_str     0x0000000000003418       0xcf build/gd32vf103_hw.o
+                                        0xcf7 (size before relaxing)
+ .debug_str     0x00000000000034e7       0x6d build/gd32vf103_usb_it.o
+                                       0x125f (size before relaxing)
+ .debug_str     0x0000000000003554       0x1b build/usb_delay.o
+                                        0x1f9 (size before relaxing)
+ .debug_str     0x000000000000356f       0xf3 build/usb_serial_if.o
+                                       0x11f1 (size before relaxing)
+ .debug_str     0x0000000000003662       0xd1 build/usbd_core.o
+                                        0xab7 (size before relaxing)
+ .debug_str     0x0000000000003733      0x3b0 build/usbd_enum.o
+                                       0x1083 (size before relaxing)
+ .debug_str     0x0000000000003ae3       0x6d build/usbd_transc.o
+                                        0xd3c (size before relaxing)
+ .debug_str     0x0000000000003b50      0x10d build/main.o
+                                       0x1148 (size before relaxing)
+ .debug_str     0x0000000000003c5d       0x11 build/stepperUP.o
                                         0x34a (size before relaxing)
- .debug_str     0x0000000000001daa       0x35 build/start.o
+ .debug_str     0x0000000000003c6e       0x35 build/start.o
                                          0x79 (size before relaxing)
- .debug_str     0x0000000000001ddf       0x29 build/entry.o
+ .debug_str     0x0000000000003ca3       0x29 build/entry.o
                                          0x79 (size before relaxing)
- .debug_str     0x0000000000001e08        0xa build/drivers.o
+ .debug_str     0x0000000000003ccc        0xa build/drivers.o
                                          0x5a (size before relaxing)
 
 .comment        0x0000000000000000       0x28
- .comment       0x0000000000000000       0x28 build/gd32vf103_gpio.o
+ .comment       0x0000000000000000       0x28 build/gd32vf103_exti.o
                                          0x29 (size before relaxing)
+ .comment       0x0000000000000028       0x29 build/gd32vf103_gpio.o
  .comment       0x0000000000000028       0x29 build/gd32vf103_rcu.o
  .comment       0x0000000000000028       0x29 build/system_gd32vf103.o
  .comment       0x0000000000000028       0x29 build/_exit.o
@@ -2040,6 +2594,19 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .comment       0x0000000000000028       0x29 build/n200_func.o
  .comment       0x0000000000000028       0x29 build/handlers.o
  .comment       0x0000000000000028       0x29 build/init.o
+ .comment       0x0000000000000028       0x29 build/cs1237.o
+ .comment       0x0000000000000028       0x29 build/cs1237_gd32vf103_port.o
+ .comment       0x0000000000000028       0x29 build/cdc_acm_core.o
+ .comment       0x0000000000000028       0x29 build/drv_usb_core.o
+ .comment       0x0000000000000028       0x29 build/drv_usb_dev.o
+ .comment       0x0000000000000028       0x29 build/drv_usbd_int.o
+ .comment       0x0000000000000028       0x29 build/gd32vf103_hw.o
+ .comment       0x0000000000000028       0x29 build/gd32vf103_usb_it.o
+ .comment       0x0000000000000028       0x29 build/usb_delay.o
+ .comment       0x0000000000000028       0x29 build/usb_serial_if.o
+ .comment       0x0000000000000028       0x29 build/usbd_core.o
+ .comment       0x0000000000000028       0x29 build/usbd_enum.o
+ .comment       0x0000000000000028       0x29 build/usbd_transc.o
  .comment       0x0000000000000028       0x29 build/main.o
  .comment       0x0000000000000028       0x29 build/stepperUP.o
  .comment       0x0000000000000028       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-atexit.o)
@@ -2052,75 +2619,113 @@ OUTPUT(build/gd32vf103.elf elf32-littleriscv)
  .comment       0x0000000000000028       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
  .comment       0x0000000000000028       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
  .comment       0x0000000000000028       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-reent.o)
- .comment       0x0000000000000028       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
- .comment       0x0000000000000028       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
 
 .riscv.attributes
                 0x0000000000000000       0x2b
  .riscv.attributes
-                0x0000000000000000       0x2b build/gd32vf103_gpio.o
+                0x0000000000000000       0x2b build/gd32vf103_exti.o
  .riscv.attributes
-                0x000000000000002b       0x2b build/gd32vf103_rcu.o
+                0x000000000000002b       0x2b build/gd32vf103_gpio.o
  .riscv.attributes
-                0x0000000000000056       0x2b build/system_gd32vf103.o
+                0x0000000000000056       0x2b build/gd32vf103_rcu.o
  .riscv.attributes
-                0x0000000000000081       0x2b build/_exit.o
+                0x0000000000000081       0x2b build/system_gd32vf103.o
  .riscv.attributes
-                0x00000000000000ac       0x2b build/write_hex.o
+                0x00000000000000ac       0x2b build/_exit.o
  .riscv.attributes
-                0x00000000000000d7       0x2b build/n200_func.o
+                0x00000000000000d7       0x2b build/write_hex.o
  .riscv.attributes
-                0x0000000000000102       0x2b build/handlers.o
+                0x0000000000000102       0x2b build/n200_func.o
  .riscv.attributes
-                0x000000000000012d       0x2b build/init.o
+                0x000000000000012d       0x2b build/handlers.o
  .riscv.attributes
-                0x0000000000000158       0x2b build/main.o
+                0x0000000000000158       0x2b build/init.o
  .riscv.attributes
-                0x0000000000000183       0x2b build/stepperUP.o
+                0x0000000000000183       0x2b build/cs1237.o
  .riscv.attributes
-                0x00000000000001ae       0x29 build/start.o
+                0x00000000000001ae       0x2b build/cs1237_gd32vf103_port.o
  .riscv.attributes
-                0x00000000000001d7       0x29 build/entry.o
+                0x00000000000001d9       0x2b build/cdc_acm_core.o
  .riscv.attributes
-                0x0000000000000200       0x29 build/drivers.o
+                0x0000000000000204       0x2b build/drv_usb_core.o
  .riscv.attributes
-                0x0000000000000229       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-atexit.o)
+                0x000000000000022f       0x2b build/drv_usb_dev.o
  .riscv.attributes
-                0x0000000000000254       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-exit.o)
+                0x000000000000025a       0x2b build/drv_usbd_int.o
  .riscv.attributes
-                0x000000000000027f       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-fini.o)
+                0x0000000000000285       0x2b build/gd32vf103_hw.o
  .riscv.attributes
-                0x00000000000002aa       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
+                0x00000000000002b0       0x2b build/gd32vf103_usb_it.o
  .riscv.attributes
-                0x00000000000002d5       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-init.o)
+                0x00000000000002db       0x2b build/usb_delay.o
  .riscv.attributes
-                0x0000000000000300       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memcpy-asm.o)
+                0x0000000000000306       0x2b build/usb_serial_if.o
  .riscv.attributes
-                0x0000000000000329       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
+                0x0000000000000331       0x2b build/usbd_core.o
  .riscv.attributes
-                0x0000000000000354       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o)
+                0x000000000000035c       0x2b build/usbd_enum.o
  .riscv.attributes
-                0x000000000000037f       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
+                0x0000000000000387       0x2b build/usbd_transc.o
  .riscv.attributes
-                0x00000000000003aa       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
+                0x00000000000003b2       0x2b build/main.o
  .riscv.attributes
-                0x00000000000003d5       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-reent.o)
+                0x00000000000003dd       0x2b build/stepperUP.o
  .riscv.attributes
-                0x0000000000000400       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
+                0x0000000000000408       0x29 build/start.o
  .riscv.attributes
-                0x000000000000042b       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
+                0x0000000000000431       0x29 build/entry.o
+ .riscv.attributes
+                0x000000000000045a       0x29 build/drivers.o
+ .riscv.attributes
+                0x0000000000000483       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-atexit.o)
+ .riscv.attributes
+                0x00000000000004ae       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-exit.o)
+ .riscv.attributes
+                0x00000000000004d9       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-fini.o)
+ .riscv.attributes
+                0x0000000000000504       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
+ .riscv.attributes
+                0x000000000000052f       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-init.o)
+ .riscv.attributes
+                0x000000000000055a       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memcpy-asm.o)
+ .riscv.attributes
+                0x0000000000000583       0x29 /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memset.o)
+ .riscv.attributes
+                0x00000000000005ac       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
+ .riscv.attributes
+                0x00000000000005d7       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o)
+ .riscv.attributes
+                0x0000000000000602       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
+ .riscv.attributes
+                0x000000000000062d       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
+ .riscv.attributes
+                0x0000000000000658       0x2b /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-reent.o)
 
-.debug_frame    0x0000000000000000      0x94c
- .debug_frame   0x0000000000000000      0x144 build/gd32vf103_gpio.o
- .debug_frame   0x0000000000000144      0x2e8 build/gd32vf103_rcu.o
- .debug_frame   0x000000000000042c       0x30 build/system_gd32vf103.o
- .debug_frame   0x000000000000045c       0x2c build/_exit.o
- .debug_frame   0x0000000000000488       0x50 build/write_hex.o
- .debug_frame   0x00000000000004d8      0x2dc build/n200_func.o
- .debug_frame   0x00000000000007b4       0x44 build/handlers.o
- .debug_frame   0x00000000000007f8       0x3c build/init.o
- .debug_frame   0x0000000000000834       0xc0 build/main.o
- .debug_frame   0x00000000000008f4       0x58 build/stepperUP.o
+.debug_frame    0x0000000000000000     0x17c4
+ .debug_frame   0x0000000000000000       0xd0 build/gd32vf103_exti.o
+ .debug_frame   0x00000000000000d0      0x144 build/gd32vf103_gpio.o
+ .debug_frame   0x0000000000000214      0x2e8 build/gd32vf103_rcu.o
+ .debug_frame   0x00000000000004fc       0x30 build/system_gd32vf103.o
+ .debug_frame   0x000000000000052c       0x2c build/_exit.o
+ .debug_frame   0x0000000000000558       0x50 build/write_hex.o
+ .debug_frame   0x00000000000005a8      0x2dc build/n200_func.o
+ .debug_frame   0x0000000000000884       0x44 build/handlers.o
+ .debug_frame   0x00000000000008c8       0x3c build/init.o
+ .debug_frame   0x0000000000000904      0x124 build/cs1237.o
+ .debug_frame   0x0000000000000a28       0xbc build/cs1237_gd32vf103_port.o
+ .debug_frame   0x0000000000000ae4       0xf4 build/cdc_acm_core.o
+ .debug_frame   0x0000000000000bd8       0xc0 build/drv_usb_core.o
+ .debug_frame   0x0000000000000c98      0x1dc build/drv_usb_dev.o
+ .debug_frame   0x0000000000000e74      0x1a4 build/drv_usbd_int.o
+ .debug_frame   0x0000000000001018       0x7c build/gd32vf103_hw.o
+ .debug_frame   0x0000000000001094       0x40 build/gd32vf103_usb_it.o
+ .debug_frame   0x00000000000010d4       0x80 build/usb_delay.o
+ .debug_frame   0x0000000000001154       0xec build/usb_serial_if.o
+ .debug_frame   0x0000000000001240      0x168 build/usbd_core.o
+ .debug_frame   0x00000000000013a8      0x1f4 build/usbd_enum.o
+ .debug_frame   0x000000000000159c      0x10c build/usbd_transc.o
+ .debug_frame   0x00000000000016a8       0xc4 build/main.o
+ .debug_frame   0x000000000000176c       0x58 build/stepperUP.o
 
 Cross Reference Table
 
@@ -2167,8 +2772,11 @@ SPI0_IRQHandler                                   build/start.o
 SPI1_IRQHandler                                   build/start.o
 SPI2_IRQHandler                                   build/start.o
 SystemCoreClock                                   build/system_gd32vf103.o
+                                                  build/usb_delay.o
+                                                  build/cs1237_gd32vf103_port.o
                                                   build/n200_func.o
 SystemCoreClockUpdate                             build/system_gd32vf103.o
+                                                  build/usb_serial_if.o
 SystemInit                                        build/system_gd32vf103.o
                                                   build/init.o
 TAMPER_IRQHandler                                 build/start.o
@@ -2187,16 +2795,18 @@ UART4_IRQHandler                                  build/start.o
 USART0_IRQHandler                                 build/start.o
 USART1_IRQHandler                                 build/start.o
 USART2_IRQHandler                                 build/start.o
-USBFS_IRQHandler                                  build/start.o
-USBFS_WKUP_IRQHandler                             build/start.o
+USBFS_IRQHandler                                  build/gd32vf103_usb_it.o
+                                                  build/start.o
+USBFS_WKUP_IRQHandler                             build/gd32vf103_usb_it.o
+                                                  build/start.o
+USB_OTG_dev                                       build/usb_serial_if.o
+                                                  build/gd32vf103_usb_it.o
 WWDGT_IRQHandler                                  build/start.o
 __atexit_dummy                                    /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
 __bss_start                                       build/start.o
 __call_exitprocs                                  /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__call_atexit.o)
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-__atexit.o)
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-exit.o)
-__errno                                           /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
-                                                  /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
 __fini_array_end                                  /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-fini.o)
 __fini_array_start                                /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-fini.o)
 __global_pointer$                                 build/start.o
@@ -2242,7 +2852,6 @@ _global_impure_ptr                                /Users/gustavsf/Desktop/toolch
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-exit.o)
 _heap_end                                         build/sbrk.o
 _impure_ptr                                       /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-impure.o)
-                                                  /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-errno.o)
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-reent.o)
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
 _init                                             build/init.o
@@ -2260,7 +2869,7 @@ _sbrk_r                                           /Users/gustavsf/Desktop/toolch
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-nano-mallocr.o)
 _sp                                               build/start.o
 _start                                            build/start.o
-_write                                            /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libgloss_nano.a(sys_write.o)
+_write                                            build/usb_serial_if.o
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o)
 _write_r                                          /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o)
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
@@ -2349,11 +2958,26 @@ can_transmit_error_number_get                     build/gd32vf103_can.o
 can_transmit_states                               build/gd32vf103_can.o
 can_wakeup                                        build/gd32vf103_can.o
 can_working_mode_set                              build/gd32vf103_can.o
+cdc_acm_EP0_RxReady                               build/cdc_acm_core.o
+cdc_acm_data_in_handler                           build/cdc_acm_core.o
+cdc_acm_data_out_handler                          build/cdc_acm_core.o
+cdc_acm_data_receive                              build/cdc_acm_core.o
+cdc_acm_data_send                                 build/cdc_acm_core.o
+cdc_acm_deinit                                    build/cdc_acm_core.o
+cdc_acm_get_line_state                            build/cdc_acm_core.o
+                                                  build/usb_serial_if.o
+cdc_acm_init                                      build/cdc_acm_core.o
+cdc_acm_req_handler                               build/cdc_acm_core.o
+cdc_acm_set_custom_cb                             build/cdc_acm_core.o
 cleanup_glue                                      /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-reent.o)
+clk                                               build/cs1237.o
 colinit                                           build/drivers.o
                                                   build/main.o
 colset                                            build/drivers.o
                                                   build/main.o
+configuration_descriptor                          build/cdc_acm_core.o
+                                                  build/usb_serial_if.o
+configure_usb_serial                              build/usb_serial_if.o
 crc_block_data_calculate                          build/gd32vf103_crc.o
 crc_data_register_read                            build/gd32vf103_crc.o
 crc_data_register_reset                           build/gd32vf103_crc.o
@@ -2361,6 +2985,30 @@ crc_deinit                                        build/gd32vf103_crc.o
 crc_free_data_register_read                       build/gd32vf103_crc.o
 crc_free_data_register_write                      build/gd32vf103_crc.o
 crc_single_data_calculate                         build/gd32vf103_crc.o
+cs1237_configure                                  build/cs1237.o
+                                                  build/main.o
+cs1237_data_ready                                 build/cs1237.o
+                                                  build/main.o
+cs1237_get_configuration                          build/cs1237.o
+cs1237_get_drdy_value                             build/cs1237_gd32vf103_port.o
+                                                  build/cs1237.o
+cs1237_port_set_clock_pin                         build/cs1237_gd32vf103_port.o
+                                                  build/cs1237.o
+cs1237_port_wait_min_455ns                        build/cs1237_gd32vf103_port.o
+                                                  build/cs1237.o
+cs1237_read                                       build/cs1237.o
+                                                  build/main.o
+cs1237_sample_rate_and_gain                       build/cs1237.o
+                                                  build/main.o
+cs1237_set_drdy_as_input                          build/cs1237_gd32vf103_port.o
+                                                  build/cs1237.o
+cs1237_set_drdy_as_output                         build/cs1237_gd32vf103_port.o
+                                                  build/cs1237.o
+cs1237_set_drdy_pin                               build/cs1237_gd32vf103_port.o
+                                                  build/cs1237.o
+cs1237_setup_pins                                 build/cs1237_gd32vf103_port.o
+                                                  build/main.o
+current_config                                    build/cs1237.o
 dac_concurrent_data_set                           build/gd32vf103_dac.o
 dac_concurrent_disable                            build/gd32vf103_dac.o
 dac_concurrent_enable                             build/gd32vf103_dac.o
@@ -2393,6 +3041,9 @@ dbg_periph_disable                                build/gd32vf103_dbg.o
                                                   build/gd32vf103_can.o
 dbg_periph_enable                                 build/gd32vf103_dbg.o
                                                   build/gd32vf103_can.o
+delay_time                                        build/gd32vf103_hw.o
+device_descriptor                                 build/cdc_acm_core.o
+                                                  build/usb_serial_if.o
 disable_mcycle_minstret                           build/start.o
                                                   build/init.o
 dma_channel_disable                               build/gd32vf103_dma.o
@@ -2422,6 +3073,8 @@ dma_struct_para_init                              build/gd32vf103_dma.o
 dma_transfer_direction_config                     build/gd32vf103_dma.o
 dma_transfer_number_config                        build/gd32vf103_dma.o
 dma_transfer_number_get                           build/gd32vf103_dma.o
+drdy_input                                        build/cs1237.o
+drdy_output                                       build/cs1237.o
 eclic_bwei_handler                                build/start.o
 eclic_clear_pending                               build/n200_func.o
 eclic_disable_interrupt                           build/n200_func.o
@@ -2438,16 +3091,19 @@ eclic_get_mth                                     build/n200_func.o
 eclic_get_nlbits                                  build/n200_func.o
 eclic_global_interrupt_disable                    build/gd32vf103_eclic.o
 eclic_global_interrupt_enable                     build/gd32vf103_eclic.o
+                                                  build/usb_serial_if.o
 eclic_init                                        build/n200_func.o
                                                   build/init.o
 eclic_irq_disable                                 build/gd32vf103_eclic.o
 eclic_irq_enable                                  build/gd32vf103_eclic.o
+                                                  build/gd32vf103_hw.o
 eclic_mode_enable                                 build/n200_func.o
                                                   build/init.o
 eclic_msip_handler                                build/start.o
 eclic_mtip_handler                                build/start.o
 eclic_pmovi_handler                               build/start.o
 eclic_priority_group_set                          build/gd32vf103_eclic.o
+                                                  build/usb_serial_if.o
 eclic_send_event                                  build/gd32vf103_eclic.o
 eclic_set_cliccfg                                 build/n200_func.o
 eclic_set_intattr                                 build/n200_func.o
@@ -2468,6 +3124,7 @@ eclic_set_posedge_trig                            build/n200_func.o
 eclic_set_vmode                                   build/n200_func.o
 eclic_system_reset                                build/gd32vf103_eclic.o
 enable_mcycle_minstret                            build/start.o
+ep_type                                           build/usbd_core.o
 errno                                             /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-reent.o)
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-sbrkr.o)
                                                   /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-writer.o)
@@ -2486,9 +3143,13 @@ exti_event_enable                                 build/gd32vf103_exti.o
 exti_flag_clear                                   build/gd32vf103_exti.o
 exti_flag_get                                     build/gd32vf103_exti.o
 exti_init                                         build/gd32vf103_exti.o
+                                                  build/gd32vf103_hw.o
 exti_interrupt_disable                            build/gd32vf103_exti.o
 exti_interrupt_enable                             build/gd32vf103_exti.o
+                                                  build/gd32vf103_hw.o
 exti_interrupt_flag_clear                         build/gd32vf103_exti.o
+                                                  build/gd32vf103_usb_it.o
+                                                  build/gd32vf103_hw.o
 exti_interrupt_flag_get                           build/gd32vf103_exti.o
 exti_software_interrupt_disable                   build/gd32vf103_exti.o
 exti_software_interrupt_enable                    build/gd32vf103_exti.o
@@ -2515,14 +3176,19 @@ fwdgt_write_disable                               build/gd32vf103_fwdgt.o
 fwdgt_write_enable                                build/gd32vf103_fwdgt.o
 get_cpu_freq                                      build/n200_func.o
 get_cycle_value                                   build/n200_func.o
+get_drdy                                          build/cs1237.o
 get_instret_value                                 build/n200_func.o
 get_timer_freq                                    build/n200_func.o
 get_timer_value                                   build/n200_func.o
+                                                  build/usb_serial_if.o
+                                                  build/usb_delay.o
+                                                  build/cs1237_gd32vf103_port.o
 gpio_afio_deinit                                  build/gd32vf103_gpio.o
 gpio_bit_reset                                    build/gd32vf103_gpio.o
 gpio_bit_set                                      build/gd32vf103_gpio.o
 gpio_bit_write                                    build/gd32vf103_gpio.o
                                                   build/stepperUP.o
+                                                  build/cs1237_gd32vf103_port.o
 gpio_deinit                                       build/gd32vf103_gpio.o
 gpio_event_output_config                          build/gd32vf103_gpio.o
 gpio_event_output_disable                         build/gd32vf103_gpio.o
@@ -2530,7 +3196,9 @@ gpio_event_output_enable                          build/gd32vf103_gpio.o
 gpio_exti_source_select                           build/gd32vf103_gpio.o
 gpio_init                                         build/gd32vf103_gpio.o
                                                   build/stepperUP.o
+                                                  build/cs1237_gd32vf103_port.o
 gpio_input_bit_get                                build/gd32vf103_gpio.o
+                                                  build/cs1237_gd32vf103_port.o
 gpio_input_port_get                               build/gd32vf103_gpio.o
 gpio_output_bit_get                               build/gd32vf103_gpio.o
 gpio_output_port_get                              build/gd32vf103_gpio.o
@@ -2577,6 +3245,7 @@ i2s_init                                          build/gd32vf103_spi.o
 i2s_psc_config                                    build/gd32vf103_spi.o
 initStep                                          build/stepperUP.o
                                                   build/main.o
+int_to_unicode                                    build/usbd_enum.o
 irq_entry                                         build/entry.o
                                                   build/start.o
 isatty                                            /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-sysisatty.o)
@@ -2593,6 +3262,7 @@ l88mem                                            build/drivers.o
                                                   build/main.o
 l88row                                            build/drivers.o
                                                   build/main.o
+linecoding                                        build/cdc_acm_core.o
 main                                              build/main.o
                                                   build/start.o
 measure_cpu_freq                                  build/n200_func.o
@@ -2600,6 +3270,9 @@ memcpy                                            /Users/gustavsf/Desktop/toolch
                                                   build/main.o
                                                   build/_exit.o
                                                   build/gd32vf103_rcu.o
+memset                                            /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-memset.o)
+                                                  build/drv_usbd_int.o
+                                                  build/drv_usb_core.o
 motorStep                                         build/main.o
 mtime_hi                                          build/n200_func.o
 mtime_lo                                          build/n200_func.o
@@ -2614,6 +3287,10 @@ ob_user_get                                       build/gd32vf103_fmc.o
 ob_user_write                                     build/gd32vf103_fmc.o
 ob_write_protection_enable                        build/gd32vf103_fmc.o
 ob_write_protection_get                           build/gd32vf103_fmc.o
+packet_receive                                    build/cdc_acm_core.o
+                                                  build/usb_serial_if.o
+packet_sent                                       build/cdc_acm_core.o
+                                                  build/usb_serial_if.o
 pmp_open_all_space                                build/n200_func.o
 pmu_backup_write_disable                          build/gd32vf103_pmu.o
 pmu_backup_write_enable                           build/gd32vf103_pmu.o
@@ -2623,6 +3300,7 @@ pmu_flag_get                                      build/gd32vf103_pmu.o
 pmu_lvd_disable                                   build/gd32vf103_pmu.o
 pmu_lvd_select                                    build/gd32vf103_pmu.o
 pmu_to_deepsleepmode                              build/gd32vf103_pmu.o
+                                                  build/drv_usb_dev.o
 pmu_to_sleepmode                                  build/gd32vf103_pmu.o
 pmu_to_standbymode                                build/gd32vf103_pmu.o
 pmu_wakeup_pin_disable                            build/gd32vf103_pmu.o
@@ -2640,6 +3318,7 @@ rcu_bkp_reset_enable                              build/gd32vf103_rcu.o
                                                   build/gd32vf103_bkp.o
 rcu_ckout0_config                                 build/gd32vf103_rcu.o
 rcu_clock_freq_get                                build/gd32vf103_rcu.o
+                                                  build/gd32vf103_hw.o
                                                   build/gd32vf103_usart.o
                                                   build/gd32vf103_spi.o
                                                   build/gd32vf103_i2c.o
@@ -2663,6 +3342,9 @@ rcu_osci_stab_wait                                build/gd32vf103_rcu.o
 rcu_periph_clock_disable                          build/gd32vf103_rcu.o
 rcu_periph_clock_enable                           build/gd32vf103_rcu.o
                                                   build/stepperUP.o
+                                                  build/gd32vf103_usb_it.o
+                                                  build/gd32vf103_hw.o
+                                                  build/cs1237_gd32vf103_port.o
 rcu_periph_clock_sleep_disable                    build/gd32vf103_rcu.o
 rcu_periph_clock_sleep_enable                     build/gd32vf103_rcu.o
 rcu_periph_reset_disable                          build/gd32vf103_rcu.o
@@ -2696,6 +3378,11 @@ rcu_rtc_clock_config                              build/gd32vf103_rcu.o
 rcu_system_clock_source_config                    build/gd32vf103_rcu.o
 rcu_system_clock_source_get                       build/gd32vf103_rcu.o
 rcu_usb_clock_config                              build/gd32vf103_rcu.o
+                                                  build/gd32vf103_usb_it.o
+                                                  build/gd32vf103_hw.o
+read_usb_serial                                   build/usb_serial_if.o
+receive_length                                    build/cdc_acm_core.o
+                                                  build/usb_serial_if.o
 rtc_alarm_config                                  build/gd32vf103_rtc.o
 rtc_configuration_mode_enter                      build/gd32vf103_rtc.o
 rtc_configuration_mode_exit                       build/gd32vf103_rtc.o
@@ -2711,6 +3398,11 @@ rtc_interrupt_flag_get                            build/gd32vf103_rtc.o
 rtc_lwoff_wait                                    build/gd32vf103_rtc.o
 rtc_prescaler_set                                 build/gd32vf103_rtc.o
 rtc_register_sync_wait                            build/gd32vf103_rtc.o
+rx_custom_cb                                      build/cdc_acm_core.o
+set_drdy                                          build/cs1237.o
+set_usb_clock_96m_hxtal                           build/usb_serial_if.o
+                                                  build/gd32vf103_usb_it.o
+setupc_flag                                       build/drv_usbd_int.o
 spi_bidirectional_transfer_config                 build/gd32vf103_spi.o
 spi_crc_error_clear                               build/gd32vf103_spi.o
 spi_crc_get                                       build/gd32vf103_spi.o
@@ -2804,6 +3496,7 @@ timer_interrupt_flag_clear                        build/gd32vf103_timer.o
 timer_interrupt_flag_get                          build/gd32vf103_timer.o
 timer_master_output_trigger_source_select         build/gd32vf103_timer.o
 timer_master_slave_mode_config                    build/gd32vf103_timer.o
+timer_prescaler                                   build/gd32vf103_hw.o
 timer_prescaler_config                            build/gd32vf103_timer.o
 timer_prescaler_read                              build/gd32vf103_timer.o
 timer_primary_output_config                       build/gd32vf103_timer.o
@@ -2817,10 +3510,12 @@ timer_update_event_enable                         build/gd32vf103_timer.o
 timer_update_source_config                        build/gd32vf103_timer.o
 trap_entry                                        build/entry.o
                                                   build/start.o
+tx_buffer                                         build/usb_serial_if.o
 usart_address_config                              build/gd32vf103_usart.o
 usart_baudrate_set                                build/gd32vf103_usart.o
 usart_data_receive                                build/gd32vf103_usart.o
 usart_data_transmit                               build/gd32vf103_usart.o
+                                                  build/weak.o
                                                   build/write.o
 usart_deinit                                      build/gd32vf103_usart.o
 usart_disable                                     build/gd32vf103_usart.o
@@ -2829,6 +3524,7 @@ usart_dma_transmit_config                         build/gd32vf103_usart.o
 usart_enable                                      build/gd32vf103_usart.o
 usart_flag_clear                                  build/gd32vf103_usart.o
 usart_flag_get                                    build/gd32vf103_usart.o
+                                                  build/weak.o
                                                   build/write.o
 usart_guard_time_config                           build/gd32vf103_usart.o
 usart_halfduplex_disable                          build/gd32vf103_usart.o
@@ -2862,6 +3558,138 @@ usart_synchronous_clock_disable                   build/gd32vf103_usart.o
 usart_synchronous_clock_enable                    build/gd32vf103_usart.o
 usart_transmit_config                             build/gd32vf103_usart.o
 usart_word_length_set                             build/gd32vf103_usart.o
+usb_basic_init                                    build/drv_usb_core.o
+                                                  build/usbd_core.o
+usb_buffer                                        build/usb_serial_if.o
+usb_clock_active                                  build/drv_usb_dev.o
+                                                  build/gd32vf103_usb_it.o
+usb_cmd_buffer                                    build/cdc_acm_core.o
+usb_core_init                                     build/drv_usb_core.o
+                                                  build/usbd_core.o
+usb_ctlep_startout                                build/drv_usb_dev.o
+                                                  build/usbd_transc.o
+                                                  build/usbd_enum.o
+                                                  build/drv_usbd_int.o
+usb_data_buffer                                   build/cdc_acm_core.o
+usb_delay_1ms                                     build/usb_delay.o
+                                                  build/gd32vf103_hw.o
+usb_delay_1us                                     build/usb_delay.o
+                                                  build/gd32vf103_hw.o
+usb_dev_connect                                   build/drv_usb_dev.o
+                                                  build/usbd_core.o
+usb_dev_disconnect                                build/drv_usb_dev.o
+                                                  build/usbd_core.o
+usb_dev_stop                                      build/drv_usb_dev.o
+usb_dev_suspend                                   build/drv_usb_dev.o
+usb_devaddr_set                                   build/drv_usb_dev.o
+                                                  build/usbd_core.o
+usb_devcore_init                                  build/drv_usb_dev.o
+                                                  build/usbd_core.o
+usb_devint_enable                                 build/drv_usb_dev.o
+usb_iepintnum_read                                build/drv_usb_dev.o
+                                                  build/drv_usbd_int.o
+usb_iepintr_read                                  build/drv_usb_dev.o
+                                                  build/drv_usbd_int.o
+usb_intr_config                                   build/gd32vf103_hw.o
+                                                  build/usb_serial_if.o
+usb_mdelay                                        build/gd32vf103_hw.o
+                                                  build/usbd_core.o
+                                                  build/usb_serial_if.o
+                                                  build/drv_usb_dev.o
+                                                  build/drv_usb_core.o
+usb_oepintnum_read                                build/drv_usb_dev.o
+                                                  build/drv_usbd_int.o
+usb_oepintr_read                                  build/drv_usb_dev.o
+                                                  build/drv_usbd_int.o
+usb_rcu_config                                    build/gd32vf103_hw.o
+                                                  build/usb_serial_if.o
+usb_rwkup_active                                  build/drv_usb_dev.o
+usb_rwkup_reset                                   build/drv_usb_dev.o
+usb_rwkup_set                                     build/drv_usb_dev.o
+usb_rxfifo_flush                                  build/drv_usb_core.o
+                                                  build/usbd_core.o
+                                                  build/drv_usb_dev.o
+usb_rxfifo_read                                   build/drv_usb_core.o
+                                                  build/drv_usbd_int.o
+usb_serial_available                              build/usb_serial_if.o
+usb_serial_connected                              build/usb_serial_if.o
+usb_timer_init                                    build/gd32vf103_hw.o
+                                                  build/usb_serial_if.o
+usb_transc_active                                 build/drv_usb_dev.o
+                                                  build/usbd_core.o
+                                                  build/drv_usbd_int.o
+usb_transc_clrstall                               build/drv_usb_dev.o
+                                                  build/usbd_core.o
+usb_transc_deactivate                             build/drv_usb_dev.o
+                                                  build/usbd_core.o
+usb_transc_inxfer                                 build/drv_usb_dev.o
+                                                  build/usbd_core.o
+usb_transc_outxfer                                build/drv_usb_dev.o
+                                                  build/usbd_core.o
+usb_transc_stall                                  build/drv_usb_dev.o
+                                                  build/usbd_core.o
+usb_txfifo_flush                                  build/drv_usb_core.o
+                                                  build/usbd_core.o
+                                                  build/drv_usbd_int.o
+                                                  build/drv_usb_dev.o
+usb_txfifo_write                                  build/drv_usb_core.o
+                                                  build/drv_usbd_int.o
+                                                  build/drv_usb_dev.o
+usb_udelay                                        build/gd32vf103_hw.o
+                                                  build/drv_usb_core.o
+usbd_addr_set                                     build/usbd_core.o
+                                                  build/usbd_enum.o
+usbd_cdc_cb                                       build/cdc_acm_core.o
+                                                  build/usb_serial_if.o
+usbd_class_request                                build/usbd_enum.o
+                                                  build/usbd_transc.o
+usbd_connect                                      build/usbd_core.o
+usbd_ctl_recev                                    build/usbd_transc.o
+usbd_ctl_send                                     build/usbd_transc.o
+usbd_ctl_status_recev                             build/usbd_transc.o
+usbd_ctl_status_send                              build/usbd_transc.o
+usbd_disconnect                                   build/usbd_core.o
+usbd_enum_error                                   build/usbd_enum.o
+                                                  build/usbd_transc.o
+usbd_ep_clear                                     build/usbd_core.o
+                                                  build/cdc_acm_core.o
+usbd_ep_recev                                     build/usbd_core.o
+                                                  build/usbd_transc.o
+                                                  build/usb_serial_if.o
+                                                  build/cdc_acm_core.o
+usbd_ep_send                                      build/usbd_core.o
+                                                  build/usbd_transc.o
+                                                  build/usb_serial_if.o
+                                                  build/cdc_acm_core.o
+usbd_ep_setup                                     build/usbd_core.o
+                                                  build/cdc_acm_core.o
+usbd_ep_stall                                     build/usbd_core.o
+                                                  build/usbd_enum.o
+usbd_ep_stall_clear                               build/usbd_core.o
+                                                  build/usbd_enum.o
+usbd_fifo_flush                                   build/usbd_core.o
+usbd_in_transc                                    build/usbd_transc.o
+                                                  build/drv_usbd_int.o
+usbd_init                                         build/usbd_core.o
+                                                  build/usb_serial_if.o
+usbd_isr                                          build/drv_usbd_int.o
+                                                  build/gd32vf103_usb_it.o
+usbd_language_id_desc                             build/cdc_acm_core.o
+usbd_out_transc                                   build/usbd_transc.o
+                                                  build/drv_usbd_int.o
+usbd_rxcount_get                                  build/usbd_core.o
+                                                  build/cdc_acm_core.o
+usbd_setup_transc                                 build/usbd_transc.o
+                                                  build/drv_usbd_int.o
+usbd_standard_request                             build/usbd_enum.o
+                                                  build/usbd_transc.o
+usbd_strings                                      build/cdc_acm_core.o
+                                                  build/usb_serial_if.o
+usbd_vendor_request                               build/usbd_enum.o
+                                                  build/usbd_transc.o
+usbfs_prescaler                                   build/gd32vf103_hw.o
+                                                  build/gd32vf103_usb_it.o
+wait                                              build/cs1237.o
 write                                             /Users/gustavsf/Desktop/toolchain-gd32v-v202-osx/compiler/bin/../lib/gcc/riscv64-unknown-elf/8.3.0/../../../../riscv64-unknown-elf/lib/rv32imac/ilp32/libc_nano.a(lib_a-syswrite.o)
                                                   build/handlers.o
                                                   build/write_hex.o
