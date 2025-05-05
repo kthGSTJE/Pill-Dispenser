@@ -22,7 +22,7 @@ Libraries (other than vendor SDK and gcc libraries) must have .h-files in /lib/[
 #define HALFREV 2048
 #define SPEED 1
 #define BLINKSPEED 500
-#define DELAY 200
+#define DELAY 500
 
 void blink (int *pMs, int *pLight);
 void keyPad (int pressedKey, int *pStepBuffer, int *pMoveBuffer);
@@ -39,6 +39,8 @@ int main(){
 	int stepBuffer = 0;
 	int key = 0;
 	int lookUpTbl[16]={1,4,7,14,2,5,8,0,3,6,9,15,10,11,12,13};
+	float loadCell = 0;
+	int lights = 0;
 
 	uint64_t time = 0;
     uint64_t last_time = 0;
@@ -70,13 +72,21 @@ int main(){
 			l88mem(1, stepBuffer);
 			l88mem(2, delayBuffer/100);
 			l88mem(3, moveBuffer/100);
-			if (adc >= -41000){
+			loadCell = (float)adc*0.005 + loadCell*0.995;
+			lights = (int) loadCell/1000;
+			lights+= 36;
 			
-				l88mem(4, 0xFF);
+			if (lights>0)
+			{
+				l88mem(5, 0x00);
+				l88mem(4, lights);
 			}
 			else{
 				l88mem(4, 0x00);
+				l88mem(5, lights*-1);
 			}
+
+			
 			
 			
 
@@ -111,7 +121,10 @@ void keyPad (int pressedKey, int *pStepBuffer, int *pMoveBuffer){
 	case 11:
 	case 12:
 	case 13: 
+		break;
 	case 14:
+		*pMoveBuffer=0;
+		*pStepBuffer=0;
 		break;
 	case 15:
 		(*pMoveBuffer) += 32;
